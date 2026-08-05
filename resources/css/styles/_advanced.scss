@@ -1,0 +1,17 @@
+@use "sass:map";
+@use "./settings" as vuetify;
+
+.card-carousel {
+    --edge: 16px;
+
+    padding-left: var(--edge);
+    padding-right: var(--edge);
+    scroll-padding-left: var(--edge);
+    scroll-padding-right: var(--edge);
+
+    @each $name, $width in vuetify.$container-max-widths {
+        @media (min-width: map.get(vuetify.$grid-breakpoints, $name)) {
+            --edge: max(16px, calc((100vw - #{$width}) / 2 + 16px));
+        }
+    }
+}

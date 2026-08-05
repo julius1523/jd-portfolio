@@ -1,0 +1,10 @@
+@forward "vuetify/settings" with (
+    $body-font-family: (
+        "Roboto",
+        sans-serif,
+    ),
+    $container-max-widths: (
+        xs: 100%,
+    ),
+    $slide-group-prev-basis: 32px
+);

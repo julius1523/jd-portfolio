@@ -4,6 +4,8 @@ import {
     isNavigationFailure,
 } from "vue-router";
 import routes from "./routes";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -42,6 +44,7 @@ router.onError((error, to) => {
 
 router.afterEach((to, from, failure) => {
     if (isNavigationFailure(failure)) return;
+    requestAnimationFrame(() => ScrollTrigger.refresh());
     document.title = to.meta?.title ?? "Portfolio";
 });
 

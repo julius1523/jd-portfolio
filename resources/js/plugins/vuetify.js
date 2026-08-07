@@ -89,6 +89,9 @@ export default createVuetify({
         VListItem: {
             rounded: "lg",
         },
+        VContainer: {
+            maxWidth: 1400,
+        },
     },
     components: {
         VPie,

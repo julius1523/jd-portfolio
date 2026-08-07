@@ -7,11 +7,9 @@ import { useAuthStore } from "@/stores/auth";
 import { useLayoutStore } from "@/stores/layout";
 import { useThemeStore } from "@/stores/theme";
 import { useRouter } from "vue-router";
-
 defineProps({
     variant: { type: String, default: "icon" },
 });
-
 const page = ref("main");
 const openTheme = () => {
     page.value = "theme";
@@ -19,14 +17,12 @@ const openTheme = () => {
 const back = () => {
     page.value = "main";
 };
-
 const layout = useLayoutStore();
 const auth = useAuthStore();
 const themeStore = useThemeStore();
 const { loading, wrap } = useFormLoading();
 const { error: notifyError } = useSnackBarQueue();
 const router = useRouter();
-
 const logout = () => {
     showConfirmDialog({
         title: "Log Out",

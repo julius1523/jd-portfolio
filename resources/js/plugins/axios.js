@@ -29,9 +29,10 @@ axios.interceptors.response.use(
         if (
             status === 401 &&
             auth.isAuthenticated &&
-            !error.config.url?.includes("/login")
+            !error.config.url?.includes("/login") &&
+            !error.config.url?.includes("/logout")
         ) {
-            auth.logout();
+            auth.clearUser();
         }
 
         if (status === 403) {

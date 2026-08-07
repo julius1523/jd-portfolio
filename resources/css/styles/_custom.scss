@@ -92,23 +92,7 @@ html {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: normal;
-    height: 4rem;
-}
-
-.lazy-hidden {
-    opacity: 0;
-    transform: translateY(40px);
-    transition:
-        opacity 0.8s ease,
-        transform 0.8s ease;
-}
-
-.lazy-visible {
-    opacity: 1;
-    transform: translateY(0);
-    transition:
-        opacity 0.8s ease,
-        transform 0.8s ease;
+    height: 3.9rem;
 }
 
 .translate-content,

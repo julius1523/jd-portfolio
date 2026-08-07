@@ -113,7 +113,7 @@
 </template>
 
 <script setup>
-import axios from "axios";
+import axios from "@/plugins/axios";
 import { ref, onMounted, watch, nextTick } from "vue";
 import * as yup from "yup";
 import { useValidatedForm } from "@/composables/useValidatedForm";
@@ -192,8 +192,6 @@ async function getHomeContent() {
                 image: data.image_url,
             },
         });
-    } catch (e) {
-        error(e);
     } finally {
         pageLoading.value = false;
     }

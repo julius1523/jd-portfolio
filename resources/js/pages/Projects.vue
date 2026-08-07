@@ -1,162 +1,159 @@
 <template>
-    <LazyLoad>
-        <section id="projects">
-            <v-card flat tile>
-                <v-container class="my-5 my-md-13">
-                    <v-row class="my-0 my-md-8">
-                        <v-col cols="12" md="7">
-                            <div class="d-flex flex-column ga-3 ga-md-5">
-                                <div class="text-uppercase text-title-large font-weight-semibold text-primary animate">
-                                    Projects
-                                </div>
-                                <div class="text-headline-small animate">
-                                    Please see the projects I have worked on below.
-                                </div>
-                                <div class="text-medium-emphasis animate">
-                                    This collection highlights the systems I've developed and maintained for my
-                                    city's Local Government Unit. Alongside each project, you'll find user manuals
-                                    of how the systems work and an audio video presentation.
-                                </div>
+    <section id="projects" ref="projectsSection">
+        <v-card flat tile>
+            <v-container class="my-5 my-md-13">
+                <v-row class="my-0 my-md-8">
+                    <v-col cols="12" md="7">
+                        <div class="d-flex flex-column ga-3 ga-md-5">
+                            <div class="text-uppercase text-title-large font-weight-semibold text-primary reveal-item">
+                                Projects
                             </div>
-                        </v-col>
-                        <v-col cols="12" md="5">
-                            <div class="animate">
-                                <v-img src="/images/projects.png" cover height="300" width="300" class="fade-bottom"
-                                    :class="$vuetify.display.mdAndUp ? 'ml-auto' : 'mx-auto'" alt="Project Person" />
+                            <div class="text-headline-small reveal-item">
+                                Please see the projects I have worked on below.
                             </div>
-                        </v-col>
-                    </v-row>
-                </v-container>
-            </v-card>
-        </section>
-    </LazyLoad>
-
-    <LazyLoad>
-        <section id="projects-body">
-            <v-card flat tile color="surface-light">
-                <v-container class="my-5 my-md-13">
-                    <div class="d-flex flex-column ga-5">
-                        <div class="animate">
-                            <div class="text-headline-small font-weight-medium">
-                                Software Development
+                            <div class="text-medium-emphasis reveal-item">
+                                This collection highlights the systems I've developed and maintained for my
+                                city's Local Government Unit. Alongside each project, you'll find user manuals
+                                of how the systems work and an audio video presentation.
                             </div>
-                            <v-divider :thickness="4" color="primary" class="border-opacity-75 my-3" length="50" />
                         </div>
+                    </v-col>
+                    <v-col cols="12" md="5">
+                        <div class="reveal-item">
+                            <v-img src="/images/projects.png" cover height="300" width="300" class="fade-bottom"
+                                :class="$vuetify.display.mdAndUp ? 'ml-auto' : 'mx-auto'" alt="Project Person" />
+                        </div>
+                    </v-col>
+                </v-row>
+            </v-container>
+        </v-card>
+    </section>
 
-                        <SnapCarousel :items="software">
-                            <template #default="{ item, index }">
-                                <v-card width="330" height="440" rounded="xl" flat
-                                    class="border d-flex flex-column scale-down-content" @click="openProject(item.url)">
-                                    <div class="d-flex align-center justify-center h-50">
-                                        <img :src="item.preview" loading="lazy" decoding="async"
-                                            :alt="`Software Development Preview ${index}`" class="border rounded-lg" />
-                                    </div>
-
-                                    <div class="pa-5 d-flex flex-column flex-grow-1">
-                                        <div class="text-title font-weight-bold text-truncate">
-                                            {{ item.title }}
-                                        </div>
-
-                                        <div class="text-label-large text-medium-emphasis three-line mt-2">
-                                            {{ item.description }}
-                                        </div>
-
-                                        <div class="d-flex flex-wrap ga-1 mt-auto">
-                                            <v-chip v-for="(material, i) in item.materials" :key="i" color="primary"
-                                                size="small" variant="tonal">
-                                                {{ material }}
-                                            </v-chip>
-                                        </div>
-                                    </div>
-                                </v-card>
-                            </template>
-                        </SnapCarousel>
+    <section id="projects-body" ref="projectsBodySection">
+        <v-card flat tile color="surface-light">
+            <v-container class="my-5 my-md-13">
+                <div class="d-flex flex-column ga-5">
+                    <div class="reveal-item">
+                        <div class="text-headline-small font-weight-medium">
+                            Software Development
+                        </div>
+                        <v-divider :thickness="4" color="primary" class="border-opacity-75 my-3" length="50" />
                     </div>
 
-                    <div class="d-flex flex-column ga-5">
-                        <div class="animate">
-                            <div class="text-headline-small font-weight-medium mt-10 mt-md-15">
-                                Technical Documentation
-                            </div>
-                            <v-divider :thickness="4" color="primary" class="border-opacity-75 my-3" length="50" />
+                    <SnapCarousel :items="software">
+                        <template #default="{ item, index }">
+                            <v-card width="330" height="440" rounded="xl" flat
+                                class="border d-flex flex-column scale-down-content" @click="openProject(item.url)">
+                                <div class="d-flex align-center justify-center h-50">
+                                    <img :src="item.preview" loading="lazy" decoding="async"
+                                        :alt="`Software Development Preview ${index}`" class="border rounded-lg" />
+                                </div>
+
+                                <div class="pa-5 d-flex flex-column flex-grow-1">
+                                    <div class="text-title font-weight-bold text-truncate">
+                                        {{ item.title }}
+                                    </div>
+
+                                    <div class="text-label-large text-medium-emphasis three-line mt-2">
+                                        {{ item.description }}
+                                    </div>
+
+                                    <div class="d-flex flex-wrap ga-1 mt-auto">
+                                        <v-chip v-for="(material, i) in item.materials" :key="i" color="primary"
+                                            size="small" variant="tonal">
+                                            {{ material }}
+                                        </v-chip>
+                                    </div>
+                                </div>
+                            </v-card>
+                        </template>
+                    </SnapCarousel>
+                </div>
+
+                <div class="d-flex flex-column ga-5">
+                    <div class="reveal-item">
+                        <div class="text-headline-small font-weight-medium mt-10 mt-md-15">
+                            Technical Documentation
                         </div>
-
-                        <SnapCarousel :items="documentation">
-                            <template #default="{ item, index }">
-                                <v-card width="330" height="440" rounded="xl" flat
-                                    class="border d-flex flex-column scale-down-content" @click="openProject(item.url)">
-                                    <div class="d-flex align-center justify-center h-50">
-                                        <img :src="item.preview" loading="lazy" decoding="async"
-                                            :alt="`Technical Documentation Preview ${index}`"
-                                            class="border rounded-lg" />
-                                    </div>
-                                    <div class="pa-5 d-flex flex-column flex-grow-1">
-                                        <div class="text-title font-weight-bold text-truncate">
-                                            {{ item.title }}
-                                        </div>
-
-                                        <div class="text-label-large text-medium-emphasis three-line mt-2">
-                                            {{ item.description }}
-                                        </div>
-
-                                        <div class="d-flex flex-wrap ga-1 mt-auto">
-                                            <v-chip v-for="(material, i) in item.materials" :key="i" color="primary"
-                                                size="small" variant="tonal">
-                                                {{ material }}
-                                            </v-chip>
-                                        </div>
-                                    </div>
-                                </v-card>
-                            </template>
-                        </SnapCarousel>
+                        <v-divider :thickness="4" color="primary" class="border-opacity-75 my-3" length="50" />
                     </div>
 
-                    <div class="d-flex flex-column ga-5">
-                        <div class="animate">
-                            <div class="text-headline-small font-weight-medium mt-10 mt-md-15">
-                                Presentations/Multimedia
-                            </div>
-                            <v-divider :thickness="4" color="primary" class="border-opacity-75 my-3" length="50" />
+                    <SnapCarousel :items="documentation">
+                        <template #default="{ item, index }">
+                            <v-card width="330" height="440" rounded="xl" flat
+                                class="border d-flex flex-column scale-down-content" @click="openProject(item.url)">
+                                <div class="d-flex align-center justify-center h-50">
+                                    <img :src="item.preview" loading="lazy" decoding="async"
+                                        :alt="`Technical Documentation Preview ${index}`" class="border rounded-lg" />
+                                </div>
+                                <div class="pa-5 d-flex flex-column flex-grow-1">
+                                    <div class="text-title font-weight-bold text-truncate">
+                                        {{ item.title }}
+                                    </div>
+
+                                    <div class="text-label-large text-medium-emphasis three-line mt-2">
+                                        {{ item.description }}
+                                    </div>
+
+                                    <div class="d-flex flex-wrap ga-1 mt-auto">
+                                        <v-chip v-for="(material, i) in item.materials" :key="i" color="primary"
+                                            size="small" variant="tonal">
+                                            {{ material }}
+                                        </v-chip>
+                                    </div>
+                                </div>
+                            </v-card>
+                        </template>
+                    </SnapCarousel>
+                </div>
+
+                <div class="d-flex flex-column ga-5">
+                    <div class="reveal-item">
+                        <div class="text-headline-small font-weight-medium mt-10 mt-md-15">
+                            Presentations/Multimedia
                         </div>
-                        <SnapCarousel :items="media">
-                            <template #default="{ item, index }">
-                                <v-card width="330" height="440" rounded="xl" flat
-                                    class="border d-flex flex-column scale-down-content" @click="openProject(item.url)">
-                                    <div class="d-flex align-center justify-center h-50">
-                                        <img :src="item.preview" loading="lazy" decoding="async"
-                                            :alt="`Presentations/Multimedia Preview ${index}`"
-                                            class="border rounded-lg" />
-                                    </div>
-
-                                    <div class="pa-5 d-flex flex-column flex-grow-1">
-                                        <div class="text-title font-weight-bold text-truncate">
-                                            {{ item.title }}
-                                        </div>
-
-                                        <div class="text-label-large text-medium-emphasis three-line mt-2">
-                                            {{ item.description }}
-                                        </div>
-
-                                        <div class="d-flex flex-wrap ga-1 mt-auto">
-                                            <v-chip v-for="(material, i) in item.materials" :key="i" color="primary"
-                                                size="small" variant="tonal">
-                                                {{ material }}
-                                            </v-chip>
-                                        </div>
-                                    </div>
-                                </v-card>
-                            </template>
-                        </SnapCarousel>
+                        <v-divider :thickness="4" color="primary" class="border-opacity-75 my-3" length="50" />
                     </div>
-                </v-container>
-            </v-card>
-        </section>
-    </LazyLoad>
+                    <SnapCarousel :items="media">
+                        <template #default="{ item, index }">
+                            <v-card width="330" height="440" rounded="xl" flat
+                                class="border d-flex flex-column scale-down-content" @click="openProject(item.url)">
+                                <div class="d-flex align-center justify-center h-50">
+                                    <img :src="item.preview" loading="lazy" decoding="async"
+                                        :alt="`Presentations/Multimedia Preview ${index}`" class="border rounded-lg" />
+                                </div>
+
+                                <div class="pa-5 d-flex flex-column flex-grow-1">
+                                    <div class="text-title font-weight-bold text-truncate">
+                                        {{ item.title }}
+                                    </div>
+
+                                    <div class="text-label-large text-medium-emphasis three-line mt-2">
+                                        {{ item.description }}
+                                    </div>
+
+                                    <div class="d-flex flex-wrap ga-1 mt-auto">
+                                        <v-chip v-for="(material, i) in item.materials" :key="i" color="primary"
+                                            size="small" variant="tonal">
+                                            {{ material }}
+                                        </v-chip>
+                                    </div>
+                                </div>
+                            </v-card>
+                        </template>
+                    </SnapCarousel>
+                </div>
+            </v-container>
+        </v-card>
+    </section>
 </template>
 
 <script setup>
 import { ref } from "vue";
 import SnapCarousel from "@/components/ui/SnapCarousel";
+import { useScrollReveal } from "@/composables/useScrollReveal";
+const projectsSection = ref(null);
+const projectsBodySection = ref(null);
 const softwarePage = ref(1);
 const documentationPage = ref(1);
 const videoPage = ref(1);
@@ -254,4 +251,6 @@ const openProject = (url) => {
         'noopener,noreferrer'
     )
 };
+useScrollReveal(projectsSection, { selector: '.reveal-item', stagger: 0.15, y: 40 });
+useScrollReveal(projectsBodySection, { selector: '.reveal-item', stagger: 0.15, y: 40 });
 </script>

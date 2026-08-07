@@ -17,6 +17,7 @@
         "@mdi/font": "^7.4.47",
         "@vitejs/plugin-vue": "^6.0.6",
         "axios": "^1.18.1",
+        "gsap": "^3.15.0",
         "pinia": "^3.0.4",
         "sass": "^1.99.0",
         "sass-loader": "^16.0.7",

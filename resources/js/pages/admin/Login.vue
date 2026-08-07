@@ -1,7 +1,7 @@
 <template>
-    <LazyLoad>
+    <section id="login" ref="loginSection">
         <v-container>
-            <v-card class="pa-6 mx-auto mt-10 animate" max-width="400" rounded="xl" :loading="loading"
+            <v-card class="pa-6 mx-auto mt-10 reveal-item" max-width="400" rounded="xl" :loading="loading"
                 :disabled="loading">
                 <template v-if="loading" #loader>
                     <v-progress-linear indeterminate color="primary" />
@@ -30,17 +30,22 @@
                 </v-form>
             </v-card>
         </v-container>
-    </LazyLoad>
+    </section>
 </template>
 
 <script setup>
+import { ref, onMounted } from "vue";
 import * as yup from "yup";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import { useValidatedForm } from "@/composables/useValidatedForm";
 import PasswordField from "@/components/forms/PasswordField";
 import Alert from "@/components/ui/Alert";
+import { useAlert } from "@/composables/useAlert";
+import { useScrollReveal } from '@/composables/useScrollReveal';
+const loginSection = ref(null);
 const router = useRouter();
+const { warning } = useAlert();
 const auth = useAuthStore();
 const schema = yup.object({
     email: yup.string().label('Email').email().required(),
@@ -56,4 +61,5 @@ const { defineField, errors, loading, submit } = useValidatedForm(schema, async 
 const [email] = defineField('email');
 const [password] = defineField('password');
 const [remember] = defineField('remember');
+useScrollReveal(loginSection, { selector: '.reveal-item', y: 20 });
 </script>

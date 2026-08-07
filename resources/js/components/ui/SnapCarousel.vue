@@ -3,7 +3,6 @@ import { ref, onMounted, onBeforeUnmount } from 'vue';
 const carousel = ref(null);
 const canScrollLeft = ref(false);
 const canScrollRight = ref(true);
-
 const updateButtons = () => {
     if (!carousel.value) return;
     const el = carousel.value;
@@ -11,27 +10,21 @@ const updateButtons = () => {
     canScrollRight.value =
         el.scrollLeft + el.clientWidth < el.scrollWidth - 1;
 };
-
 const props = defineProps({
     items: {
         type: Array,
         required: true,
     },
 });
-
 const scroll = (direction) => {
     if (!carousel.value) return;
     const el = carousel.value;
-
     const cards = Array.from(el.querySelectorAll('.card-item'));
     if (!cards.length) return;
-
     const edge = parseFloat(getComputedStyle(el).paddingLeft) || 0;
     const current = el.scrollLeft;
-    const buffer = 1; // guards against subpixel rounding
-
+    const buffer = 1;
     let targetCard;
-
     if (direction > 0) {
         targetCard = cards.find(card => card.offsetLeft - edge > current + buffer);
         targetCard ??= cards[cards.length - 1];
@@ -40,15 +33,12 @@ const scroll = (direction) => {
             .find(card => card.offsetLeft - edge < current - buffer);
         targetCard ??= cards[0];
     }
-
     el.scrollTo({
         left: targetCard.offsetLeft - edge,
         behavior: 'smooth',
     });
 };
-
 let resizeObserver;
-
 onMounted(() => {
     requestAnimationFrame(updateButtons);
     const el = carousel.value;
@@ -58,7 +48,6 @@ onMounted(() => {
     });
     resizeObserver.observe(el);
 });
-
 onBeforeUnmount(() => {
     const el = carousel.value;
     el?.removeEventListener('scroll', updateButtons);
@@ -68,7 +57,7 @@ onBeforeUnmount(() => {
 
 <template>
     <div class="card-carousel-wrapper">
-        <div ref="carousel" class="card-carousel animate py-3">
+        <div ref="carousel" class="card-carousel py-3 reveal-item">
             <div v-for="(item, i) in items" :key="i" class="card-item">
                 <slot :item="item" :index="i" />
             </div>

@@ -1,3 +1,9 @@
+<script setup>
+import { useSnackBarQueue } from "@/composables/useSnackBarQueue";
+
+const { messages } = useSnackBarQueue();
+</script>
+
 <template>
     <v-snackbar-queue v-model="messages" :location="$vuetify.display.mdAndUp ? 'top end' : 'bottom center'"
         :collapsed="$vuetify.display.smAndDown" timeout="5000" transition="bouncy-slide-auto" total-visible="5"
@@ -13,9 +19,3 @@
         </template>
     </v-snackbar-queue>
 </template>
-
-<script setup>
-import { useSnackBarQueue } from "@/composables/useSnackBarQueue";
-
-const { messages } = useSnackBarQueue();
-</script>

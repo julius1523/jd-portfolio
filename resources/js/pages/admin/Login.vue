@@ -25,7 +25,7 @@
                     </v-btn>
                     <v-btn color="surface-variant" variant="plain" rounded="pill" size="x-large"
                         prepend-icon="mdi-arrow-left" block text="Go back to home"
-                        @click="$router.push({ name: 'home' })">
+                        @click="$router.replace({ name: 'home' })">
                     </v-btn>
                 </v-form>
             </v-card>
@@ -54,7 +54,7 @@ const schema = yup.object({
 });
 const { defineField, errors, loading, submit } = useValidatedForm(schema, async (values) => {
     await auth.login(values);
-    router.push({ name: 'manage-content' });
+    router.replace({ name: 'manage-content' });
 },
     { resetOnSuccess: false, useAlertForErrors: true }
 );

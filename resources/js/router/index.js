@@ -44,15 +44,7 @@ router.beforeEach((to) => {
 });
 
 router.afterEach((to, from, failure) => {
-    if (isNavigationFailure(failure)) {
-        const current = router.currentRoute.value;
-        document.title = current.meta?.title ?? "Portfolio";
-
-        if (to.fullPath !== current.fullPath) {
-            router.replace(current.fullPath).catch(() => {});
-        }
-        return;
-    }
+    if (isNavigationFailure(failure)) return;
     requestAnimationFrame(() => ScrollTrigger.refresh());
     document.title = to.meta?.title ?? "Portfolio";
 });

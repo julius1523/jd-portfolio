@@ -34,7 +34,7 @@ const logout = () => {
             wrap(async () => {
                 try {
                     await auth.logout();
-                    router.push({ name: "login" });
+                    router.replace({ name: "login" })
                 } catch (error) {
                     notifyError(
                         error.response?.data?.message ?? "Failed to log out."

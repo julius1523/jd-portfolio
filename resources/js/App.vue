@@ -29,7 +29,6 @@ import { watch, computed } from "vue";
 import { useTheme } from "vuetify";
 import { useThemeStore } from "@/stores/theme";
 import { useRoute } from "vue-router";
-
 import { provideShimmerConfig } from '@shimmer-from-structure/vue';
 
 provideShimmerConfig({

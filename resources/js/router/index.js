@@ -4,6 +4,7 @@ import {
     isNavigationFailure,
 } from "vue-router";
 import routes from "./routes";
+import { useAuthStore } from "@/stores/auth";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -19,27 +20,27 @@ const router = createRouter({
     },
 });
 
-router.beforeEach((to, from) => {
-    const middleware = to.meta.middleware;
-
-    if (!middleware) {
-        return true;
+router.beforeEach((to) => {
+    const auth = useAuthStore();
+    switch (to.meta.middleware) {
+        case "guest":
+            if (auth.isAuthenticated) {
+                return {
+                    name: "manage-content",
+                    replace: true,
+                };
+            }
+            break;
+        case "auth":
+            if (!auth.isAuthenticated) {
+                return {
+                    name: "login",
+                    replace: true,
+                };
+            }
+            break;
     }
-
-    return middleware(to, from);
-});
-
-router.onError((error, to) => {
-    if (
-        error.message.includes("Failed to fetch dynamically imported module") ||
-        error.message.includes("Importing a module script failed")
-    ) {
-        if (!to?.fullPath) {
-            window.location.reload();
-        } else {
-            window.location = to.fullPath;
-        }
-    }
+    return true;
 });
 
 router.afterEach((to, from, failure) => {

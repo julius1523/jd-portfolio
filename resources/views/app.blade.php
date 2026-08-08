@@ -12,6 +12,17 @@
 
 <body>
     <div id="app"></div>
+
+    <script>
+        window.__AUTH_USER__ = {{ Js::from(
+    auth()->user() ? [
+        'id' => auth()->user()->id,
+        'name' => auth()->user()->name,
+        'email' => auth()->user()->email,
+    ]
+    : null
+) }};
+    </script>
 </body>
 
 </html>

@@ -1,11 +1,12 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
-import axios from "@/plugins/axios";
+import axios from "axios";
+import { getInitialUser } from "@/bootstrap/auth";
 
 export const useAuthStore = defineStore("auth", () => {
-    const user = ref(null);
+    const user = ref(getInitialUser());
 
-    const isAuthenticated = computed(() => !!user.value);
+    const isAuthenticated = computed(() => user.value !== null);
 
     function setUser(value) {
         user.value = value;
@@ -21,12 +22,13 @@ export const useAuthStore = defineStore("auth", () => {
 
     async function login(credentials) {
         await getCsrfCookie();
-        await axios.post("/api/login", credentials);
+        const response = await axios.post("/api/login", credentials);
+        setUser(response.data.user);
     }
 
     async function register(payload) {
         await getCsrfCookie();
-        await axios.post("/api/register", payload);
+        const response = await axios.post("/api/register", payload);
     }
 
     async function logout() {

@@ -209,9 +209,10 @@ const cancelEdit = () => {
     info("No changes made.");
 };
 watch(title, async (val) => {
+    if (!Array.isArray(val)) return;
     if (val.length > 4) {
-        await nextTick()
-        title.value.pop()
+        await nextTick();
+        title.value = val.slice(0, 4);
     }
 }, { deep: true });
 onMounted(getHomeContent);

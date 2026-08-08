@@ -44,7 +44,6 @@ const onScroll = () => {
                         @click="themeStore.setDark(!themeStore.isDark)" variant="text" size="x-small"></v-btn>
                 </div>
             </template>
-
             <template v-else>
                 <div class="d-flex flex-row justify-space-between align-center w-100">
                     <v-btn size="small" icon="mdi-menu" class="border" @click="layout.toggleDrawer()" />

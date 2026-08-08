@@ -29,24 +29,21 @@ import { watch, computed } from "vue";
 import { useTheme } from "vuetify";
 import { useThemeStore } from "@/stores/theme";
 import { useRoute } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
 import { provideShimmerConfig } from '@shimmer-from-structure/vue';
-
 provideShimmerConfig({
     shimmerColor: 'rgba(156, 163, 175, 0.4)',
     backgroundColor: 'rgba(156, 163, 175, 0.15)',
     duration: 1.5,
     fallbackBorderRadius: 8,
 });
-
 const route = useRoute();
 const theme = useTheme();
 const themeStore = useThemeStore();
-
 const layoutType = computed(() => route.meta.layout ?? "public");
 const showAppBar = computed(() => layoutType.value !== "login");
 const showSidebar = computed(() => layoutType.value === "app");
 const showFooter = computed(() => layoutType.value === "public");
-
 watch(
     () => themeStore.isDark,
     (isDark) => theme.change(isDark ? "dark" : "light")

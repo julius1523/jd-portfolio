@@ -8,7 +8,6 @@ const savedTheme = localStorage.getItem("theme") ?? "dark";
 
 export default createVuetify({
     theme: {
-        transition: true,
         defaultTheme: savedTheme,
         themes: {
             light: {
@@ -82,12 +81,6 @@ export default createVuetify({
         },
         VMenu: {
             offset: "7px",
-        },
-        VList: {
-            rounded: "lg",
-        },
-        VListItem: {
-            rounded: "lg",
         },
         VContainer: {
             maxWidth: 1400,

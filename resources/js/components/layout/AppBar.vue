@@ -1,19 +1,20 @@
 <script setup>
 import { ref, watch, computed } from "vue";
-import { useAuthStore } from "@/stores/auth";
-import useActiveRoute from "@/composables/useActiveRoute";
-import { useThemeStore } from '@/stores/theme';
-import { useLayoutStore } from "@/stores/layout";
+import { useDisplay, useTheme } from "vuetify";
 import { useRoute } from "vue-router";
-import { useDisplay } from "vuetify";
+import { useAuthStore } from "@/stores/auth";
+import { useLayoutStore } from "@/stores/layout";
+import { useThemeStore } from '@/stores/theme';
 import ProfileMenu from "../ui/ProfileMenu";
+import useActiveRoute from "@/composables/useActiveRoute";
 const auth = useAuthStore();
-const isScrolled = ref(false);
-const route = useRoute();
-const themeStore = useThemeStore();
-const layout = useLayoutStore();
-const { isActive } = useActiveRoute();
 const { smAndDown } = useDisplay();
+const theme = useTheme();
+const route = useRoute();
+const layout = useLayoutStore();
+const themeStore = useThemeStore();
+const isScrolled = ref(false);
+const { isActive } = useActiveRoute();
 const layoutType = computed(() => {
     if (route.name === 'not-found') {
         return auth.isAuthenticated ? 'app' : 'public';
@@ -23,6 +24,10 @@ const layoutType = computed(() => {
 const isAppLayout = computed(() => layoutType.value === 'app');
 const onScroll = () => {
     isScrolled.value = window.scrollY > 10;
+};
+const toggleTheme = (e) => {
+    theme.setTransitionOrigin(e.target);
+    themeStore.setDark(!themeStore.isDark);
 };
 </script>
 
@@ -38,18 +43,18 @@ const onScroll = () => {
                 <div class="d-flex align-center ga-2 ml-auto">
                     <template v-if="$vuetify.display.mdAndUp">
                         <v-btn :color="isActive('home') ? 'primary' : undefined" height="28" rounded="pill" text="Home"
-                            :to="{ name: 'home' }"></v-btn>
+                            :to="{ name: 'home' }" />
                         <v-btn :color="isActive('about') ? 'primary' : undefined" height="28" rounded="pill"
-                            text="About" :to="{ name: 'about' }"></v-btn>
+                            text="About" :to="{ name: 'about' }" />
                         <v-btn :color="isActive('projects') ? 'primary' : undefined" height="28" rounded="pill"
-                            text="Projects" :to="{ name: 'projects' }"></v-btn>
+                            text="Projects" :to="{ name: 'projects' }" />
                         <v-btn :color="isActive('contact') ? 'primary' : undefined" height="28" rounded="pill"
-                            text="Contact" :to="{ name: 'contact' }"></v-btn>
+                            text="Contact" :to="{ name: 'contact' }" />
                     </template>
                     <v-btn
                         :icon="themeStore.isDark ? 'mdi-moon-waning-crescent mdi-rotate-315 opacity-80' : 'mdi-white-balance-sunny opacity-80'"
                         v-tooltip="{ text: themeStore.isDark ? 'Light Mode' : 'Dark Mode', location: 'bottom' }"
-                        @click="themeStore.setDark(!themeStore.isDark)" variant="text" size="x-small"></v-btn>
+                        @click="toggleTheme" variant="text" size="x-small" />
                 </div>
             </template>
             <template v-else>

@@ -11,17 +11,17 @@ const layout = useLayoutStore();
         :floating="$vuetify.display.smAndDown" :permanent="$vuetify.display.mdAndUp" width="250">
         <template #prepend>
             <template v-if="$vuetify.display.mdAndUp">
-                <v-list variant="plain" density="compact" nav class="mt-1">
-                    <v-list-item exact :ripple="false" class="opacity-100" :class="{ 'justify-center': layout.rail }"
-                        :to="{ name: 'home' }">
+                <v-list variant="plain" density="compact" slim nav>
+                    <v-list-item exact rounded="lg" :ripple="false" class="opacity-100"
+                        :class="{ 'justify-center': layout.rail }" :to="{ name: 'home' }">
                         <template #title>
                             <span class="text-title-medium font-weight-bold">Portfolio</span>
                         </template>
                         <template #append>
-                            <v-icon-btn variant="text" height="32" rounded="lg" icon="mdi-dock-left opacity-70"
+                            <v-icon-btn variant="text" rounded="lg" icon="mdi-dock-left"
+                                :class="{ 'me-n2': !layout.rail }" class="opacity-70"
                                 v-tooltip="{ text: layout.rail ? 'Open sidebar' : 'Close sidebar', location: 'end', disabled: !layout.rail && $vuetify.display.smAndDown }"
-                                @click.stop.prevent="layout.toggleRail()">
-                            </v-icon-btn>
+                                @click.stop.prevent="layout.toggleRail()" />
                         </template>
                     </v-list-item>
                 </v-list>
@@ -35,11 +35,11 @@ const layout = useLayoutStore();
                     Menu
                 </template>
             </v-list-subheader>
-            <v-list-item prepend-icon="mdi-pencil-outline" title="Manage Content" exact value="home-content"
-                :to="{ name: 'manage-content' }"
+            <v-list-item prepend-icon="mdi-pencil-outline" title="Manage Content" exact rounded="lg"
+                value="home-content" :to="{ name: 'manage-content' }"
                 v-tooltip="{ text: 'Manage Content', location: 'end', disabled: !layout.rail }" />
-            <v-list-item prepend-icon="mdi-cog-outline" title="System Settings" exact value="system-settings"
-                :to="{ name: 'system-settings' }"
+            <v-list-item prepend-icon="mdi-cog-outline" title="System Settings" exact rounded="lg"
+                value="system-settings" :to="{ name: 'system-settings' }"
                 v-tooltip="{ text: 'System Settings', location: 'end', disabled: !layout.rail }" />
         </v-list>
 

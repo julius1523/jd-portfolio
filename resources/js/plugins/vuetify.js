@@ -8,7 +8,7 @@ const savedTheme = localStorage.getItem("theme") ?? "dark";
 
 export default createVuetify({
     theme: {
-        transition: { origin: "100% 0%" },
+        transition: true,
         defaultTheme: savedTheme,
         themes: {
             light: {

@@ -11,8 +11,8 @@ useScrollReveal(notFoundSection, { selector: '.reveal-item', stagger: 0.15, y: 4
             <v-empty-state headline="Whoops, 404" title="Page not found"
                 text="The page you were looking for does not exist" image="/images/not-found.png" class="mt-15 animate">
                 <template #actions>
-                    <v-btn color="primary" variant="flat" rounded="pill" size="x-large" prepend-icon="mdi-arrow-left"
-                        block text="Go back to home" @click="$router.replace('/')">
+                    <v-btn color="primary" variant="flat" rounded="pill" size="x-large" block text="Go back to home"
+                        @click="$router.replace('/')">
                     </v-btn>
                 </template>
             </v-empty-state>

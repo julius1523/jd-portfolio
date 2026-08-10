@@ -1,18 +1,26 @@
 <script setup>
 import { ref, watch, computed } from "vue";
+import { useAuthStore } from "@/stores/auth";
 import useActiveRoute from "@/composables/useActiveRoute";
 import { useThemeStore } from '@/stores/theme';
 import { useLayoutStore } from "@/stores/layout";
 import { useRoute } from "vue-router";
 import { useDisplay } from "vuetify";
 import ProfileMenu from "../ui/ProfileMenu";
+const auth = useAuthStore();
 const isScrolled = ref(false);
 const route = useRoute();
 const themeStore = useThemeStore();
 const layout = useLayoutStore();
 const { isActive } = useActiveRoute();
 const { smAndDown } = useDisplay();
-const isAppLayout = computed(() => route.meta.layout === "app");
+const layoutType = computed(() => {
+    if (route.name === 'not-found') {
+        return auth.isAuthenticated ? 'app' : 'public';
+    }
+    return route.meta.layout ?? 'public';
+});
+const isAppLayout = computed(() => layoutType.value === 'app');
 const onScroll = () => {
     isScrolled.value = window.scrollY > 10;
 };

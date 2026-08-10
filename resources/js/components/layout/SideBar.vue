@@ -11,7 +11,7 @@ const layout = useLayoutStore();
         :floating="$vuetify.display.smAndDown" :permanent="$vuetify.display.mdAndUp" width="250">
         <template #prepend>
             <template v-if="$vuetify.display.mdAndUp">
-                <v-list variant="plain" density="compact" slim nav class="mt-1">
+                <v-list variant="plain" density="compact" nav class="mt-1">
                     <v-list-item exact :ripple="false" class="opacity-100" :class="{ 'justify-center': layout.rail }"
                         :to="{ name: 'home' }">
                         <template #title>
@@ -25,10 +25,6 @@ const layout = useLayoutStore();
                         </template>
                     </v-list-item>
                 </v-list>
-            </template>
-            <template v-else>
-                <v-btn size="small" icon="mdi-close" variant="text" class="border ma-2"
-                    @click="layout.toggleDrawer()" />
             </template>
         </template>
 

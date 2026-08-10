@@ -7,7 +7,6 @@ export default [
         path: "/",
         redirect: { name: "home" },
     },
-
     {
         path: "/home",
         name: "home",
@@ -18,7 +17,6 @@ export default [
             layout: "public",
         },
     },
-
     {
         path: "/about",
         name: "about",
@@ -29,7 +27,6 @@ export default [
             layout: "public",
         },
     },
-
     {
         path: "/projects",
         name: "projects",
@@ -40,7 +37,6 @@ export default [
             layout: "public",
         },
     },
-
     {
         path: "/contact",
         name: "contact",
@@ -51,7 +47,6 @@ export default [
             layout: "public",
         },
     },
-
     {
         path: "/login",
         name: "login",
@@ -62,7 +57,6 @@ export default [
             layout: "login",
         },
     },
-
     {
         path: "/manage-content/:tab?",
         name: "manage-content",
@@ -73,7 +67,6 @@ export default [
             layout: "app",
         },
     },
-
     {
         path: "/system-settings",
         name: "system-settings",
@@ -84,14 +77,12 @@ export default [
             layout: "app",
         },
     },
-
     {
         path: "/:pathMatch(.*)*",
-        name: "notfound",
+        name: "not-found",
         component: page("errors/NotFound"),
         meta: {
             title: "Page Not Found",
-            layout: "public",
         },
     },
 ];

@@ -26,10 +26,10 @@ import footr from "@/components/layout/Footer";
 import snackbar from "@/components/ui/SnackBarQueue";
 import confirm from "@/components/ui/ConfirmDialog";
 import { watch, computed } from "vue";
+import { useAuthStore } from "@/stores/auth";
 import { useTheme } from "vuetify";
 import { useThemeStore } from "@/stores/theme";
 import { useRoute } from "vue-router";
-import { useAuthStore } from "@/stores/auth";
 import { provideShimmerConfig } from '@shimmer-from-structure/vue';
 provideShimmerConfig({
     shimmerColor: 'rgba(156, 163, 175, 0.4)',
@@ -37,10 +37,16 @@ provideShimmerConfig({
     duration: 1.5,
     fallbackBorderRadius: 8,
 });
+const auth = useAuthStore();
 const route = useRoute();
 const theme = useTheme();
 const themeStore = useThemeStore();
-const layoutType = computed(() => route.meta.layout ?? "public");
+const layoutType = computed(() => {
+    if (route.name === "not-found") {
+        return auth.isAuthenticated ? "app" : "public";
+    }
+    return route.meta.layout ?? "public";
+});
 const showAppBar = computed(() => layoutType.value !== "login");
 const showSidebar = computed(() => layoutType.value === "app");
 const showFooter = computed(() => layoutType.value === "public");

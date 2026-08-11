@@ -41,10 +41,9 @@
         <v-card flat tile color="surface-light">
             <v-container class="d-flex flex-column align-center ga-5 my-5 my-md-13">
                 <div class="reveal-item">
-                    <div class="text-center text-headline-small font-weight-medium">
+                    <div class="text-center text-headline-small text-md-headline-medium font-weight-medium">
                         Skills
                     </div>
-                    <v-divider :thickness="4" color="primary" class="border-opacity-75 mx-auto my-3" length="50" />
                 </div>
                 <div class="d-flex flex-column ga-10 reveal-item">
                     <div v-for="item in skills" :key="item.title" class="d-flex flex-column ga-3">
@@ -68,10 +67,9 @@
         <v-card flat tile>
             <v-container class="d-flex flex-column align-center ga-5 my-5 my-md-13">
                 <div class="reveal-item">
-                    <div class="text-center text-headline-small font-weight-medium">
+                    <div class="text-center text-headline-small text-md-headline-medium font-weight-medium">
                         Random Facts
                     </div>
-                    <v-divider :thickness="4" color="primary" class="border-opacity-75 mx-auto my-3" length="50" />
                 </div>
                 <div class="d-flex flex-row flex-wrap ga-4 justify-center">
                     <div v-for="item in facts" :key="item.text" class="reveal-item">
@@ -94,10 +92,9 @@
         <v-card flat tile color="surface-light">
             <v-container class="d-flex flex-column align-center ga-5 my-5 my-md-13">
                 <div class="reveal-item">
-                    <div class="text-center text-headline-small font-weight-medium">
+                    <div class="text-center text-headline-small text-md-headline-medium font-weight-medium">
                         Design System
                     </div>
-                    <v-divider :thickness="4" color="primary" class="border-opacity-75 mx-auto my-3" length="50" />
                 </div>
                 <v-row>
                     <v-col cols="12" class="text-center reveal-item">

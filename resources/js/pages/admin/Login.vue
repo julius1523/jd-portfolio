@@ -11,7 +11,7 @@
                 <Alert />
                 <v-form @submit.prevent="submit" class="mt-5">
                     <v-text-field v-model="email" color="primary" variant="solo" flat label="Email" rounded="lg"
-                        density="comfortable" clearable :error-messages="errors.email" />
+                        density="comfortable" class="mb-1" clearable :error-messages="errors.email" />
                     <PasswordField v-model="password" label="Password" :error-messages="errors.password" />
                     <v-checkbox v-model="remember" color="primary" hide-details density="compact"
                         class="text-label-large">
@@ -36,7 +36,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import * as yup from "yup";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import { useValidatedForm } from "@/composables/useValidatedForm";
 import PasswordField from "@/components/forms/PasswordField";
@@ -44,8 +44,9 @@ import Alert from "@/components/ui/Alert";
 import { useAlert } from "@/composables/useAlert";
 import { useScrollReveal } from '@/composables/useScrollReveal';
 const loginSection = ref(null);
+const route = useRoute();
 const router = useRouter();
-const { warning } = useAlert();
+const { warning, error } = useAlert();
 const auth = useAuthStore();
 const schema = yup.object({
     email: yup.string().label('Email').email().required(),
@@ -61,5 +62,13 @@ const { defineField, errors, loading, submit } = useValidatedForm(schema, async 
 const [email] = defineField('email');
 const [password] = defineField('password');
 const [remember] = defineField('remember');
+onMounted(() => {
+    if (route.query.reason === 'session_expired') {
+        warning('Your session has expired. Please log in again.');
+    } else if (route.query.reason === 'unauthenticated') {
+        error('You are unauthenticated. Please log in again.');
+    }
+    router.replace({ name: 'login' });
+});
 useScrollReveal(loginSection, { selector: '.reveal-item', y: 20 });
 </script>

@@ -1,6 +1,7 @@
 <script setup>
 import { ref, watch, computed } from "vue";
-import { useDisplay, useTheme } from "vuetify";
+import { storeToRefs } from "pinia";
+import { useTheme } from "vuetify";
 import { useRoute } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import { useLayoutStore } from "@/stores/layout";
@@ -8,7 +9,7 @@ import { useThemeStore } from '@/stores/theme';
 import ProfileMenu from "../ui/ProfileMenu";
 import useActiveRoute from "@/composables/useActiveRoute";
 const auth = useAuthStore();
-const { smAndDown } = useDisplay();
+const { isAuthenticated } = storeToRefs(auth);
 const theme = useTheme();
 const route = useRoute();
 const layout = useLayoutStore();
@@ -17,7 +18,7 @@ const isScrolled = ref(false);
 const { isActive } = useActiveRoute();
 const layoutType = computed(() => {
     if (route.name === 'not-found') {
-        return auth.isAuthenticated ? 'app' : 'public';
+        return isAuthenticated.value ? 'app' : 'public';
     }
     return route.meta.layout ?? 'public';
 });
@@ -69,22 +70,25 @@ const toggleTheme = (e) => {
 
     <v-bottom-navigation v-if="!isAppLayout && $vuetify.display.smAndDown" :elevation="0" grow rounded="pill"
         class="border mx-auto pa-1">
-        <v-btn :color="isActive('home') ? 'primary' : undefined" rounded="pill" :to="{ name: 'home' }">
+        <v-btn :ripple="false" :color="isActive('home') ? 'primary' : undefined" rounded="pill" :to="{ name: 'home' }">
             <v-icon size="27">mdi-home</v-icon>
             Home
         </v-btn>
 
-        <v-btn :color="isActive('about') ? 'primary' : undefined" rounded="pill" :to="{ name: 'about' }">
+        <v-btn :ripple="false" :color="isActive('about') ? 'primary' : undefined" rounded="pill"
+            :to="{ name: 'about' }">
             <v-icon size="27">mdi-information</v-icon>
             About
         </v-btn>
 
-        <v-btn :color="isActive('projects') ? 'primary' : undefined" rounded="pill" :to="{ name: 'projects' }">
+        <v-btn :ripple="false" :color="isActive('projects') ? 'primary' : undefined" rounded="pill"
+            :to="{ name: 'projects' }">
             <v-icon size="27">mdi-briefcase-variant</v-icon>
             Projects
         </v-btn>
 
-        <v-btn :color="isActive('contact') ? 'primary' : undefined" rounded="pill" :to="{ name: 'contact' }">
+        <v-btn :ripple="false" :color="isActive('contact') ? 'primary' : undefined" rounded="pill"
+            :to="{ name: 'contact' }">
             <v-icon size="27">mdi-phone</v-icon>
             Contact
         </v-btn>

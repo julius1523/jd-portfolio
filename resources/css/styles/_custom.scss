@@ -7,13 +7,6 @@ html {
     backface-visibility: hidden;
 }
 
-// @media not all and (hover: hover) and (pointer: fine) {
-//     .v-list-item:hover > .v-list-item__overlay,
-//     .v-list-item--link:hover > .v-list-item__overlay {
-//         opacity: 0;
-//     }
-// }
-
 .v-text-field {
     .v-field {
         &.v-field--variant-solo {

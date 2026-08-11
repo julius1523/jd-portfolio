@@ -1,10 +1,10 @@
 <script setup>
-import { onMounted } from "vue";
+import { onUnmounted } from "vue";
 import { useAlert } from "@/composables/useAlert";
 
 const { alert, clear } = useAlert();
 
-onMounted(() => {
+onUnmounted(() => {
     clear();
 });
 </script>

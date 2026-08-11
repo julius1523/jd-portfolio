@@ -49,21 +49,18 @@
         <v-card flat tile color="surface-light">
             <v-container class="d-flex flex-column ga-5 my-5 my-md-13" :max-width="450">
                 <div class="reveal-item">
-                    <div class="text-center text-headline-small font-weight-medium">Send Email
+                    <div class="text-center text-headline-small text-md-headline-medium font-weight-medium">Send Email
                     </div>
-                    <v-divider :thickness="4" color="primary" class="border-opacity-75 mx-auto my-3" length="50" />
                 </div>
                 <v-form @submit.prevent="submit" :disabled="loading">
                     <v-row gap="13" class="mt-3 reveal-item">
                         <v-col cols="12">
                             <v-text-field v-model="name" color="primary" variant="solo" flat label="Name" rounded="lg"
-                                density="comfortable" clearable :error-messages="errors.name"
-                                autocomplete="off"></v-text-field>
+                                density="comfortable" clearable :error-messages="errors.name"></v-text-field>
                         </v-col>
                         <v-col cols="12">
                             <v-text-field v-model="email" color="primary" variant="solo" flat label="Email" rounded="lg"
-                                density="comfortable" clearable :error-messages="errors.email"
-                                autocomplete="off"></v-text-field>
+                                density="comfortable" clearable :error-messages="errors.email"></v-text-field>
                         </v-col>
                         <v-col cols="12">
                             <v-textarea v-model="message" color="primary" auto-grow variant="solo" flat label="Message"
@@ -73,7 +70,8 @@
                         </v-col>
                         <v-col cols="12">
                             <v-btn type="submit" color="primary" variant="flat" rounded="pill" size="x-large" block
-                                prepend-icon="mdi-send" :loading="loading" :disabled="!meta.dirty || loading">
+                                prepend-icon="mdi-send mdi-rotate-315" :loading="loading"
+                                :disabled="!meta.dirty || loading">
                                 Send Email
                             </v-btn>
                         </v-col>

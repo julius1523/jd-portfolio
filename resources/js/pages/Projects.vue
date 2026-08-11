@@ -34,23 +34,22 @@
             <v-container class="my-5 my-md-13">
                 <div class="d-flex flex-column ga-5">
                     <div class="reveal-item">
-                        <div class="text-headline-small font-weight-medium">
+                        <div class="text-headline-small text-md-headline-medium font-weight-medium">
                             Software Development
                         </div>
-                        <v-divider :thickness="4" color="primary" class="border-opacity-75 my-3" length="50" />
                     </div>
 
                     <SnapCarousel :items="software">
                         <template #default="{ item, index }">
                             <v-card width="330" height="440" rounded="xl" flat
-                                class="border d-flex flex-column scale-down-content" @click="openProject(item.url)">
+                                class="d-flex flex-column scale-down-content" @click="openProject(item.url)">
                                 <div class="d-flex align-center justify-center h-50">
                                     <img :src="item.preview" loading="lazy" decoding="async"
-                                        :alt="`Software Development Preview ${index}`" class="border rounded-lg" />
+                                        :alt="`Software Development Preview ${index}`" class="border rounded-md" />
                                 </div>
 
                                 <div class="pa-5 d-flex flex-column flex-grow-1">
-                                    <div class="text-title font-weight-bold text-truncate">
+                                    <div class="text-title text-truncate">
                                         {{ item.title }}
                                     </div>
 
@@ -72,22 +71,21 @@
 
                 <div class="d-flex flex-column ga-5">
                     <div class="reveal-item">
-                        <div class="text-headline-small font-weight-medium mt-10 mt-md-15">
+                        <div class="text-headline-small text-md-headline-medium font-weight-medium mt-10 mt-md-15">
                             Technical Documentation
                         </div>
-                        <v-divider :thickness="4" color="primary" class="border-opacity-75 my-3" length="50" />
                     </div>
 
                     <SnapCarousel :items="documentation">
                         <template #default="{ item, index }">
                             <v-card width="330" height="440" rounded="xl" flat
-                                class="border d-flex flex-column scale-down-content" @click="openProject(item.url)">
+                                class="d-flex flex-column scale-down-content" @click="openProject(item.url)">
                                 <div class="d-flex align-center justify-center h-50">
                                     <img :src="item.preview" loading="lazy" decoding="async"
-                                        :alt="`Technical Documentation Preview ${index}`" class="border rounded-lg" />
+                                        :alt="`Technical Documentation Preview ${index}`" class="border rounded-md" />
                                 </div>
                                 <div class="pa-5 d-flex flex-column flex-grow-1">
-                                    <div class="text-title font-weight-bold text-truncate">
+                                    <div class="text-title text-truncate">
                                         {{ item.title }}
                                     </div>
 
@@ -109,22 +107,21 @@
 
                 <div class="d-flex flex-column ga-5">
                     <div class="reveal-item">
-                        <div class="text-headline-small font-weight-medium mt-10 mt-md-15">
+                        <div class="text-headline-small text-md-headline-medium font-weight-medium mt-10 mt-md-15">
                             Presentations/Multimedia
                         </div>
-                        <v-divider :thickness="4" color="primary" class="border-opacity-75 my-3" length="50" />
                     </div>
                     <SnapCarousel :items="media">
                         <template #default="{ item, index }">
                             <v-card width="330" height="440" rounded="xl" flat
-                                class="border d-flex flex-column scale-down-content" @click="openProject(item.url)">
+                                class="d-flex flex-column scale-down-content" @click="openProject(item.url)">
                                 <div class="d-flex align-center justify-center h-50">
                                     <img :src="item.preview" loading="lazy" decoding="async"
-                                        :alt="`Presentations/Multimedia Preview ${index}`" class="border rounded-lg" />
+                                        :alt="`Presentations/Multimedia Preview ${index}`" class="border rounded-md" />
                                 </div>
 
                                 <div class="pa-5 d-flex flex-column flex-grow-1">
-                                    <div class="text-title font-weight-bold text-truncate">
+                                    <div class="text-title text-truncate">
                                         {{ item.title }}
                                     </div>
 

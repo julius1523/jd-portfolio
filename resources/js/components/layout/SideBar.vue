@@ -1,8 +1,6 @@
 <script setup>
-import { useAuthStore } from "@/stores/auth";
 import { useLayoutStore } from "@/stores/layout";
 import ProfileMenu from "../ui/ProfileMenu";
-const auth = useAuthStore();
 const layout = useLayoutStore();
 </script>
 

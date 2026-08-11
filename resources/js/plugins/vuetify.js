@@ -85,6 +85,11 @@ export default createVuetify({
         VContainer: {
             maxWidth: 1400,
         },
+        VField: {
+            style: {
+                overflow: "hidden",
+            },
+        },
     },
     components: {
         VPie,

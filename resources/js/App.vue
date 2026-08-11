@@ -9,7 +9,7 @@
         }">
             <router-view v-slot="{ Component, route }">
                 <transition name="fade" mode="out-in">
-                    <div :key="route.fullPath">
+                    <div :key="route.name">
                         <component :is="Component" />
                     </div>
                 </transition>
@@ -26,10 +26,11 @@ import footr from "@/components/layout/Footer";
 import snackbar from "@/components/ui/SnackBarQueue";
 import confirm from "@/components/ui/ConfirmDialog";
 import { watch, computed } from "vue";
-import { useAuthStore } from "@/stores/auth";
 import { useTheme } from "vuetify";
-import { useThemeStore } from "@/stores/theme";
+import { storeToRefs } from "pinia";
 import { useRoute } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
+import { useThemeStore } from "@/stores/theme";
 import { provideShimmerConfig } from '@shimmer-from-structure/vue';
 provideShimmerConfig({
     shimmerColor: 'rgba(156, 163, 175, 0.4)',
@@ -37,13 +38,13 @@ provideShimmerConfig({
     duration: 1.5,
     fallbackBorderRadius: 8,
 });
-const auth = useAuthStore();
+const { isAuthenticated } = storeToRefs(useAuthStore());
 const route = useRoute();
 const theme = useTheme();
 const themeStore = useThemeStore();
 const layoutType = computed(() => {
     if (route.name === "not-found") {
-        return auth.isAuthenticated ? "app" : "public";
+        return isAuthenticated ? "app" : "public";
     }
     return route.meta.layout ?? "public";
 });

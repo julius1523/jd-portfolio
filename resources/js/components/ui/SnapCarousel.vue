@@ -57,7 +57,7 @@ onBeforeUnmount(() => {
 
 <template>
     <div class="card-carousel-wrapper">
-        <div ref="carousel" class="card-carousel py-3 reveal-item">
+        <div ref="carousel" class="card-carousel reveal-item">
             <div v-for="(item, i) in items" :key="i" class="card-item">
                 <slot :item="item" :index="i" />
             </div>
@@ -65,7 +65,7 @@ onBeforeUnmount(() => {
     </div>
 
     <div v-if="($vuetify.display.mdAndDown || items.length > 4) && (canScrollLeft || canScrollRight)"
-        class="d-flex ga-2 justify-end">
+        class="d-flex ga-4 justify-end">
         <v-btn icon="mdi-arrow-left" variant="tonal" size="small" :disabled="!canScrollLeft" @click="scroll(-1)" />
         <v-btn icon="mdi-arrow-right" variant="tonal" size="small" :disabled="!canScrollRight" @click="scroll(1)" />
     </div>

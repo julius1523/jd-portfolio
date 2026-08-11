@@ -9,6 +9,8 @@ export const useLayoutStore = defineStore("layout", () => {
     const rail = ref(false);
 
     watch(smAndDown, (isSmAndDown) => {
+        drawer.value = !isSmAndDown;
+
         if (isSmAndDown) {
             rail.value = false;
         }
@@ -23,5 +25,10 @@ export const useLayoutStore = defineStore("layout", () => {
         rail.value = !rail.value;
     };
 
-    return { drawer, toggleDrawer, rail, toggleRail };
+    return {
+        drawer,
+        toggleDrawer,
+        rail,
+        toggleRail,
+    };
 });

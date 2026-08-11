@@ -192,6 +192,8 @@ async function getHomeContent() {
                 image: data.image_url,
             },
         });
+    } catch (err) {
+        error(err?.response?.data?.message ?? "Failed to load home content.");
     } finally {
         pageLoading.value = false;
     }
@@ -215,5 +217,7 @@ watch(title, async (val) => {
         title.value = val.slice(0, 4);
     }
 }, { deep: true });
-onMounted(getHomeContent);
+onMounted(() => {
+    getHomeContent();
+});
 </script>

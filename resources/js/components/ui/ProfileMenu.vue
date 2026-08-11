@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from "vue";
+import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import { useTheme } from "vuetify";
 import { useFormLoading } from "@/composables/useFormLoading";
@@ -13,6 +14,7 @@ defineProps({
 });
 const layout = useLayoutStore();
 const auth = useAuthStore();
+const { user } = storeToRefs(auth);
 const theme = useTheme();
 const themeStore = useThemeStore();
 const { loading, wrap } = useFormLoading();
@@ -54,7 +56,7 @@ const logout = () => {
             <template v-else>
                 <v-divider />
                 <v-list density="comfortable" slim nav :prepend-gap="8">
-                    <v-list-item v-bind="activatorProps" :title="auth.user?.name" subtitle="Administrator" rounded="lg"
+                    <v-list-item v-bind="activatorProps" :title="user?.name" subtitle="Administrator" rounded="lg"
                         v-tooltip="{ text: 'Account', location: 'end', disabled: !layout.rail }">
                         <template #prepend>
                             <v-icon-btn color="primary" variant="tonal" icon="mdi-account"
@@ -82,8 +84,8 @@ const logout = () => {
                     </template>
 
                     <template #append>
-                        <v-switch :model-value="themeStore.isDark" @update:model-value="themeStore.setDark"
-                            color="primary" size="small" density="compact" hide-details @click.stop />
+                        <v-switch :model-value="themeStore.isDark" color="primary" size="small" density="compact"
+                            hide-details @click.stop="toggleTheme" />
                     </template>
                 </v-list-item>
 

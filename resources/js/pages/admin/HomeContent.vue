@@ -195,12 +195,7 @@ async function getHomeContent() {
     } catch (err) {
         error(err?.response?.data?.message ?? "Failed to load home content.");
     } finally {
-        await nextTick();
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                pageLoading.value = false;
-            });
-        });
+        pageLoading.value = false;
     }
 };
 const [greeting] = defineField('greeting');

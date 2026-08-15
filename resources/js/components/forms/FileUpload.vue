@@ -72,7 +72,6 @@ const helperText = computed(() => {
 });
 const internalError = ref('');
 const internalValue = ref(null);
-const resolvingPreview = ref(false);
 const externalErrorMessages = computed(() => {
     const raw = props.errorMessage ?? props.errorMessages;
     if (!raw) return [];
@@ -181,15 +180,12 @@ watch(
             internalValue.value = val;
             return;
         }
-        resolvingPreview.value = true;
         try {
             const resolved = await resolveModelValue(val);
             internalValue.value = resolved;
         } catch (e) {
             internalError.value = 'Could not load the existing file for preview.';
             emit('error', internalError.value);
-        } finally {
-            resolvingPreview.value = false;
         }
     },
     { immediate: true }

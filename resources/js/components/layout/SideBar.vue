@@ -12,7 +12,7 @@ const layout = useLayoutStore();
     <v-navigation-drawer v-model="layout.drawer" elevation="0" :rail="layout.rail"
         :location="$vuetify.display.smAndDown ? 'bottom' : undefined" color="surface-light" floating
         :floating="$vuetify.display.smAndDown" :permanent="$vuetify.display.mdAndUp"
-        :class="$vuetify.display.smAndDown ? 'rounded-t-lg' : undefined" width="250">
+        :class="$vuetify.display.smAndDown ? 'rounded-t-xl' : undefined" width="250">
         <template #prepend>
             <template v-if="$vuetify.display.mdAndUp">
                 <v-list variant="plain" density="compact" slim nav>

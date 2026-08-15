@@ -7,19 +7,14 @@ import router from "@/router";
 import tooltipPlugin from "@/plugins/tooltip";
 import { Shimmer } from "@shimmer-from-structure/vue";
 import { historyGuard } from "@/router/guard";
-
 const app = createApp(App);
 const pinia = createPinia();
-
 app.component("Shimmer", Shimmer);
-
 app.use(pinia);
 app.use(vuetify);
 app.use(router);
 app.use(tooltipPlugin);
-
 historyGuard(router);
-
 router.isReady().then(() => {
     app.mount("#app");
 });

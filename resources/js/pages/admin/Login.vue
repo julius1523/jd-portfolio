@@ -23,7 +23,7 @@
                         class="my-3">
                         Log In
                     </v-btn>
-                    <v-btn color="surface-variant" variant="plain" rounded="pill" size="x-large"
+                    <v-btn variant="plain" color="surface-variant" rounded="pill" size="x-large" class="opacity-100"
                         :prepend-icon="mdiArrowLeft" block text="Go back to home"
                         @click="$router.replace({ name: 'home' })">
                     </v-btn>

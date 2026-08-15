@@ -15,7 +15,6 @@ const theme = useTheme();
 const route = useRoute();
 const layout = useLayoutStore();
 const themeStore = useThemeStore();
-const isScrolled = ref(false);
 const { isActive } = useActiveRoute();
 const layoutType = computed(() => {
     if (route.name === 'not-found') {
@@ -24,9 +23,6 @@ const layoutType = computed(() => {
     return route.meta.layout ?? 'public';
 });
 const isAppLayout = computed(() => layoutType.value === 'app');
-const onScroll = () => {
-    isScrolled.value = window.scrollY > 10;
-};
 const toggleTheme = (e) => {
     theme.setTransitionOrigin(e.target);
     themeStore.setDark(!themeStore.isDark);
@@ -34,31 +30,33 @@ const toggleTheme = (e) => {
 </script>
 
 <template>
-    <v-app-bar v-if="!isAppLayout || $vuetify.display.smAndDown" v-scroll="onScroll" app flat density="comfortable"
-        :order="$vuetify.display.mdAndDown ? 1 : 0" :class="{ 'border-b': isScrolled }">
+    <v-app-bar v-if="!isAppLayout || $vuetify.display.smAndDown" app flat density="comfortable"
+        :order="$vuetify.display.mdAndDown ? 1 : 0">
         <v-container class="d-flex flex-row align-center ga-2">
             <template v-if="!isAppLayout">
                 <router-link :to="{ name: 'home' }">
-                    <v-avatar size="small" color="primary">J</v-avatar>
+                    <v-avatar size="38" color="primary">J</v-avatar>
                 </router-link>
 
-                <div class="d-flex align-center ga-2 ml-auto">
+                <div class="border pa-1 rounded-pill d-flex align-center ml-auto">
                     <template v-if="$vuetify.display.mdAndUp">
-                        <v-btn :color="isActive('home') ? 'primary' : undefined" height="28" rounded="pill" text="Home"
-                            :to="{ name: 'home' }" />
-                        <v-btn :color="isActive('about') ? 'primary' : undefined" height="28" rounded="pill"
+                        <v-btn density="comfortable" :color="isActive('home') ? 'primary' : undefined" rounded="pill"
+                            text="Home" :to="{ name: 'home' }" />
+                        <v-btn density="comfortable" :color="isActive('about') ? 'primary' : undefined" rounded="pill"
                             text="About" :to="{ name: 'about' }" />
-                        <v-btn :color="isActive('projects') ? 'primary' : undefined" height="28" rounded="pill"
-                            text="Projects" :to="{ name: 'projects' }" />
-                        <v-btn :color="isActive('contact') ? 'primary' : undefined" height="28" rounded="pill"
+                        <v-btn density="comfortable" :color="isActive('projects') ? 'primary' : undefined"
+                            rounded="pill" text="Projects" :to="{ name: 'projects' }" />
+                        <v-btn density="comfortable" :color="isActive('contact') ? 'primary' : undefined" rounded="pill"
                             text="Contact" :to="{ name: 'contact' }" />
                     </template>
                     <template v-else>
-                        <v-btn size="x-small" :icon="mdiMenu" class="order-1" @click="layout.toggleDrawer()"></v-btn>
+                        <v-icon-btn size="30" icon-size="23" class="order-1" :icon="mdiMenu"
+                            @click="layout.toggleDrawer()" />
                     </template>
-                    <v-btn :icon="themeStore.isDark ? mdiMoonWaningCrescent : mdiWhiteBalanceSunny"
+                    <v-icon-btn size="30" icon-size="small"
+                        :icon="themeStore.isDark ? mdiMoonWaningCrescent : mdiWhiteBalanceSunny" class="order-0"
                         v-tooltip="{ text: themeStore.isDark ? 'Light Mode' : 'Dark Mode', location: 'bottom' }"
-                        @click="toggleTheme" variant="text" size="x-small" />
+                        @click="toggleTheme" />
                 </div>
             </template>
             <template v-else>

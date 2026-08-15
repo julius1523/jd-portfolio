@@ -37,6 +37,11 @@ export default createVuetify({
         VCard: {
             ripple: "center",
         },
+        VBtn: {
+            style: {
+                "webkit-user-drag": "none",
+            },
+        },
         VChip: {
             style: {
                 userSelect: "none",
@@ -47,9 +52,6 @@ export default createVuetify({
         },
         VAppBar: {
             style: {
-                background: "rgba(var(--v-theme-surface), 0.7)",
-                backdropFilter: "blur(12px)",
-                WebkitBackdropFilter: "blur(12px)",
                 userSelect: "none",
             },
         },

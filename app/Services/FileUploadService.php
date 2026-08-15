@@ -24,19 +24,23 @@ class FileUploadService
 
             $this->storeCompressed($file, $path, $filename);
 
+            $filePath = "$path/$filename";
+
             $model->{$column} = [
                 'file_name' => (string) $filename,
                 'orig_name' => $file->getClientOriginalName(),
-                'file_size' => Storage::disk('public')->size("$path/$filename"),
+                'file_size' => Storage::disk('public')->size($filePath),
                 'mime_type' => $file->getMimeType(),
+                'url' => Storage::url($filePath),
             ];
-            $this->deleteOldFile($oldFile);
+
+            $this->deleteOldFile($oldFile, $path);
             return;
         }
 
         if ($request->boolean("remove_{$field}")) {
             $oldFile = $model->{$column};
-            $this->deleteOldFile($oldFile);
+            $this->deleteOldFile($oldFile, $path);
             $model->{$column} = null;
         }
     }
@@ -88,10 +92,10 @@ class FileUploadService
         }
     }
 
-    private function deleteOldFile(?array $file): void
+    private function deleteOldFile(?array $file, string $path): void
     {
-        if (!empty($file['file_path'])) {
-            Storage::disk('public')->delete($file['file_path']);
+        if (!empty($file['file_name'])) {
+            Storage::disk('public')->delete("$path/{$file['file_name']}");
         }
     }
 }

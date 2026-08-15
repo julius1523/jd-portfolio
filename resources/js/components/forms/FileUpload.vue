@@ -2,7 +2,7 @@
 import { ref, computed, watch, useAttrs } from "vue";
 import { mdiCloudUpload, mdiCloudUploadOutline, mdiFileDocument } from "@mdi/js";
 const props = defineProps({
-    modelValue: { type: [File, Array, String], default: null },
+    modelValue: { type: [File, Object, Array, String], default: null },
     fileType: { type: String, default: 'any' },
     inset: { type: Boolean, default: false },
     scrim: { type: Boolean, default: false },
@@ -82,26 +82,28 @@ const displayedErrorMessages = computed(() => {
     return externalErrorMessages.value;
 });
 const hasError = computed(() => displayedErrorMessages.value.length > 0);
-async function urlToFile(url) {
-    const response = await fetch(url);
-    if (!response.ok) throw new Error(`Failed to fetch ${url} (${response.status})`);
-    const blob = await response.blob();
-    const filename = decodeURIComponent(url.split('/').pop().split('?')[0]) || 'file';
-    return new File([blob], filename, { type: blob.type });
+function isExistingFileMeta(item) {
+    return !!item && typeof item === 'object' && !(item instanceof File) && !(item instanceof Blob) && 'file_name' in item;
 };
-async function resolveSingle(item) {
-    if (typeof item === 'string') {
-        return urlToFile(item);
-    }
+function metaToPseudoFile(item) {
+    const size = item.file_size || 0;
+    const blob = new Blob([new Uint8Array(size)], { type: item.mime_type });
+    const file = new File([blob], item.file_name, { type: item.mime_type });
+    Object.defineProperty(file, 'file_name', { value: item.file_name, enumerable: true });
+    Object.defineProperty(file, '__existing', { value: true, enumerable: true });
+    return file;
+};
+function resolveSingle(item) {
+    if (isExistingFileMeta(item)) return metaToPseudoFile(item);
     return item;
 };
-async function resolveModelValue(val) {
+function resolveModelValue(val) {
     if (!val) return null;
     if (Array.isArray(val)) {
-        return Promise.all(val.map(resolveSingle));
+        return val.map(resolveSingle);
     }
     return resolveSingle(val);
-}
+};
 const files = computed(() => {
     if (!internalValue.value) return [];
     return Array.isArray(internalValue.value) ? internalValue.value : [internalValue.value];
@@ -123,6 +125,7 @@ function validate(selected) {
         return `You can upload a maximum of ${props.maxFiles} file(s).`;
     }
     for (const file of list) {
+        if (file?.__existing) continue;
         if (props.maxSize && file.size > props.maxSize * 1024 * 1024) {
             return `"${file.name}" exceeds the maximum size of ${props.maxSize} MB.`;
         }
@@ -171,22 +174,9 @@ function removeFile(index) {
 };
 watch(
     () => props.modelValue,
-    async (val) => {
+    (val) => {
         internalError.value = '';
-        const hasUrlToResolve = Array.isArray(val)
-            ? val.some((v) => typeof v === 'string')
-            : typeof val === 'string';
-        if (!hasUrlToResolve) {
-            internalValue.value = val;
-            return;
-        }
-        try {
-            const resolved = await resolveModelValue(val);
-            internalValue.value = resolved;
-        } catch (e) {
-            internalError.value = 'Could not load the existing file for preview.';
-            emit('error', internalError.value);
-        }
+        internalValue.value = resolveModelValue(val);
     },
     { immediate: true }
 );

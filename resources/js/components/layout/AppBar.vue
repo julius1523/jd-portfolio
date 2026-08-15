@@ -38,7 +38,7 @@ const toggleTheme = (e) => {
                     <v-avatar size="38" color="primary">J</v-avatar>
                 </router-link>
 
-                <div class="border pa-1 rounded-pill d-flex align-center ml-auto">
+                <div class="border pa-1 rounded-pill d-flex ga-1 align-center ml-auto">
                     <template v-if="$vuetify.display.mdAndUp">
                         <v-btn density="comfortable" :color="isActive('home') ? 'primary' : undefined" rounded="pill"
                             text="Home" :to="{ name: 'home' }" />

@@ -19,29 +19,8 @@ class HomeContent extends Model
     {
         return [
             'title' => 'array',
+            'file' => 'array',
+            'image' => 'array',
         ];
-    }
-
-    protected $appends = [
-        'cv_url',
-        'image_url',
-    ];
-
-    protected function cvUrl(): Attribute
-    {
-        return Attribute::make(
-            get: fn() => $this->cv_path
-            ? Storage::url("uploads/files/{$this->cv_path}")
-            : null,
-        );
-    }
-
-    protected function imageUrl(): Attribute
-    {
-        return Attribute::make(
-            get: fn() => $this->image_path
-            ? Storage::url("uploads/images/{$this->image_path}")
-            : null,
-        );
     }
 }

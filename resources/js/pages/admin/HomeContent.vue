@@ -85,9 +85,9 @@
                                 </div>
                             </v-col>
                             <v-col cols="12" lg="6">
-                                <FileUpload v-model="cv" file-type="pdf" :max-files="1" inset :disabled="loading"
+                                <FileUpload v-model="file" file-type="pdf" :max-files="1" inset :disabled="loading"
                                     :show-size="true" density="comfortable" hint="The CV file for download"
-                                    :persistent-hint="true" :error-messages="errors.cv" data-shimmer-no-children />
+                                    :persistent-hint="true" :error-messages="errors.file" data-shimmer-no-children />
                             </v-col>
                             <v-col cols="12" lg="6">
                                 <FileUpload v-model="image" file-type="image" :max-files="1" inset :disabled="loading"
@@ -147,12 +147,12 @@ const schema = yup.object({
     primary_btn_text: yup.string().label('Primary button text').required(),
     primary_btn_link: yup.string().label('Primary button link').required(),
     secondary_btn_text: yup.string().label('Secondary button text').required(),
-    cv: yup.mixed().label('CV').nullable(),
+    file: yup.mixed().label('CV').nullable(),
     image: yup.mixed().label('Image').nullable(),
 });
 const { defineField, errors, loading, submit, resetForm, meta } = useValidatedForm(schema, async (values) => {
     const formData = new FormData();
-    const fileFields = ['cv', 'image'];
+    const fileFields = ['file', 'image'];
     for (const [key, value] of Object.entries(values)) {
         if (fileFields.includes(key)) {
             if (value instanceof File || value instanceof Blob) {
@@ -176,6 +176,18 @@ const { defineField, errors, loading, submit, resetForm, meta } = useValidatedFo
     { resetOnSuccess: false }
 );
 useUnsavedChanges(meta);
+const [greeting] = defineField('greeting');
+const [title] = defineField('title');
+const [description] = defineField('description');
+const [primary_btn_text] = defineField('primary_btn_text');
+const [primary_btn_link] = defineField('primary_btn_link');
+const [secondary_btn_text] = defineField('secondary_btn_text');
+const [file] = defineField('file');
+const [image] = defineField('image');
+const cancelEdit = () => {
+    resetForm();
+    info("No changes made.");
+};
 async function getHomeContent() {
     try {
         const { data } = await axios.get('/api/getHomeContent');
@@ -188,8 +200,8 @@ async function getHomeContent() {
                 primary_btn_text: data.primary_btn_text,
                 primary_btn_link: data.primary_btn_link,
                 secondary_btn_text: data.secondary_btn_text,
-                cv: data.cv_url,
-                image: data.image_url,
+                file: data.file,
+                image: data.image,
             },
         });
     } catch (err) {
@@ -197,18 +209,6 @@ async function getHomeContent() {
     } finally {
         pageLoading.value = false;
     }
-};
-const [greeting] = defineField('greeting');
-const [title] = defineField('title');
-const [description] = defineField('description');
-const [primary_btn_text] = defineField('primary_btn_text');
-const [primary_btn_link] = defineField('primary_btn_link');
-const [secondary_btn_text] = defineField('secondary_btn_text');
-const [cv] = defineField('cv');
-const [image] = defineField('image');
-const cancelEdit = () => {
-    resetForm();
-    info("No changes made.");
 };
 watch(title, async (val) => {
     if (!Array.isArray(val)) return;

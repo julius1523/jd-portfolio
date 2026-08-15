@@ -2,9 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\ContactController;
-use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\HomeContentController;
+use App\Http\Controllers\Public\ContactController;
+use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\HomeContentController;
 
 Route::post('/contact', [ContactController::class, 'store']);
 

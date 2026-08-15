@@ -16,29 +16,30 @@
                                 of my socials or sending me a message through email.
                             </div>
                         </div>
-                        <div class="d-flex flex-row justify-center justify-md-start ga-3 my-10">
+                        <div class="d-flex flex-row justify-center justify-md-start ga-3 my-4 my-md-10">
                             <div class="reveal-item">
-                                <v-btn icon="mdi-facebook" class="translate-content" variant="tonal" color="primary"
+                                <v-btn :icon="mdiFacebook" class="translate-content" variant="tonal" color="primary"
                                     href="https://www.facebook.com/JuliusDolana/" target="_blank">
                                 </v-btn>
                             </div>
                             <div class="reveal-item">
-                                <v-btn icon="mdi-linkedin" class="translate-content" variant="tonal" color="primary"
+                                <v-btn :icon="mdiLinkedin" class="translate-content" variant="tonal" color="primary"
                                     href="https://www.linkedin.com/in/julius-dolana-783bb1371/" target="_blank">
                                 </v-btn>
                             </div>
                             <div class="reveal-item">
-                                <v-btn icon="mdi-camera" class="translate-content" variant="tonal" color="primary"
+                                <v-btn :icon="mdiCamera" class="translate-content" variant="tonal" color="primary"
                                     href="https://www.instagram.com/juliussss1998/" target="_blank">
                                 </v-btn>
                             </div>
                         </div>
                     </v-col>
                     <v-col cols="12" md="5">
-                        <div class="reveal-item">
-                            <v-img src="/images/contact.png" cover height="300" width="300" class="fade-bottom"
-                                :class="$vuetify.display.mdAndUp ? 'ml-auto' : 'mx-auto'" alt="Contact Person" />
-                        </div>
+                        <v-img src="/images/contact.png" :position="$vuetify.display.mdAndUp ? 'right' : 'center'"
+                            alt="Contact Character Image" class="clamped-img fade-bottom reveal-item" :style="{
+                                '--img-min-h': '180px',
+                                '--img-max-h': '320px',
+                            }" />
                     </v-col>
                 </v-row>
             </v-container>
@@ -70,8 +71,7 @@
                         </v-col>
                         <v-col cols="12">
                             <v-btn type="submit" color="primary" variant="flat" rounded="pill" size="x-large" block
-                                prepend-icon="mdi-send mdi-rotate-315" :loading="loading"
-                                :disabled="!meta.dirty || loading">
+                                :prepend-icon="mdiSend" :loading="loading" :disabled="!meta.dirty || loading">
                                 Send Email
                             </v-btn>
                         </v-col>
@@ -85,6 +85,7 @@
 <script setup>
 import axios from "@/plugins/axios";
 import { ref } from "vue";
+import { mdiFacebook, mdiLinkedin, mdiCamera, mdiSend } from "@mdi/js";
 import * as yup from "yup";
 import { useValidatedForm } from "@/composables/useValidatedForm";
 import { useUnsavedChanges } from "@/composables/useUnsavedChanges";

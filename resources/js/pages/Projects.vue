@@ -19,10 +19,11 @@
                         </div>
                     </v-col>
                     <v-col cols="12" md="5">
-                        <div class="reveal-item">
-                            <v-img src="/images/projects.png" cover height="300" width="300" class="fade-bottom"
-                                :class="$vuetify.display.mdAndUp ? 'ml-auto' : 'mx-auto'" alt="Project Person" />
-                        </div>
+                        <v-img src="/images/projects.png" :position="$vuetify.display.mdAndUp ? 'right' : 'center'"
+                            alt="Projects Character Image" class="clamped-img fade-bottom reveal-item" :style="{
+                                '--img-min-h': '180px',
+                                '--img-max-h': '320px',
+                            }" />
                     </v-col>
                 </v-row>
             </v-container>
@@ -31,8 +32,8 @@
 
     <section id="projects-body" ref="projectsBodySection">
         <v-card flat tile color="surface-light">
-            <v-container class="my-5 my-md-13">
-                <div class="d-flex flex-column ga-5">
+            <v-container class="my-5 my-md-13 px-7">
+                <div class="d-flex flex-column ga-4">
                     <div class="reveal-item">
                         <div class="text-headline-small text-md-headline-medium font-weight-medium">
                             Software Development

@@ -21,18 +21,20 @@
                         </div>
                         <div class="mt-5 d-flex flex-row flex-wrap ga-2 justify-center justify-md-start reveal-item">
                             <v-btn color="primary" width="160" size="large" rounded="pill" variant="flat" text="Hire Me"
-                                append-icon="mdi-chevron-right"></v-btn>
+                                :append-icon="mdiChevronRight"></v-btn>
                             <v-btn color="primary" width="160" size="large" rounded="pill" variant="outlined"
                                 text="Download CV"></v-btn>
                         </div>
                     </div>
                 </v-col>
                 <v-col cols="12" md="5">
-                    <div class="reveal-item">
-                        <v-img :style="gradientStyle" src="/images/profile-1.png" rounded="circle" contain
-                            class="responsive-img square" position="center 120%"
-                            :class="[$vuetify.display.mdAndUp ? 'ml-auto' : 'mx-auto']" alt="Profile Picture" />
-                    </div>
+                    <v-img :style="{
+                        ...gradientStyle,
+                        '--img-min-w': '230px',
+                        '--img-max-w': '420px'
+                    }" src="/images/profile-1.png" rounded="circle" contain position="center 120%"
+                        class="clamped-img clamped-img--square reveal-item"
+                        :class="[$vuetify.display.mdAndUp ? 'ml-auto' : 'mx-auto']" alt="Profile Character Image" />
                 </v-col>
             </v-row>
         </v-container>
@@ -41,6 +43,7 @@
 
 <script setup>
 import { ref, computed } from "vue";
+import { mdiChevronRight } from "@mdi/js";
 import { useTyped } from "@/composables/useTyped";
 import { useScrollReveal } from '@/composables/useScrollReveal';
 const homeSection = ref(null);

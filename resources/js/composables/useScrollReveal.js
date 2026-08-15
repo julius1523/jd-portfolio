@@ -67,9 +67,11 @@ export function useScrollReveal(targetRef, options = {}) {
                         : (batch) => gsap.set(batch, { y, opacity }),
                 });
             } else {
-                gsap.from(rootEl, {
-                    y,
-                    opacity,
+                gsap.set(rootEl, { y, opacity });
+
+                gsap.to(rootEl, {
+                    y: 0,
+                    opacity: 1,
                     duration,
                     ease,
                     scrollTrigger: {

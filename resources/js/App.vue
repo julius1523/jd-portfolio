@@ -4,9 +4,7 @@
         <sidebar v-if="showSidebar" />
         <snackbar />
         <confirm />
-        <v-main :class="{ 'bg-surface-light': layoutType === 'login' }" :style="{
-            '--v-layout-bottom': $vuetify.display.mdAndDown ? '75px' : '68px'
-        }">
+        <v-main :class="{ 'bg-surface-light': layoutType === 'login' }">
             <router-view v-slot="{ Component, route }">
                 <transition name="fade" mode="out-in">
                     <div :key="route.name">
@@ -26,7 +24,7 @@ import footr from "@/components/layout/Footer";
 import snackbar from "@/components/ui/SnackBarQueue";
 import confirm from "@/components/ui/ConfirmDialog";
 import { watch, computed } from "vue";
-import { useTheme } from "vuetify";
+import { useTheme, useDisplay } from "vuetify";
 import { storeToRefs } from "pinia";
 import { useRoute } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
@@ -42,6 +40,7 @@ const { isAuthenticated } = storeToRefs(useAuthStore());
 const route = useRoute();
 const theme = useTheme();
 const themeStore = useThemeStore();
+const { smAndDown } = useDisplay();
 const layoutType = computed(() => {
     if (route.name === "not-found") {
         return isAuthenticated ? "app" : "public";
@@ -49,7 +48,9 @@ const layoutType = computed(() => {
     return route.meta.layout ?? "public";
 });
 const showAppBar = computed(() => layoutType.value !== "login");
-const showSidebar = computed(() => layoutType.value === "app");
+const showSidebar = computed(() =>
+    layoutType.value !== "login" && (isAuthenticated.value || smAndDown.value)
+);
 const showFooter = computed(() => layoutType.value === "public");
 watch(
     () => themeStore.isDark,

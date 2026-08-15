@@ -1,16 +1,20 @@
 import { ref } from "vue";
-
+import {
+    mdiCheckCircleOutline,
+    mdiAlertCircleOutline,
+    mdiAlertOutline,
+    mdiInformationOutline,
+} from "@mdi/js";
 const messages = ref([]);
-
 const stateConfig = {
-    success: { icon: "mdi-check-circle-outline", color: "success" },
-    error: { icon: "mdi-alert-circle-outline", color: "error" },
-    warning: { icon: "mdi-alert-outline", color: "warning" },
-    info: { icon: "mdi-information-outline", color: "info" },
+    success: { icon: mdiCheckCircleOutline, color: "success" },
+    error: { icon: mdiAlertCircleOutline, color: "error" },
+    warning: { icon: mdiAlertOutline, color: "warning" },
+    info: { icon: mdiInformationOutline, color: "info" },
 };
-
 function push(text, type = "info", extra = {}) {
     const { icon, color } = stateConfig[type] ?? stateConfig.info;
+
     messages.value.push({
         text,
         icon,
@@ -19,7 +23,6 @@ function push(text, type = "info", extra = {}) {
         ...extra,
     });
 }
-
 export function useSnackBarQueue() {
     return {
         messages,

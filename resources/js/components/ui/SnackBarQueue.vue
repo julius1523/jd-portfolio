@@ -1,6 +1,5 @@
 <script setup>
 import { useSnackBarQueue } from "@/composables/useSnackBarQueue";
-
 const { messages } = useSnackBarQueue();
 </script>
 
@@ -15,7 +14,7 @@ const { messages } = useSnackBarQueue();
             </div>
         </template>
         <template v-slot:actions="{ props }">
-            <v-btn icon="$close" size="small" variant="text" v-bind="props"></v-btn>
+            <v-icon-btn icon="$close" size="small" variant="text" v-bind="props" />
         </template>
     </v-snackbar-queue>
 </template>

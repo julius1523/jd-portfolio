@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, watch, useAttrs } from "vue";
+import { mdiCloudUpload, mdiCloudUploadOutline, mdiFileDocument } from "@mdi/js";
 const props = defineProps({
     modelValue: { type: [File, Array, String], default: null },
     fileType: { type: String, default: 'any' },
@@ -12,7 +13,7 @@ const props = defineProps({
     maxFiles: { type: Number, default: null },
     title: { type: String, default: 'Choose a file or drag and drop it here' },
     subtitle: { type: String, default: undefined },
-    icon: { type: String, default: 'mdi-cloud-upload' },
+    icon: { type: String, default: mdiCloudUpload },
     density: { type: String, default: 'default' },
     variant: { type: String, default: 'default' },
     disabled: { type: Boolean, default: false },
@@ -172,6 +173,7 @@ function removeFile(index) {
 watch(
     () => props.modelValue,
     async (val) => {
+        internalError.value = '';
         const hasUrlToResolve = Array.isArray(val)
             ? val.some((v) => typeof v === 'string')
             : typeof val === 'string';
@@ -203,9 +205,6 @@ watch(
             v-bind="filteredAttrs" @update:model-value="handleChange">
             <template v-for="(_, slot) in $slots" #[slot]="scope">
                 <slot :name="slot" v-bind="scope" />
-            </template>
-            <template #icon>
-                <v-icon icon="mdi-cloud-upload-outline" size="x-small"></v-icon>
             </template>
             <template #title>
                 <div class="text-title-medium font-weight-bold">{{ props.title }}</div>

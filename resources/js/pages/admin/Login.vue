@@ -24,7 +24,7 @@
                         Log In
                     </v-btn>
                     <v-btn color="surface-variant" variant="plain" rounded="pill" size="x-large"
-                        prepend-icon="mdi-arrow-left" block text="Go back to home"
+                        :prepend-icon="mdiArrowLeft" block text="Go back to home"
                         @click="$router.replace({ name: 'home' })">
                     </v-btn>
                 </v-form>
@@ -35,6 +35,7 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
+import { mdiArrowLeft } from "@mdi/js";
 import * as yup from "yup";
 import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";

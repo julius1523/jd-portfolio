@@ -35,23 +35,17 @@ html {
     }
 }
 
-.v-bottom-navigation__content {
-    justify-content: space-between;
-}
+.clamped-img {
+    width: 100%;
+    min-width: var(--img-min-w, 0);
+    max-width: min(var(--img-max-w, 100%), 90vw);
+    height: clamp(var(--img-min-h, 150px), 40vw, var(--img-max-h, 400px));
 
-.responsive-img.landscape {
-    width: clamp(100%, 50vw, 900px);
-    aspect-ratio: 16 / 9;
-}
-
-.responsive-img.portrait {
-    width: clamp(300px, 40vw, 700px);
-    aspect-ratio: 3 / 4;
-}
-
-.responsive-img.square {
-    width: clamp(250px, 33vw, 420px);
-    aspect-ratio: 1 / 1;
+    &.clamped-img--square {
+        height: auto;
+        aspect-ratio: 1 / 1;
+        max-width: min(var(--img-max-w, 100%), 35vw);
+    }
 }
 
 .v-card > div > img {
@@ -137,7 +131,6 @@ html {
     overflow-x: auto;
     overflow-y: hidden;
     scroll-snap-type: x mandatory;
-    gap: 1.2rem;
     scrollbar-width: none;
 }
 

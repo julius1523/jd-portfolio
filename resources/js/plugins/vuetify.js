@@ -1,12 +1,17 @@
-import "@mdi/font/css/materialdesignicons.min.css";
 import "vuetify/styles";
-
 import { createVuetify } from "vuetify";
+import { aliases, mdi } from "vuetify/iconsets/mdi-svg";
+import { mdiFileDocument } from "@mdi/js";
 import { VPie } from "vuetify/labs/VPie";
-
 const savedTheme = localStorage.getItem("theme") ?? "dark";
-
 export default createVuetify({
+    icons: {
+        defaultSet: "mdi",
+        aliases,
+        sets: {
+            mdi,
+        },
+    },
     theme: {
         defaultTheme: savedTheme,
         themes: {
@@ -48,19 +53,6 @@ export default createVuetify({
                 userSelect: "none",
             },
         },
-        VBottomNavigation: {
-            style: {
-                width: "auto",
-                maxWidth: "400px",
-                bottom: "10px",
-                left: "10px",
-                right: "10px",
-                background: "rgba(var(--v-theme-surface), 0.7)",
-                backdropFilter: "blur(12px)",
-                WebkitBackdropFilter: "blur(12px)",
-                userSelect: "none",
-            },
-        },
         VCarousel: {
             style: {
                 height: "100%",
@@ -75,6 +67,10 @@ export default createVuetify({
             style: {
                 userSelect: "none",
             },
+        },
+        VFileUploadItem: {
+            fileIcon: mdiFileDocument,
+            density: "compact",
         },
         VFileUploadDropzone: {
             rounded: "lg",

@@ -1,5 +1,6 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from "vue";
+import { mdiArrowLeft, mdiArrowRight } from "@mdi/js";
 const carousel = ref(null);
 const canScrollLeft = ref(false);
 const canScrollRight = ref(true);
@@ -57,7 +58,7 @@ onBeforeUnmount(() => {
 
 <template>
     <div class="card-carousel-wrapper">
-        <div ref="carousel" class="card-carousel reveal-item">
+        <div ref="carousel" class="card-carousel reveal-item ga-4 ga-md-8">
             <div v-for="(item, i) in items" :key="i" class="card-item">
                 <slot :item="item" :index="i" />
             </div>
@@ -65,8 +66,8 @@ onBeforeUnmount(() => {
     </div>
 
     <div v-if="($vuetify.display.mdAndDown || items.length > 4) && (canScrollLeft || canScrollRight)"
-        class="d-flex ga-4 justify-end">
-        <v-btn icon="mdi-arrow-left" variant="tonal" size="small" :disabled="!canScrollLeft" @click="scroll(-1)" />
-        <v-btn icon="mdi-arrow-right" variant="tonal" size="small" :disabled="!canScrollRight" @click="scroll(1)" />
+        class="d-flex ga-4 justify-end reveal-item">
+        <v-btn :icon="mdiArrowLeft" variant="tonal" size="small" :disabled="!canScrollLeft" @click="scroll(-1)" />
+        <v-btn :icon="mdiArrowRight" variant="tonal" size="small" :disabled="!canScrollRight" @click="scroll(1)" />
     </div>
 </template>

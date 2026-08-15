@@ -27,10 +27,11 @@
                         </div>
                     </v-col>
                     <v-col cols="12" md="5">
-                        <div class="reveal-item">
-                            <v-img src="/images/about.png" cover height="300" width="300" class="fade-bottom"
-                                :class="$vuetify.display.mdAndUp ? 'ml-auto' : 'mx-auto'" alt="About Person" />
-                        </div>
+                        <v-img src="/images/about.png" :position="$vuetify.display.mdAndUp ? 'right' : 'center'"
+                            alt="About Character Image" class="clamped-img fade-bottom reveal-item" :style="{
+                                '--img-min-h': '180px',
+                                '--img-max-h': '320px',
+                            }" />
                     </v-col>
                 </v-row>
             </v-container>
@@ -46,9 +47,9 @@
                     </div>
                 </div>
                 <div class="d-flex flex-column ga-10 reveal-item">
-                    <div v-for="item in skills" :key="item.title" class="d-flex flex-column ga-3">
-                        <div class="text-subtitle font-weight-bold">
-                            <v-icon icon="mdi-layers-outline" color="primary" class="mr-2" />
+                    <div v-for="item in skills" :key="item.title" class="d-flex flex-column ga-1">
+                        <div class="text-subtitle font-weight-medium">
+                            <v-icon :icon="mdiLayersOutline" color="primary" class="mr-2" />
                             {{ item.title }}
                         </div>
                         <div class="d-flex flex-row flex-wrap ga-2 ml-11">
@@ -105,10 +106,11 @@
                         </div>
                     </v-col>
                     <v-col cols="12">
-                        <div class="reveal-item">
-                            <v-img src="/images/design.png" max-width="800" min-height="200" max-height="450"
-                                aspect-ratio="16/9" class="mx-auto scale-up-content" alt="Design System" />
-                        </div>
+                        <v-img src="/images/design.png" alt="Design System Image"
+                            class="clamped-img mx-auto reveal-item" :style="{
+                                '--img-max-h': '500px',
+                                '--img-max-w': '800px',
+                            }" />
                     </v-col>
                 </v-row>
             </v-container>
@@ -118,6 +120,7 @@
 
 <script setup>
 import { ref } from "vue";
+import { mdiLayersOutline, mdiController, mdiHandOkay, mdiPaw, mdiSpotify, mdiEmoticonExcited } from "@mdi/js";
 import { useScrollReveal } from "@/composables/useScrollReveal";
 const aboutSection = ref(null);
 const skillsSection = ref(null);
@@ -142,11 +145,11 @@ const skills = ref([
     }
 ]);
 const facts = ref([
-    { icon: "mdi-controller", text: "My peak mmr in DotA 2 is 14k" },
-    { icon: "mdi-hand-okay", text: "I am a perfectionist" },
-    { icon: "mdi-paw", text: "I love cats and dogs" },
-    { icon: "mdi-spotify", text: "I love listening to pop music" },
-    { icon: "mdi-emoticon-excited", text: "I am an introvert and a picky eater" }
+    { icon: mdiController, text: "My peak mmr in DotA 2 is 14k" },
+    { icon: mdiHandOkay, text: "I am a perfectionist" },
+    { icon: mdiPaw, text: "I love cats and dogs" },
+    { icon: mdiSpotify, text: "I love listening to pop music" },
+    { icon: mdiEmoticonExcited, text: "I am an introvert and a picky eater" }
 ]);
 useScrollReveal(aboutSection, { selector: '.reveal-item', stagger: 0.15, y: 40 });
 useScrollReveal(skillsSection, { selector: '.reveal-item', stagger: 0.15, y: 40 });

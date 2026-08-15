@@ -1,5 +1,6 @@
 <script setup>
-import { ref } from 'vue';
+import { ref } from "vue";
+import { mdiEye, mdiEyeOff } from "@mdi/js";
 
 const model = defineModel({
     type: String,
@@ -22,6 +23,6 @@ const show = ref(false);
 
 <template>
     <v-text-field v-model="model" :type="show ? 'text' : 'password'" :label="label" :error-messages="errorMessages"
-        :append-inner-icon="show ? 'mdi-eye-off' : 'mdi-eye'" @click:append-inner="show = !show" color="primary"
-        variant="solo" flat rounded="lg" density="comfortable" autocomplete="off" />
+        :append-inner-icon="show ? mdiEyeOff : mdiEye" @click:append-inner="show = !show" color="primary" variant="solo"
+        flat rounded="lg" density="comfortable" autocomplete="off" />
 </template>

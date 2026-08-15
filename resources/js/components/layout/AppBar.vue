@@ -1,4 +1,5 @@
 <script setup>
+import { mdiMenu, mdiMoonWaningCrescent, mdiWhiteBalanceSunny } from "@mdi/js";
 import { ref, watch, computed } from "vue";
 import { storeToRefs } from "pinia";
 import { useTheme } from "vuetify";
@@ -38,7 +39,7 @@ const toggleTheme = (e) => {
         <v-container class="d-flex flex-row align-center ga-2">
             <template v-if="!isAppLayout">
                 <router-link :to="{ name: 'home' }">
-                    <v-avatar size="33" color="primary" rounded="lg">J</v-avatar>
+                    <v-avatar size="small" color="primary">J</v-avatar>
                 </router-link>
 
                 <div class="d-flex align-center ga-2 ml-auto">
@@ -52,45 +53,21 @@ const toggleTheme = (e) => {
                         <v-btn :color="isActive('contact') ? 'primary' : undefined" height="28" rounded="pill"
                             text="Contact" :to="{ name: 'contact' }" />
                     </template>
-                    <v-btn
-                        :icon="themeStore.isDark ? 'mdi-moon-waning-crescent mdi-rotate-315 opacity-80' : 'mdi-white-balance-sunny opacity-80'"
+                    <template v-else>
+                        <v-btn size="x-small" :icon="mdiMenu" class="order-1" @click="layout.toggleDrawer()"></v-btn>
+                    </template>
+                    <v-btn :icon="themeStore.isDark ? mdiMoonWaningCrescent : mdiWhiteBalanceSunny"
                         v-tooltip="{ text: themeStore.isDark ? 'Light Mode' : 'Dark Mode', location: 'bottom' }"
                         @click="toggleTheme" variant="text" size="x-small" />
                 </div>
             </template>
             <template v-else>
                 <div class="d-flex flex-row justify-space-between align-center w-100">
-                    <v-btn size="small" icon="mdi-menu" class="border" @click="layout.toggleDrawer()" />
+                    <v-btn size="small" :icon="mdiMenu" class="border" @click="layout.toggleDrawer()" />
                     <div class="text-title-medium font-weight-bold">Portfolio</div>
                     <ProfileMenu />
                 </div>
             </template>
         </v-container>
     </v-app-bar>
-
-    <v-bottom-navigation v-if="!isAppLayout && $vuetify.display.smAndDown" :elevation="0" grow rounded="pill"
-        class="border mx-auto pa-1">
-        <v-btn :ripple="false" :color="isActive('home') ? 'primary' : undefined" rounded="pill" :to="{ name: 'home' }">
-            <v-icon size="27">mdi-home</v-icon>
-            Home
-        </v-btn>
-
-        <v-btn :ripple="false" :color="isActive('about') ? 'primary' : undefined" rounded="pill"
-            :to="{ name: 'about' }">
-            <v-icon size="27">mdi-information</v-icon>
-            About
-        </v-btn>
-
-        <v-btn :ripple="false" :color="isActive('projects') ? 'primary' : undefined" rounded="pill"
-            :to="{ name: 'projects' }">
-            <v-icon size="27">mdi-briefcase-variant</v-icon>
-            Projects
-        </v-btn>
-
-        <v-btn :ripple="false" :color="isActive('contact') ? 'primary' : undefined" rounded="pill"
-            :to="{ name: 'contact' }">
-            <v-icon size="27">mdi-phone</v-icon>
-            Contact
-        </v-btn>
-    </v-bottom-navigation>
 </template>

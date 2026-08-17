@@ -7,7 +7,7 @@ import path from "path";
 export default defineConfig({
     plugins: [
         laravel({
-            input: ["resources/css/app.scss", "resources/js/app.js"],
+            input: ["resources/js/app.js"],
             refresh: true,
         }),
         vue(),
@@ -50,6 +50,7 @@ export default defineConfig({
         },
     },
     build: {
+        cssCodeSplit: false,
         chunkSizeWarningLimit: 1000,
         rollupOptions: {
             output: {
@@ -60,9 +61,9 @@ export default defineConfig({
                         return "vendor";
                     }
                 },
-                entryFileNames: `assets/[name]-[hash].js`,
-                chunkFileNames: `assets/[name]-[hash].js`,
-                assetFileNames: `assets/[name]-[hash].[ext]`,
+                entryFileNames: "assets/[name]-[hash].js",
+                chunkFileNames: "assets/[name]-[hash].js",
+                assetFileNames: "assets/[name]-[hash][extname]",
             },
         },
     },

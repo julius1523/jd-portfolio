@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'ghostscript' => [
+        'binary' => env('GHOSTSCRIPT_BINARY'),
+    ],
+
 ];

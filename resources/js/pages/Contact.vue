@@ -38,7 +38,7 @@
                         <v-img src="/images/contact.png" :position="$vuetify.display.mdAndUp ? 'right' : 'center'"
                             alt="Contact Character Image" class="clamped-img fade-bottom reveal-item" :style="{
                                 '--img-min-h': '180px',
-                                '--img-max-h': '320px',
+                                '--img-max-h': '285px',
                             }" />
                     </v-col>
                 </v-row>

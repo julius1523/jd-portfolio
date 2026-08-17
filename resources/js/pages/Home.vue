@@ -19,7 +19,8 @@
                             I'm passionate about designing intuitive and visually appealing web
                             applications—with a sharp eye for small details that enhance user experience.
                         </div>
-                        <div class="mt-5 d-flex flex-row flex-wrap ga-2 justify-center justify-md-start reveal-item">
+                        <div
+                            class="mt-5 d-flex flex-row flex-wrap ga-3 ga-sm-2 justify-center justify-md-start reveal-item">
                             <v-btn color="primary" width="160" size="large" rounded="pill" variant="flat" text="Hire Me"
                                 :append-icon="mdiChevronRight"></v-btn>
                             <v-btn color="primary" width="160" size="large" rounded="pill" variant="outlined"

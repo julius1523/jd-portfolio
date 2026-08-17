@@ -30,7 +30,7 @@
                         <v-img src="/images/about.png" :position="$vuetify.display.mdAndUp ? 'right' : 'center'"
                             alt="About Character Image" class="clamped-img fade-bottom reveal-item" :style="{
                                 '--img-min-h': '180px',
-                                '--img-max-h': '320px',
+                                '--img-max-h': '285px',
                             }" />
                     </v-col>
                 </v-row>
@@ -74,13 +74,13 @@
                 </div>
                 <div class="d-flex flex-row flex-wrap ga-4 justify-center">
                     <div v-for="item in facts" :key="item.text" class="reveal-item">
-                        <v-card color="surface-light" flat height="180" width="180" rounded="xl"
+                        <v-card color="surface-light" flat height="175" width="175" rounded="xl"
                             class="pa-3 d-flex flex-column align-center">
                             <div class="h-50 w-100 d-flex align-center justify-center">
                                 <v-icon :icon="item.icon" size="37" color="primary" class="opacity-80" />
                             </div>
                             <div class="flex-grow-1 w-100 d-flex justify-center text-center three-line">
-                                {{ item.text }}
+                                <span v-html="item.text"></span>
                             </div>
                         </v-card>
                     </div>
@@ -145,9 +145,9 @@ const skills = ref([
     }
 ]);
 const facts = ref([
-    { icon: mdiController, text: "My peak mmr in DotA 2 is 14k" },
-    { icon: mdiHandOkay, text: "I am a perfectionist" },
-    { icon: mdiPaw, text: "I love cats and dogs" },
+    { icon: mdiController, text: "My peak mmr in DotA 2 was 14k" },
+    { icon: mdiHandOkay, text: "I am a <br/> perfectionist" },
+    { icon: mdiPaw, text: "I love <br/> cats and dogs" },
     { icon: mdiSpotify, text: "I love listening to pop music" },
     { icon: mdiEmoticonExcited, text: "I am an introvert and a picky eater" }
 ]);

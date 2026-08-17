@@ -35,28 +35,30 @@ const toggleTheme = (e) => {
         <v-container class="d-flex flex-row align-center ga-2">
             <template v-if="!isAppLayout">
                 <router-link :to="{ name: 'home' }">
-                    <v-avatar size="38" color="primary">J</v-avatar>
+                    <v-avatar size="40" color="primary">J</v-avatar>
                 </router-link>
 
-                <div class="border pa-1 rounded-pill d-flex ga-1 align-center ml-auto">
-                    <template v-if="$vuetify.display.mdAndUp">
-                        <v-btn density="comfortable" :color="isActive('home') ? 'primary' : undefined" rounded="pill"
-                            text="Home" :to="{ name: 'home' }" />
-                        <v-btn density="comfortable" :color="isActive('about') ? 'primary' : undefined" rounded="pill"
+                <div class="d-flex ga-2 align-center ml-auto">
+                    <div v-if="$vuetify.display.mdAndUp"
+                        class="border pa-1 order-1 order-md-0 rounded-pill d-flex ga-1 align-center">
+                        <v-btn height="31" :color="isActive('home') ? 'primary' : undefined" rounded="pill" text="Home"
+                            :to="{ name: 'home' }" />
+                        <v-btn height="31" :color="isActive('about') ? 'primary' : undefined" rounded="pill"
                             text="About" :to="{ name: 'about' }" />
-                        <v-btn density="comfortable" :color="isActive('projects') ? 'primary' : undefined"
-                            rounded="pill" text="Projects" :to="{ name: 'projects' }" />
-                        <v-btn density="comfortable" :color="isActive('contact') ? 'primary' : undefined" rounded="pill"
+                        <v-btn height="31" :color="isActive('projects') ? 'primary' : undefined" rounded="pill"
+                            text="Projects" :to="{ name: 'projects' }" />
+                        <v-btn height="31" :color="isActive('contact') ? 'primary' : undefined" rounded="pill"
                             text="Contact" :to="{ name: 'contact' }" />
-                    </template>
-                    <template v-else>
-                        <v-icon-btn size="30" icon-size="23" class="order-1" :icon="mdiMenu"
-                            @click="layout.toggleDrawer()" />
-                    </template>
-                    <v-icon-btn size="30" icon-size="small"
-                        :icon="themeStore.isDark ? mdiMoonWaningCrescent : mdiWhiteBalanceSunny" class="order-0"
+                    </div>
+
+                    <v-icon-btn size="40" icon-size="small"
+                        :icon="themeStore.isDark ? mdiMoonWaningCrescent : mdiWhiteBalanceSunny" class="border"
                         v-tooltip="{ text: themeStore.isDark ? 'Light Mode' : 'Dark Mode', location: 'bottom' }"
                         @click="toggleTheme" />
+
+                    <v-icon-btn v-if="$vuetify.display.smAndDown" size="40" icon-size="23" :icon="mdiMenu"
+                        class="border" @click="layout.toggleDrawer()" />
+
                 </div>
             </template>
             <template v-else>

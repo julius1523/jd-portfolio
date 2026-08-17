@@ -7,7 +7,7 @@
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <title>{{ config('app.name') }}</title>
 
-    @vite(['resources/css/app.scss', 'resources/js/app.js'])
+    @vite(['resources/js/app.js'])
 </head>
 
 <body>

@@ -1,3 +1,4 @@
+import "../css/app.scss";
 import { createApp } from "vue";
 import { createPinia } from "pinia";
 import "@/plugins/axios";

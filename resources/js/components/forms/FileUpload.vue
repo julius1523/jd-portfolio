@@ -1,6 +1,6 @@
 <script setup>
-import { ref, computed, watch, useAttrs } from "vue";
-import { mdiCloudUpload, mdiCloudUploadOutline, mdiFileDocument } from "@mdi/js";
+import { ref, computed, watch, onBeforeUnmount, useAttrs } from "vue";
+import { mdiCloudUpload, mdiCloudUploadOutline, mdiFileDocument, mdiTrashCan } from "@mdi/js";
 const props = defineProps({
     modelValue: { type: [File, Object, Array, String], default: null },
     fileType: { type: String, default: 'any' },
@@ -86,11 +86,11 @@ function isExistingFileMeta(item) {
     return !!item && typeof item === 'object' && !(item instanceof File) && !(item instanceof Blob) && 'file_name' in item;
 };
 function metaToPseudoFile(item) {
-    const size = item.file_size || 0;
-    const blob = new Blob([new Uint8Array(size)], { type: item.mime_type });
-    const file = new File([blob], item.file_name, { type: item.mime_type });
+    const file = new File([], item.orig_name || item.file_name, { type: item.mime_type });
+    Object.defineProperty(file, 'size', { value: item.file_size || 0, enumerable: true, configurable: true });
     Object.defineProperty(file, 'file_name', { value: item.file_name, enumerable: true });
     Object.defineProperty(file, '__existing', { value: true, enumerable: true });
+    Object.defineProperty(file, '__url', { value: item.url, enumerable: true });
     return file;
 };
 function resolveSingle(item) {
@@ -118,7 +118,20 @@ function formatSize(bytes) {
         i++;
     }
     return `${size.toFixed(1)} ${units[i]}`;
-}
+};
+const previewUrls = new WeakMap();
+function getPreviewUrl(file) {
+    if (file.__existing) return file.__url;
+    if (!file.type?.startsWith('image/')) return undefined;
+    if (!previewUrls.has(file)) previewUrls.set(file, URL.createObjectURL(file));
+    return previewUrls.get(file);
+};
+function revokePreview(file) {
+    if (!file.__existing && previewUrls.has(file)) {
+        URL.revokeObjectURL(previewUrls.get(file));
+        previewUrls.delete(file);
+    }
+};
 function validate(selected) {
     const list = Array.isArray(selected) ? selected : selected ? [selected] : [];
     if (props.maxFiles && list.length > props.maxFiles) {
@@ -158,16 +171,22 @@ function handleChange(selected) {
         emit('error', message);
         return;
     }
+    const prevFiles = files.value;
+    const nextList = Array.isArray(selected) ? selected : selected ? [selected] : [];
+    prevFiles.forEach((f) => { if (!nextList.includes(f)) revokePreview(f); });
+
     internalValue.value = selected;
     emit('update:modelValue', selected);
 };
 function removeFile(index) {
     if (Array.isArray(internalValue.value)) {
         const updated = [...internalValue.value];
-        updated.splice(index, 1);
+        const [removed] = updated.splice(index, 1);
+        if (removed) revokePreview(removed);
         internalValue.value = updated;
         emit('update:modelValue', updated);
     } else {
+        if (internalValue.value) revokePreview(internalValue.value);
         internalValue.value = null;
         emit('update:modelValue', null);
     }
@@ -180,6 +199,9 @@ watch(
     },
     { immediate: true }
 );
+onBeforeUnmount(() => {
+    files.value.forEach((f) => revokePreview(f));
+});
 </script>
 
 <template>
@@ -189,9 +211,43 @@ watch(
             :subtitle="subtitle" :icon="icon" :disabled="disabled" :clearable="clearable" :show-size="showSize"
             :hint="hint" :persistent-hint="persistent" :error="hasError" :error-messages="displayedErrorMessages"
             v-bind="filteredAttrs" @update:model-value="handleChange">
+
+            <template #single="{ file, props: itemProps }">
+                <v-file-upload-item v-bind="itemProps" :file="file" :show-size="showSize" :clearable="clearable"
+                    class="border-0">
+                    <template #prepend>
+                        <v-avatar size="46">
+                            <v-img v-if="file.type?.startsWith('image/')" :src="getPreviewUrl(file)" :cover="false"
+                                class="border" alt="" />
+                            <v-icon v-else :icon="mdiFileDocument" />
+                        </v-avatar>
+                    </template>
+                    <template v-slot:clear="{ props: clearProps }">
+                        <v-btn :icon="mdiTrashCan" v-bind="clearProps"></v-btn>
+                    </template>
+                </v-file-upload-item>
+            </template>
+
+            <template #item="{ file, props: itemProps }">
+                <v-file-upload-item v-bind="itemProps" :file="file" :show-size="showSize" :clearable="clearable"
+                    class="border-0">
+                    <template #prepend>
+                        <v-avatar size="46">
+                            <v-img v-if="file.type?.startsWith('image/')" :src="getPreviewUrl(file)" :cover="false"
+                                class="border" alt="" />
+                            <v-icon v-else :icon="mdiFileDocument" />
+                        </v-avatar>
+                    </template>
+                    <template v-slot:clear="{ props: clearProps }">
+                        <v-btn :icon="mdiTrashCan" v-bind="clearProps"></v-btn>
+                    </template>
+                </v-file-upload-item>
+            </template>
+
             <template v-for="(_, slot) in $slots" #[slot]="scope">
                 <slot :name="slot" v-bind="scope" />
             </template>
+
             <template #title>
                 <div class="text-title-medium font-weight-bold">{{ props.title }}</div>
                 <div v-if="props.density != 'compact'" class="text-title-small text-medium-emphasis mt-1">

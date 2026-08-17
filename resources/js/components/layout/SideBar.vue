@@ -9,8 +9,8 @@ const layout = useLayoutStore();
 </script>
 
 <template>
-    <v-navigation-drawer v-model="layout.drawer" elevation="0" :rail="layout.rail"
-        :location="$vuetify.display.smAndDown ? 'bottom' : undefined" color="surface-light" floating
+    <v-navigation-drawer :key="$vuetify.display.smAndDown ? 'mobile' : 'desktop'" v-model="layout.drawer" elevation="0"
+        :rail="layout.rail" :location="$vuetify.display.smAndDown ? 'bottom' : undefined" color="surface-light" floating
         :floating="$vuetify.display.smAndDown" :permanent="$vuetify.display.mdAndUp"
         :class="$vuetify.display.smAndDown ? 'rounded-t-xl' : undefined" width="250">
         <template #prepend>

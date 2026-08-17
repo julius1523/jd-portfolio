@@ -21,7 +21,7 @@
                             </v-col>
                             <v-col cols="12">
                                 <v-combobox v-model="title" v-model:search="search" :hide-no-data="false"
-                                    :items="jobTitles" variant="solo" flat label="Job Title" rounded="lg"
+                                    :items="jobTitles" variant="solo" flat label="Job Title" closable-chips rounded="lg"
                                     density="comfortable" chips hide-selected hint="Maximum of 4 tags" persistent-hint
                                     multiple :list-props="{ rounded: 'xl' }" :error-messages="errors.title"
                                     autocomplete="off" data-shimmer-no-children>

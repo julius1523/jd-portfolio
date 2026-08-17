@@ -89,16 +89,16 @@ html {
     will-change: transform, opacity;
 }
 
-.scale-up-content:hover {
-    transform: scale(1.02);
-}
-
-.scale-down-content:hover {
-    transform: scale(0.98);
-}
-
-.translate-content:hover {
-    transform: translateY(-15px);
+@media (hover: hover) and (pointer: fine) {
+    .scale-up-content:hover {
+        transform: scale(1.02);
+    }
+    .scale-down-content:hover {
+        transform: scale(0.98);
+    }
+    .translate-content:hover {
+        transform: translateY(-10px);
+    }
 }
 
 .v-card:hover > .v-card__overlay {

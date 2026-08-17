@@ -22,7 +22,7 @@
                         <v-img src="/images/projects.png" :position="$vuetify.display.mdAndUp ? 'right' : 'center'"
                             alt="Projects Character Image" class="clamped-img fade-bottom reveal-item" :style="{
                                 '--img-min-h': '180px',
-                                '--img-max-h': '320px',
+                                '--img-max-h': '285px',
                             }" />
                     </v-col>
                 </v-row>
@@ -33,7 +33,7 @@
     <section id="projects-body" ref="projectsBodySection">
         <v-card flat tile color="surface-light">
             <v-container class="my-5 my-md-13 px-7">
-                <div class="d-flex flex-column ga-4">
+                <div class="d-flex flex-column ga-2">
                     <div class="reveal-item">
                         <div class="text-headline-small text-md-headline-medium font-weight-medium">
                             Software Development
@@ -43,25 +43,31 @@
                     <SnapCarousel :items="software">
                         <template #default="{ item, index }">
                             <v-card width="330" height="440" rounded="xl" flat
-                                class="d-flex flex-column scale-down-content" @click="openProject(item.url)">
-                                <div class="d-flex align-center justify-center h-50">
-                                    <img :src="item.preview" loading="lazy" decoding="async"
-                                        :alt="`Software Development Preview ${index}`" class="border rounded-md" />
+                                class="border d-flex flex-column scale-down-content" @click="openProject(item.url)">
+
+                                <div class="h-50">
+                                    <v-img :src="item.preview" width="fit-content" position="top"
+                                        :alt="`Software Development Preview ${index}`" aspect-ratio="16/9"
+                                        class="border-b" />
                                 </div>
 
                                 <div class="pa-5 d-flex flex-column flex-grow-1">
-                                    <div class="text-title text-truncate">
+                                    <div class="text-title">
                                         {{ item.title }}
                                     </div>
 
-                                    <div class="text-label-large text-medium-emphasis three-line mt-2">
+                                    <div class="text-label-large three-line text-medium-emphasis mt-2">
                                         {{ item.description }}
                                     </div>
 
-                                    <div class="d-flex flex-wrap ga-1 mt-auto">
-                                        <v-chip v-for="(material, i) in item.materials" :key="i" color="primary"
-                                            size="small" variant="tonal">
+                                    <div class="d-flex flex-row ga-1 mt-auto">
+                                        <v-chip v-for="material in item.materials.slice(0, 3)" :key="material"
+                                            color="primary" size="small" variant="tonal">
                                             {{ material }}
+                                        </v-chip>
+                                        <v-chip v-if="item.materials.length > 3" size="small" variant="text"
+                                            class="text-medium-emphasis">
+                                            +{{ item.materials.length - 3 }} more
                                         </v-chip>
                                     </div>
                                 </div>
@@ -70,7 +76,7 @@
                     </SnapCarousel>
                 </div>
 
-                <div class="d-flex flex-column ga-5">
+                <div class="d-flex flex-column ga-2">
                     <div class="reveal-item">
                         <div class="text-headline-small text-md-headline-medium font-weight-medium mt-10 mt-md-15">
                             Technical Documentation
@@ -80,24 +86,31 @@
                     <SnapCarousel :items="documentation">
                         <template #default="{ item, index }">
                             <v-card width="330" height="440" rounded="xl" flat
-                                class="d-flex flex-column scale-down-content" @click="openProject(item.url)">
-                                <div class="d-flex align-center justify-center h-50">
-                                    <img :src="item.preview" loading="lazy" decoding="async"
-                                        :alt="`Technical Documentation Preview ${index}`" class="border rounded-md" />
+                                class="border d-flex flex-column scale-down-content" @click="openProject(item.url)">
+
+                                <div class="h-50">
+                                    <v-img :src="item.preview" width="fit-content" position="top"
+                                        :alt="`Technical Documentation Preview ${index}`" aspect-ratio="16/9"
+                                        class="border-b" />
                                 </div>
+
                                 <div class="pa-5 d-flex flex-column flex-grow-1">
-                                    <div class="text-title text-truncate">
+                                    <div class="text-title">
                                         {{ item.title }}
                                     </div>
 
-                                    <div class="text-label-large text-medium-emphasis three-line mt-2">
+                                    <div class="text-label-large three-line text-medium-emphasis mt-2">
                                         {{ item.description }}
                                     </div>
 
-                                    <div class="d-flex flex-wrap ga-1 mt-auto">
-                                        <v-chip v-for="(material, i) in item.materials" :key="i" color="primary"
-                                            size="small" variant="tonal">
+                                    <div class="d-flex flex-row ga-1 mt-auto">
+                                        <v-chip v-for="material in item.materials.slice(0, 3)" :key="material"
+                                            color="primary" size="small" variant="tonal">
                                             {{ material }}
+                                        </v-chip>
+                                        <v-chip v-if="item.materials.length > 3" size="small" variant="text"
+                                            class="text-medium-emphasis">
+                                            +{{ item.materials.length - 3 }} more
                                         </v-chip>
                                     </div>
                                 </div>
@@ -106,7 +119,7 @@
                     </SnapCarousel>
                 </div>
 
-                <div class="d-flex flex-column ga-5">
+                <div class="d-flex flex-column ga-2">
                     <div class="reveal-item">
                         <div class="text-headline-small text-md-headline-medium font-weight-medium mt-10 mt-md-15">
                             Presentations/Multimedia
@@ -115,25 +128,31 @@
                     <SnapCarousel :items="media">
                         <template #default="{ item, index }">
                             <v-card width="330" height="440" rounded="xl" flat
-                                class="d-flex flex-column scale-down-content" @click="openProject(item.url)">
-                                <div class="d-flex align-center justify-center h-50">
-                                    <img :src="item.preview" loading="lazy" decoding="async"
-                                        :alt="`Presentations/Multimedia Preview ${index}`" class="border rounded-md" />
+                                class="border d-flex flex-column scale-down-content" @click="openProject(item.url)">
+
+                                <div class="h-50">
+                                    <v-img :src="item.preview" width="fit-content" position="top"
+                                        :alt="`Presentations/Multimedia Preview ${index}`" aspect-ratio="16/9"
+                                        class="border-b" />
                                 </div>
 
                                 <div class="pa-5 d-flex flex-column flex-grow-1">
-                                    <div class="text-title text-truncate">
+                                    <div class="text-title">
                                         {{ item.title }}
                                     </div>
 
-                                    <div class="text-label-large text-medium-emphasis three-line mt-2">
+                                    <div class="text-label-large three-line text-medium-emphasis mt-2">
                                         {{ item.description }}
                                     </div>
 
-                                    <div class="d-flex flex-wrap ga-1 mt-auto">
-                                        <v-chip v-for="(material, i) in item.materials" :key="i" color="primary"
-                                            size="small" variant="tonal">
+                                    <div class="d-flex flex-row ga-1 mt-auto">
+                                        <v-chip v-for="material in item.materials.slice(0, 3)" :key="material"
+                                            color="primary" size="small" variant="tonal">
                                             {{ material }}
+                                        </v-chip>
+                                        <v-chip v-if="item.materials.length > 3" size="small" variant="text"
+                                            class="text-medium-emphasis">
+                                            +{{ item.materials.length - 3 }} more
                                         </v-chip>
                                     </div>
                                 </div>

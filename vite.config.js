@@ -12,12 +12,8 @@ export default defineConfig({
         }),
         vue(),
         vuetify({
-            autoImport: {
-                ignore: ["Tooltip"],
-            },
-            styles: {
-                configFile: "resources/css/styles/settings.scss",
-            },
+            autoImport: { ignore: ["Tooltip"] },
+            styles: { configFile: "resources/css/styles/_settings.scss" },
         }),
     ],
     optimizeDeps: {

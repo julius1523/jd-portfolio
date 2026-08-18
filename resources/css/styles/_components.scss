@@ -1,0 +1,73 @@
+@use "./mixins" as mixins;
+@use "./variables" as vars;
+
+.v-text-field {
+    .v-field.v-field--variant-solo {
+        border: 1px solid rgba(var(--v-border-color), 0.4);
+    }
+
+    &.v-input--focused {
+        .v-field.v-field--variant-solo {
+            @include mixins.focus-ring(--v-theme-primary);
+        }
+    }
+
+    &.v-input--error {
+        .v-field.v-field--variant-solo {
+            border-color: rgb(var(--v-theme-error));
+        }
+    }
+
+    &.v-input--focused.v-input--error {
+        .v-field.v-field--variant-solo {
+            @include mixins.focus-ring(--v-theme-error);
+        }
+    }
+}
+
+.v-card {
+    > div > img {
+        height: 160px;
+        width: auto;
+        max-width: 100%;
+        object-fit: contain;
+        display: block;
+    }
+
+    &:hover > .v-card__overlay {
+        opacity: 0;
+    }
+}
+
+.card-carousel-wrapper {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+}
+
+.card-carousel {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+}
+
+.card-item {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+}
+
+.v-field__clearable {
+    margin-inline: 0;
+}
+
+.v-tooltip {
+    > .v-overlay__content {
+        font-size: vars.$tooltip-font-size;
+        border-radius: vars.$tooltip-radius;
+    }
+}

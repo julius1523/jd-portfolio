@@ -1,0 +1,65 @@
+@use "./variables" as vars;
+@use "./mixins" as mixins;
+
+.clamped-img {
+    width: 100%;
+    min-width: var(--img-min-w, 0);
+    max-width: min(var(--img-max-w, 100%), 90vw);
+
+    height: clamp(
+        var(--img-min-h, #{vars.$clamped-img-min-height}),
+        40vw,
+        var(--img-max-h, #{vars.$clamped-img-max-height})
+    );
+
+    &.clamped-img--square {
+        height: auto;
+        aspect-ratio: 1 / 1;
+        max-width: min(var(--img-max-w, 100%), 35vw);
+    }
+}
+
+.fade-bottom {
+    -webkit-mask-image: linear-gradient(
+        to bottom,
+        black 0%,
+        black 60%,
+        transparent 100%
+    );
+
+    mask-image: linear-gradient(
+        to bottom,
+        black 0%,
+        black 60%,
+        transparent 100%
+    );
+}
+
+.three-line {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+
+    height: 3.9rem;
+}
+
+.text-title {
+    font-size: 1.2rem;
+}
+
+.text-subtitle {
+    font-size: 1.3rem;
+}
+
+.skills {
+    @include mixins.desktop-hover {
+        &:hover {
+            background-color: rgb(var(--v-theme-primary));
+        }
+    }
+}

@@ -1,0 +1,27 @@
+@use "./variables" as vars;
+
+@mixin desktop-hover {
+    @media (hover: hover) and (pointer: fine) {
+        @content;
+    }
+}
+
+@mixin hover-transform($transform) {
+    @include desktop-hover {
+        &:hover {
+            transform: $transform;
+        }
+    }
+}
+
+@mixin focus-ring($color) {
+    border-color: rgb(var(#{$color}));
+    box-shadow: 0 0 0 1px rgb(var(#{$color}));
+}
+
+@mixin bouncy-transition {
+    transition:
+        transform vars.$transition-bouncy-duration
+            vars.$transition-bouncy-easing,
+        opacity vars.$transition-bouncy-duration vars.$transition-bouncy-easing;
+}

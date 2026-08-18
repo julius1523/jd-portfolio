@@ -52,11 +52,11 @@
                                 </div>
 
                                 <div class="pa-5 d-flex flex-column flex-grow-1">
-                                    <div class="text-title">
+                                    <div class="text-title two-line">
                                         {{ item.title }}
                                     </div>
 
-                                    <div class="text-label-large three-line text-medium-emphasis mt-2">
+                                    <div class="text-label-large text-medium-emphasis mt-2 three-line">
                                         {{ item.description }}
                                     </div>
 
@@ -95,11 +95,11 @@
                                 </div>
 
                                 <div class="pa-5 d-flex flex-column flex-grow-1">
-                                    <div class="text-title">
+                                    <div class="text-title two-line">
                                         {{ item.title }}
                                     </div>
 
-                                    <div class="text-label-large three-line text-medium-emphasis mt-2">
+                                    <div class="text-label-large text-medium-emphasis mt-2 three-line">
                                         {{ item.description }}
                                     </div>
 
@@ -137,11 +137,11 @@
                                 </div>
 
                                 <div class="pa-5 d-flex flex-column flex-grow-1">
-                                    <div class="text-title">
+                                    <div class="text-title two-line">
                                         {{ item.title }}
                                     </div>
 
-                                    <div class="text-label-large three-line text-medium-emphasis mt-2">
+                                    <div class="text-label-large text-medium-emphasis mt-2 three-line">
                                         {{ item.description }}
                                     </div>
 

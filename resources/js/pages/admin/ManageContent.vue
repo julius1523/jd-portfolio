@@ -13,7 +13,7 @@
 
             <v-divider />
 
-            <v-tabs-window v-model="tab" crossfade :transition-duration="500">
+            <v-tabs-window v-model="tab">
                 <v-tabs-window-item :value="1">
                     <HomeContent />
                 </v-tabs-window-item>

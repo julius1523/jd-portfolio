@@ -1,5 +1,5 @@
 <script setup>
-import { mdiMenu, mdiMoonWaningCrescent, mdiWhiteBalanceSunny } from "@mdi/js";
+import { RiMoonLine, RiSunLine, RiMenu2Fill, RiMenu3Fill } from "@remixicon/vue";
 import { ref, watch, computed } from "vue";
 import { storeToRefs } from "pinia";
 import { useTheme } from "vuetify";
@@ -51,19 +51,19 @@ const toggleTheme = (e) => {
                             text="Contact" :to="{ name: 'contact' }" />
                     </div>
 
-                    <v-icon-btn size="40" icon-size="small"
-                        :icon="themeStore.isDark ? mdiMoonWaningCrescent : mdiWhiteBalanceSunny" class="border"
+                    <v-icon-btn size="40" icon-size="small" :icon="themeStore.isDark ? RiMoonLine : RiSunLine"
+                        class="border"
                         v-tooltip="{ text: themeStore.isDark ? 'Light Mode' : 'Dark Mode', location: 'bottom' }"
                         @click="toggleTheme" />
 
-                    <v-icon-btn v-if="$vuetify.display.smAndDown" size="40" icon-size="23" :icon="mdiMenu"
+                    <v-icon-btn v-if="$vuetify.display.smAndDown" size="40" icon-size="23" :icon="RiMenu3Fill"
                         class="border" @click="layout.toggleDrawer()" />
 
                 </div>
             </template>
             <template v-else>
                 <div class="d-flex flex-row justify-space-between align-center w-100">
-                    <v-btn size="small" :icon="mdiMenu" class="border" @click="layout.toggleDrawer()" />
+                    <v-btn size="small" :icon="RiMenu2Fill" class="border" @click="layout.toggleDrawer()" />
                     <div class="text-title-medium font-weight-bold">Portfolio</div>
                     <ProfileMenu />
                 </div>

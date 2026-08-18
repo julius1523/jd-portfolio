@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, watch, onBeforeUnmount, useAttrs } from "vue";
-import { mdiCloudUpload, mdiCloudUploadOutline, mdiFileDocument, mdiTrashCan } from "@mdi/js";
+import { mdiCloudUpload, mdiCloudUploadOutline, mdiTrashCan } from "@mdi/js";
+import { RiFilePdf2Fill, RiFileWordFill, RiFilePptFill, RiFileExcelFill, RiFile3Fill } from "@remixicon/vue";
 const props = defineProps({
     modelValue: { type: [File, Object, Array, String], default: null },
     fileType: { type: String, default: 'any' },
@@ -30,6 +31,7 @@ const filteredAttrs = computed(() => {
     const { error, errorMessage: _em, errorMessages: _ems, 'error-messages': _emk, ...rest } = attrs;
     return rest;
 });
+const fileUploadRef = ref(null);
 const emit = defineEmits(['update:modelValue', 'error']);
 const PRESETS = {
     image: 'image/*',
@@ -108,6 +110,45 @@ const files = computed(() => {
     if (!internalValue.value) return [];
     return Array.isArray(internalValue.value) ? internalValue.value : [internalValue.value];
 });
+const FILE_TYPE_ICONS = {
+    pdf: RiFilePdf2Fill,
+    word: RiFileWordFill,
+    ppt: RiFilePptFill,
+    excel: RiFileExcelFill,
+    default: RiFile3Fill,
+};
+function getFileIconComponent(file) {
+    if (!file) return FILE_TYPE_ICONS.default;
+    const name = (file.name || file.file_name || '').toLowerCase();
+    const type = (file.type || file.mime_type || '').toLowerCase();
+    const ext = name.includes('.') ? name.split('.').pop() : '';
+    if (type === 'application/pdf' || ext === 'pdf') {
+        return FILE_TYPE_ICONS.pdf;
+    }
+    if (
+        ['doc', 'docx', 'odt'].includes(ext) ||
+        type.includes('msword') ||
+        type.includes('wordprocessingml')
+    ) {
+        return FILE_TYPE_ICONS.word;
+    }
+    if (
+        ['ppt', 'pptx'].includes(ext) ||
+        type.includes('ms-powerpoint') ||
+        type.includes('presentationml')
+    ) {
+        return FILE_TYPE_ICONS.ppt;
+    }
+    if (
+        ['xls', 'xlsx', 'csv'].includes(ext) ||
+        type.includes('ms-excel') ||
+        type.includes('spreadsheetml') ||
+        type === 'text/csv'
+    ) {
+        return FILE_TYPE_ICONS.excel;
+    }
+    return FILE_TYPE_ICONS.default;
+};
 function formatSize(bytes) {
     if (!bytes) return '0 B';
     const units = ['B', 'KB', 'MB', 'GB'];
@@ -191,6 +232,10 @@ function removeFile(index) {
         emit('update:modelValue', null);
     }
 };
+function onDropzoneClick(e) {
+    if (props.disabled || e.target.closest('.v-btn')) return;
+    fileUploadRef.value?.controlRef?.click();
+};
 watch(
     () => props.modelValue,
     (val) => {
@@ -205,21 +250,25 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div>
-        <v-file-upload v-model="internalValue" :inset-file-list="inset" bg-color="primary" :scrim="scrim" :color="color"
-            :accept="computedAccept" :multiple="multiple" :density="density" :variant="variant" :title="title"
-            :subtitle="subtitle" :icon="icon" :disabled="disabled" :clearable="clearable" :show-size="showSize"
-            :hint="hint" :persistent-hint="persistent" :error="hasError" :error-messages="displayedErrorMessages"
-            v-bind="filteredAttrs" @update:model-value="handleChange">
+    <div class="cursor-pointer" @click="onDropzoneClick">
+        <v-file-upload ref="fileUploadRef" v-model="internalValue" :inset-file-list="inset" bg-color="primary"
+            :scrim="scrim" :color="color" :accept="computedAccept" :multiple="multiple" :density="density"
+            :variant="variant" :title="title" :subtitle="subtitle" :icon="icon" :disabled="disabled"
+            :clearable="clearable" :show-size="showSize" :hint="hint" :persistent-hint="persistent" :error="hasError"
+            :error-messages="displayedErrorMessages" v-bind="filteredAttrs" @update:model-value="handleChange">
+
+            <template v-for="(_, slot) in $slots" #[slot]="scope">
+                <slot :name="slot" v-bind="scope" />
+            </template>
 
             <template #single="{ file, props: itemProps }">
                 <v-file-upload-item v-bind="itemProps" :file="file" :show-size="showSize" :clearable="clearable"
                     class="border-0">
                     <template #prepend>
-                        <v-avatar size="46">
+                        <v-avatar size="46" class="border">
                             <v-img v-if="file.type?.startsWith('image/')" :src="getPreviewUrl(file)" :cover="false"
-                                class="border" alt="" />
-                            <v-icon v-else :icon="mdiFileDocument" />
+                                alt="" />
+                            <component v-else :is="getFileIconComponent(file)" size="24" />
                         </v-avatar>
                     </template>
                     <template v-slot:clear="{ props: clearProps }">
@@ -232,10 +281,10 @@ onBeforeUnmount(() => {
                 <v-file-upload-item v-bind="itemProps" :file="file" :show-size="showSize" :clearable="clearable"
                     class="border-0">
                     <template #prepend>
-                        <v-avatar size="46">
+                        <v-avatar size="46" class="border">
                             <v-img v-if="file.type?.startsWith('image/')" :src="getPreviewUrl(file)" :cover="false"
                                 class="border" alt="" />
-                            <v-icon v-else :icon="mdiFileDocument" />
+                            <component v-else :is="getFileIconComponent(file)" size="24" />
                         </v-avatar>
                     </template>
                     <template v-slot:clear="{ props: clearProps }">
@@ -244,8 +293,9 @@ onBeforeUnmount(() => {
                 </v-file-upload-item>
             </template>
 
-            <template v-for="(_, slot) in $slots" #[slot]="scope">
-                <slot :name="slot" v-bind="scope" />
+            <template #browse="{ props: browseProps }">
+                <v-btn v-bind="browseProps" variant="tonal" color="primary" rounded="lg" text="Browse File"
+                    class="mt-3" />
             </template>
 
             <template #title>

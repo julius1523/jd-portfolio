@@ -1,6 +1,7 @@
 <script setup>
+import { mdiPencilOutline, mdiCogOutline, mdiHomeOutline, mdiInformationOutline, mdiBriefcaseVariantOutline, mdiPhoneOutline } from "@mdi/js";
+import { RiLayoutLeft2Line } from "@remixicon/vue";
 import { storeToRefs } from "pinia";
-import { mdiDockLeft, mdiPencilOutline, mdiCogOutline, mdiHomeOutline, mdiInformationOutline, mdiBriefcaseVariantOutline, mdiPhoneOutline } from "@mdi/js";
 import { useAuthStore } from "@/stores/auth";
 import { useLayoutStore } from "@/stores/layout";
 import ProfileMenu from "../ui/ProfileMenu";
@@ -25,7 +26,7 @@ const layout = useLayoutStore();
                         </template>
 
                         <template #append>
-                            <v-icon-btn variant="text" rounded="lg" :icon="mdiDockLeft"
+                            <v-icon-btn variant="text" rounded="lg" :icon="RiLayoutLeft2Line"
                                 :class="{ 'me-n2': !layout.rail }" class="opacity-70" v-tooltip="{
                                     text: layout.rail ? 'Open sidebar' : 'Close sidebar',
                                     location: 'end',

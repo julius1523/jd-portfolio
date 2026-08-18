@@ -35,17 +35,20 @@
     );
 }
 
+.two-line {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+}
+
 .three-line {
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
-    line-clamp: 3;
-
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: normal;
-
-    height: 3.9rem;
 }
 
 .text-title {
@@ -62,4 +65,22 @@
             background-color: rgb(var(--v-theme-primary));
         }
     }
+}
+
+.chip-mirror {
+    position: absolute;
+    visibility: hidden;
+    height: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.chip-mirror__chip {
+    display: inline-block;
+    padding: 0 12px;
+    margin-right: 8px;
+    font-size: 0.8125rem;
+    height: 24px;
+    line-height: 24px;
 }

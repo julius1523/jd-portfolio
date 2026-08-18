@@ -15,6 +15,7 @@
     },
     "dependencies": {
         "@mdi/js": "^7.4.47",
+        "@remixicon/vue": "^4.9.0",
         "@shimmer-from-structure/vue": "^2.4.6",
         "@vitejs/plugin-vue": "^6.0.6",
         "axios": "^1.18.1",

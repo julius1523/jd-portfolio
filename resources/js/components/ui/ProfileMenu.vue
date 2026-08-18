@@ -3,7 +3,8 @@ import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import { useTheme } from "vuetify";
-import { mdiAccount, mdiDotsHorizontal, mdiAccountCog, mdiBrushVariant, mdiLogoutVariant } from "@mdi/js";
+import { mdiAccount, mdiDotsHorizontal, mdiAccountCog } from "@mdi/js";
+import { RiLogoutBoxRFill, RiPaintBrushFill } from "@remixicon/vue";
 import { useFormLoading } from "@/composables/useFormLoading";
 import { useSnackBarQueue } from "@/composables/useSnackBarQueue";
 import { showConfirmDialog } from "@/composables/useConfirmDialog";
@@ -56,12 +57,17 @@ const logout = () => {
 
             <template v-else>
                 <v-divider />
-                <v-list density="comfortable" slim nav :prepend-gap="8">
-                    <v-list-item v-bind="activatorProps" :title="user?.name" subtitle="Administrator" rounded="lg"
+                <v-list density="comfortable" class="pa-0" :prepend-gap="10">
+                    <v-list-item v-bind="activatorProps" :height="60" :class="layout.rail ? 'px-2' : undefined"
                         v-tooltip="{ text: 'Account', location: 'end', disabled: !layout.rail }">
                         <template #prepend>
-                            <v-icon-btn color="primary" variant="tonal" :icon="mdiAccount"
-                                :size="layout.rail ? 24 : undefined" />
+                            <v-icon-btn color="primary" variant="tonal" :icon="mdiAccount" />
+                        </template>
+                        <template #title>
+                            <span class="text-label-large">{{ user?.name }}</span>
+                        </template>
+                        <template #subtitle>
+                            <span class="text-label-medium">Administrator</span>
                         </template>
                         <template #append>
                             <v-icon size="18" :icon="mdiDotsHorizontal" />
@@ -75,13 +81,13 @@ const logout = () => {
             <v-list density="compact" nav prepend-gap="15" rounded="lg">
                 <v-list-item title="Account Settings" rounded="lg">
                     <template #prepend>
-                        <v-icon-btn variant="tonal" :icon="mdiAccountCog" />
+                        <v-icon-btn size="36" variant="tonal" :icon="mdiAccountCog" />
                     </template>
                 </v-list-item>
 
                 <v-list-item title="Theme Settings" rounded="lg" @click="toggleTheme">
                     <template #prepend>
-                        <v-icon-btn variant="tonal" :icon="mdiBrushVariant" />
+                        <v-icon-btn size="36" variant="tonal" :icon="RiPaintBrushFill" />
                     </template>
 
                     <template #append>
@@ -92,7 +98,7 @@ const logout = () => {
 
                 <v-list-item title="Log Out" rounded="lg" @click="logout">
                     <template #prepend>
-                        <v-icon-btn variant="tonal" :icon="mdiLogoutVariant" />
+                        <v-icon-btn size="36" variant="tonal" :icon="RiLogoutBoxRFill" />
                     </template>
                 </v-list-item>
             </v-list>

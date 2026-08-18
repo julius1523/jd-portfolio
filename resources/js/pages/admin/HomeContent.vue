@@ -8,9 +8,8 @@
                             <v-col cols="12">
                                 <div class="d-flex flex-column ga-1">
                                     <div class="text-title-medium font-weight-bold">Text</div>
-                                    <div class="text-title-small text-medium-emphasis">Update what users can see and
-                                        read
-                                        from your site
+                                    <div class="text-title-small text-medium-emphasis">
+                                        Update what users can see and read from your site
                                     </div>
                                 </div>
                             </v-col>
@@ -20,21 +19,8 @@
                                     autocomplete="off" data-shimmer-no-children />
                             </v-col>
                             <v-col cols="12">
-                                <v-combobox v-model="title" v-model:search="search" :hide-no-data="false"
-                                    :items="jobTitles" variant="solo" flat label="Job Title" closable-chips rounded="lg"
-                                    density="comfortable" chips hide-selected hint="Maximum of 4 tags" persistent-hint
-                                    multiple :list-props="{ rounded: 'xl' }" :error-messages="errors.title"
-                                    autocomplete="off" data-shimmer-no-children>
-                                    <template v-slot:no-data>
-                                        <v-list-item>
-                                            <v-list-item-subtitle>
-                                                No results matching "<strong>{{ search }}</strong>". Press
-                                                <kbd>enter</kbd>
-                                                to create a new one
-                                            </v-list-item-subtitle>
-                                        </v-list-item>
-                                    </template>
-                                </v-combobox>
+                                <Combobox v-model="title" :items="jobTitles" label="Job Title" hint="Maximum of 4 tags"
+                                    :error-messages="errors.title" data-shimmer-no-children></Combobox>
                             </v-col>
                             <v-col cols="12">
                                 <v-textarea v-model="description" color="primary" auto-grow variant="solo" flat
@@ -119,6 +105,7 @@ import * as yup from "yup";
 import { useValidatedForm } from "@/composables/useValidatedForm";
 import { useUnsavedChanges } from "@/composables/useUnsavedChanges";
 import { useSnackBarQueue } from "@/composables/useSnackBarQueue";
+import Combobox from "@/components/forms/Combobox";
 import FileUpload from "@/components/forms/FileUpload";
 const { info, error } = useSnackBarQueue();
 const search = ref(null);

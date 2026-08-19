@@ -8,10 +8,6 @@
     <title>{{ config('app.name') }}</title>
 
     @vite(['resources/js/app.js'])
-
-    @if (app()->environment('production'))
-        @vite(['style.css'])
-    @endif
 </head>
 
 <body>

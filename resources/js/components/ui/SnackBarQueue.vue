@@ -18,3 +18,7 @@ const { messages } = useSnackBarQueue();
         </template>
     </v-snackbar-queue>
 </template>
+
+<style lang="scss">
+@use "../../../css/styles/transitions";
+</style>

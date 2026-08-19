@@ -71,3 +71,40 @@ onBeforeUnmount(() => {
         <v-btn :icon="mdiArrowRight" variant="tonal" size="x-small" :disabled="!canScrollRight" @click="scroll(1)" />
     </div>
 </template>
+
+<style scoped lang="scss">
+@use "sass:map";
+@use "../../../css/styles/settings" as vuetify;
+
+.card-carousel-wrapper {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+}
+
+.card-carousel {
+    --edge: 28px;
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    padding-inline: var(--edge);
+    scroll-padding-inline: var(--edge);
+
+    @each $name, $width in vuetify.$container-max-widths {
+        @media (min-width: map.get(vuetify.$grid-breakpoints, $name)) {
+            --edge: max(28px, calc((100vw - #{$width}) / 2 + 28px));
+        }
+
+    }
+}
+
+.card-item {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+}
+</style>

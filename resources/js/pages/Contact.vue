@@ -86,7 +86,7 @@
 <script setup>
 import axios from "@/plugins/axios";
 import { ref } from "vue";
-import { RiSendPlaneFill, RiFacebookFill, RiInstagramFill, RiLinkedinBoxFill } from "@remixicon/vue";
+import { RiSendPlaneFill, RiFacebookFill, RiInstagramFill, RiLinkedinBoxFill } from "vue-remix-icons";
 import * as yup from "yup";
 import { useValidatedForm } from "@/composables/useValidatedForm";
 import { useUnsavedChanges } from "@/composables/useUnsavedChanges";

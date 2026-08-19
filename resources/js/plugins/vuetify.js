@@ -2,7 +2,6 @@ import "vuetify/styles";
 import { createVuetify } from "vuetify";
 import { aliases, mdi } from "vuetify/iconsets/mdi-svg";
 import { mdiFileDocument } from "@mdi/js";
-import { VPie } from "vuetify/labs/VPie";
 const savedTheme = localStorage.getItem("theme") ?? "dark";
 export default createVuetify({
     icons: {
@@ -86,8 +85,5 @@ export default createVuetify({
                 overflow: "hidden",
             },
         },
-    },
-    components: {
-        VPie,
     },
 });

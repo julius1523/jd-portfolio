@@ -1,6 +1,6 @@
 <script setup>
 import { mdiPencilOutline, mdiCogOutline, mdiHomeOutline, mdiInformationOutline, mdiBriefcaseVariantOutline, mdiPhoneOutline } from "@mdi/js";
-import { RiLayoutLeft2Line } from "@remixicon/vue";
+import { RiLayoutLeft2Line } from "vue-remix-icons";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/stores/auth";
 import { useLayoutStore } from "@/stores/layout";

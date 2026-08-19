@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-import { RiEyeLine, RiEyeOffLine } from "@remixicon/vue";
+import { RiEyeLine, RiEyeOffLine } from "vue-remix-icons";
 const model = defineModel({
     type: String,
     default: '',

@@ -103,3 +103,23 @@ watch(() => props.modelValue, recalcVisibleCount, { deep: true });
         </div>
     </div>
 </template>
+
+<style lang="css" scoped>
+.chip-mirror {
+    position: absolute;
+    visibility: hidden;
+    height: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.chip-mirror__chip {
+    display: inline-block;
+    padding: 0 12px;
+    margin-right: 8px;
+    font-size: 0.8125rem;
+    height: 24px;
+    line-height: 24px;
+}
+</style>

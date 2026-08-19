@@ -18,18 +18,18 @@
 </template>
 
 <script setup>
-import appbar from "@/components/layout/AppBar";
-import sidebar from "@/components/layout/SideBar";
-import footr from "@/components/layout/Footer";
-import snackbar from "@/components/ui/SnackBarQueue";
-import confirm from "@/components/ui/ConfirmDialog";
-import { watch, computed } from "vue";
+import { watch, computed, defineAsyncComponent } from "vue";
 import { useTheme, useDisplay } from "vuetify";
 import { storeToRefs } from "pinia";
 import { useRoute } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import { useThemeStore } from "@/stores/theme";
-import { provideShimmerConfig } from '@shimmer-from-structure/vue';
+import { provideShimmerConfig } from "@shimmer-from-structure/vue";
+import appbar from "@/components/layout/AppBar";
+import sidebar from "@/components/layout/SideBar";
+import footr from "@/components/layout/Footer";
+const snackbar = defineAsyncComponent(() => import("@/components/ui/SnackBarQueue"));
+const confirm = defineAsyncComponent(() => import("@/components/ui/ConfirmDialog"));
 provideShimmerConfig({
     shimmerColor: 'rgba(156, 163, 175, 0.4)',
     backgroundColor: 'rgba(156, 163, 175, 0.15)',

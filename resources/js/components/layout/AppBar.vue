@@ -1,5 +1,5 @@
 <script setup>
-import { RiMoonLine, RiSunLine, RiMenu2Fill, RiMenu3Fill } from "@remixicon/vue";
+import { RiMoonLine, RiSunLine, RiMenu2Fill, RiMenu3Fill } from "vue-remix-icons";
 import { ref, watch, computed } from "vue";
 import { storeToRefs } from "pinia";
 import { useTheme } from "vuetify";

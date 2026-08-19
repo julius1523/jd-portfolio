@@ -4,7 +4,7 @@ import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import { useTheme } from "vuetify";
 import { mdiAccount, mdiDotsHorizontal, mdiAccountCog } from "@mdi/js";
-import { RiLogoutBoxRFill, RiPaintBrushFill } from "@remixicon/vue";
+import { RiLogoutBoxRFill, RiPaintBrushFill } from "vue-remix-icons";
 import { useFormLoading } from "@/composables/useFormLoading";
 import { useSnackBarQueue } from "@/composables/useSnackBarQueue";
 import { showConfirmDialog } from "@/composables/useConfirmDialog";

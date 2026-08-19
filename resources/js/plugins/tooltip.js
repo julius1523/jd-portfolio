@@ -1,6 +1,5 @@
-// resources/js/plugins/tooltip.js
 import { createApp, h, reactive } from "vue";
-import { VTooltip } from "vuetify/components";
+import { VTooltip } from "vuetify/components/VTooltip";
 import vuetify from "@/plugins/vuetify";
 
 function normalizeOptions(value) {

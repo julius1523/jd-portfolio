@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, watch, onBeforeUnmount, useAttrs } from "vue";
 import { mdiCloudUpload, mdiCloudUploadOutline, mdiTrashCan } from "@mdi/js";
-import { RiFilePdf2Fill, RiFileWordFill, RiFilePptFill, RiFileExcelFill, RiFile3Fill } from "@remixicon/vue";
+import { RiFilePdf2Fill, RiFileWordFill, RiFilePptFill, RiFileExcelFill, RiFile3Fill } from "vue-remix-icons";
 const props = defineProps({
     modelValue: { type: [File, Object, Array, String], default: null },
     fileType: { type: String, default: 'any' },

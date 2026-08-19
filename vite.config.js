@@ -16,9 +16,6 @@ export default defineConfig({
             styles: { configFile: "resources/css/styles/_settings.scss" },
         }),
     ],
-    optimizeDeps: {
-        exclude: ["vuetify"],
-    },
     resolve: {
         alias: {
             "~": path.resolve(import.meta.dirname, "resources/js"),
@@ -47,19 +44,5 @@ export default defineConfig({
     },
     build: {
         chunkSizeWarningLimit: 1000,
-        rollupOptions: {
-            output: {
-                manualChunks(id) {
-                    if (id.includes("node_modules")) {
-                        if (id.includes("vuetify")) return "vuetify";
-                        if (id.includes("vue")) return "vue";
-                        return "vendor";
-                    }
-                },
-                entryFileNames: "assets/[name]-[hash].js",
-                chunkFileNames: "assets/[name]-[hash].js",
-                assetFileNames: "assets/[name]-[hash][extname]",
-            },
-        },
     },
 });

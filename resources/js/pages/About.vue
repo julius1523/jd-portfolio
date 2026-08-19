@@ -48,8 +48,8 @@
                 </div>
                 <div class="d-flex flex-column ga-10 reveal-item">
                     <div v-for="item in skills" :key="item.title" class="d-flex flex-column ga-3">
-                        <div class="d-flex text-subtitle font-weight-medium">
-                            <RiStackLine size="30" class="text-primary mr-3" />
+                        <div class="text-subtitle font-weight-medium">
+                            <v-icon :icon="RiStackLine" color="primary" class="mr-2" />
                             {{ item.title }}
                         </div>
                         <div class="d-flex flex-row flex-wrap ga-2 ml-11">
@@ -121,7 +121,7 @@
 <script setup>
 import { ref } from "vue";
 import { mdiController, mdiHandOkay, mdiPaw, mdiSpotify, mdiEmoticonExcited } from "@mdi/js";
-import { RiStackLine } from "@remixicon/vue";
+import { RiStackLine } from "vue-remix-icons";
 import { useScrollReveal } from "@/composables/useScrollReveal";
 const aboutSection = ref(null);
 const skillsSection = ref(null);

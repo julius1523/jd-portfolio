@@ -1,4 +1,5 @@
 import { defineConfig } from "vite";
+import UnoCSS from "unocss/vite";
 import laravel from "laravel-vite-plugin";
 import vue from "@vitejs/plugin-vue";
 import vuetify from "vite-plugin-vuetify";
@@ -15,7 +16,11 @@ export default defineConfig({
             autoImport: { ignore: ["Tooltip"] },
             styles: { configFile: "resources/css/styles/_settings.scss" },
         }),
+        UnoCSS(),
     ],
+    optimizeDeps: {
+        exclude: ["vuetify"],
+    },
     resolve: {
         alias: {
             "~": path.resolve(import.meta.dirname, "resources/js"),

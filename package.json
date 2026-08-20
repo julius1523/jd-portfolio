@@ -9,6 +9,8 @@
     "devDependencies": {
         "concurrently": "^9.0.1",
         "laravel-vite-plugin": "^3.0.0",
+        "unocss": "^66.8.0",
+        "unocss-preset-vuetify": "^0.4.0",
         "vite": "^8.0.0"
     },
     "dependencies": {

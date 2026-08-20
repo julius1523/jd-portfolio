@@ -72,7 +72,7 @@ onBeforeUnmount(() => {
     </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 @use "sass:map";
 @use "../../../css/styles/settings" as vuetify;
 

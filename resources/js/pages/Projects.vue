@@ -171,10 +171,6 @@ import SnapCarousel from "@/components/ui/SnapCarousel";
 import { useScrollReveal } from "@/composables/useScrollReveal";
 const projectsSection = ref(null);
 const projectsBodySection = ref(null);
-const softwarePage = ref(1);
-const documentationPage = ref(1);
-const videoPage = ref(1);
-const itemsPerPage = ref(3);
 const software = ref([
     {
         title: "RPTOPS",

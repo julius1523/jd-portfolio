@@ -1,16 +1,10 @@
 import { ref } from "vue";
-import {
-    mdiCheckCircleOutline,
-    mdiAlertCircleOutline,
-    mdiAlertOutline,
-    mdiInformationOutline,
-} from "@mdi/js";
 const messages = ref([]);
 const stateConfig = {
-    success: { icon: mdiCheckCircleOutline, color: "success" },
-    error: { icon: mdiAlertCircleOutline, color: "error" },
-    warning: { icon: mdiAlertOutline, color: "warning" },
-    info: { icon: mdiInformationOutline, color: "info" },
+    success: { icon: "i-mdi-check-circle-outline", color: "success" },
+    error: { icon: "i-mdi-alert-circle-outline", color: "error" },
+    warning: { icon: "i-mdi-alert-outline", color: "warning" },
+    info: { icon: "i-mdi-information-outline", color: "primary" },
 };
 function push(text, type = "info", extra = {}) {
     const { icon, color } = stateConfig[type] ?? stateConfig.info;

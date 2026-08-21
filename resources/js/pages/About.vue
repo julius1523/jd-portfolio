@@ -46,10 +46,10 @@
                         Skills
                     </div>
                 </div>
-                <div class="d-flex flex-column ga-10 reveal-item">
-                    <div v-for="item in skills" :key="item.title" class="d-flex flex-column ga-3">
+                <div class="d-flex flex-column ga-6 ga-md-9 reveal-item">
+                    <div v-for="item in skills" :key="item.title" class="d-flex flex-column ga-2">
                         <div class="text-subtitle font-weight-medium">
-                            <v-icon :icon="RiStackLine" color="primary" class="mr-2" />
+                            <v-icon icon="i-ri-stack-line" color="primary" class="mr-2" />
                             {{ item.title }}
                         </div>
                         <div class="d-flex flex-row flex-wrap ga-2 ml-11">
@@ -120,8 +120,6 @@
 
 <script setup>
 import { ref } from "vue";
-import { mdiController, mdiHandOkay, mdiPaw, mdiSpotify, mdiEmoticonExcited } from "@mdi/js";
-import { RiStackLine } from "vue-remix-icons";
 import { useScrollReveal } from "@/composables/useScrollReveal";
 const aboutSection = ref(null);
 const skillsSection = ref(null);
@@ -146,11 +144,11 @@ const skills = ref([
     }
 ]);
 const facts = ref([
-    { icon: mdiController, text: "My peak mmr in DotA 2 was 14k" },
-    { icon: mdiHandOkay, text: "I am a <br/> perfectionist" },
-    { icon: mdiPaw, text: "I love <br/> cats and dogs" },
-    { icon: mdiSpotify, text: "I love listening to pop music" },
-    { icon: mdiEmoticonExcited, text: "I am an introvert and a picky eater" }
+    { icon: "i-mdi-controller", text: "My peak mmr in DotA 2 was 14k" },
+    { icon: "i-mdi-hand-okay", text: "I am a <br/> perfectionist" },
+    { icon: "i-mdi-paw", text: "I love <br/> cats and dogs" },
+    { icon: "i-mdi-spotify", text: "I love listening to pop music" },
+    { icon: "i-mdi-emoticon-excited", text: "I am an introvert and a picky eater" }
 ]);
 useScrollReveal(aboutSection, { selector: '.reveal-item', stagger: 0.15, y: 40 });
 useScrollReveal(skillsSection, { selector: '.reveal-item', stagger: 0.15, y: 40 });

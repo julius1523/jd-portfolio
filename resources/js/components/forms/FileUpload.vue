@@ -1,7 +1,5 @@
 <script setup>
 import { ref, computed, watch, onBeforeUnmount, useAttrs } from "vue";
-import { mdiCloudUpload, mdiCloudUploadOutline, mdiTrashCan } from "@mdi/js";
-import { RiFilePdf2Fill, RiFileWordFill, RiFilePptFill, RiFileExcelFill, RiFile3Fill } from "vue-remix-icons";
 const props = defineProps({
     modelValue: { type: [File, Object, Array, String], default: null },
     fileType: { type: String, default: 'any' },
@@ -14,7 +12,7 @@ const props = defineProps({
     maxFiles: { type: Number, default: null },
     title: { type: String, default: 'Choose a file or drag and drop it here' },
     subtitle: { type: String, default: undefined },
-    icon: { type: String, default: mdiCloudUpload },
+    icon: { type: String, default: "i-mdi-cloud-upload" },
     density: { type: String, default: 'default' },
     variant: { type: String, default: 'default' },
     disabled: { type: Boolean, default: false },
@@ -31,7 +29,6 @@ const filteredAttrs = computed(() => {
     const { error, errorMessage: _em, errorMessages: _ems, 'error-messages': _emk, ...rest } = attrs;
     return rest;
 });
-const fileUploadRef = ref(null);
 const emit = defineEmits(['update:modelValue', 'error']);
 const PRESETS = {
     image: 'image/*',
@@ -111,11 +108,11 @@ const files = computed(() => {
     return Array.isArray(internalValue.value) ? internalValue.value : [internalValue.value];
 });
 const FILE_TYPE_ICONS = {
-    pdf: RiFilePdf2Fill,
-    word: RiFileWordFill,
-    ppt: RiFilePptFill,
-    excel: RiFileExcelFill,
-    default: RiFile3Fill,
+    pdf: "i-ri-file-pdf-2-fill",
+    word: "i-ri-file-word-fill",
+    ppt: "i-ri-file-ppt-fill",
+    excel: "i-ri-file-excel-fill",
+    default: "i-ri-file-3-fill",
 };
 function getFileIconComponent(file) {
     if (!file) return FILE_TYPE_ICONS.default;
@@ -148,17 +145,6 @@ function getFileIconComponent(file) {
         return FILE_TYPE_ICONS.excel;
     }
     return FILE_TYPE_ICONS.default;
-};
-function formatSize(bytes) {
-    if (!bytes) return '0 B';
-    const units = ['B', 'KB', 'MB', 'GB'];
-    let i = 0;
-    let size = bytes;
-    while (size >= 1024 && i < units.length - 1) {
-        size /= 1024;
-        i++;
-    }
-    return `${size.toFixed(1)} ${units[i]}`;
 };
 const previewUrls = new WeakMap();
 function getPreviewUrl(file) {
@@ -219,23 +205,6 @@ function handleChange(selected) {
     internalValue.value = selected;
     emit('update:modelValue', selected);
 };
-function removeFile(index) {
-    if (Array.isArray(internalValue.value)) {
-        const updated = [...internalValue.value];
-        const [removed] = updated.splice(index, 1);
-        if (removed) revokePreview(removed);
-        internalValue.value = updated;
-        emit('update:modelValue', updated);
-    } else {
-        if (internalValue.value) revokePreview(internalValue.value);
-        internalValue.value = null;
-        emit('update:modelValue', null);
-    }
-};
-function onDropzoneClick(e) {
-    if (props.disabled || e.target.closest('.v-btn')) return;
-    fileUploadRef.value?.controlRef?.click();
-};
 watch(
     () => props.modelValue,
     (val) => {
@@ -250,60 +219,58 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div class="cursor-pointer" @click="onDropzoneClick">
-        <v-file-upload ref="fileUploadRef" v-model="internalValue" :inset-file-list="inset" bg-color="primary"
-            :scrim="scrim" :color="color" :accept="computedAccept" :multiple="multiple" :density="density"
-            :variant="variant" :title="title" :subtitle="subtitle" :icon="icon" :disabled="disabled"
-            :clearable="clearable" :show-size="showSize" :hint="hint" :persistent-hint="persistent" :error="hasError"
-            :error-messages="displayedErrorMessages" v-bind="filteredAttrs" @update:model-value="handleChange">
+    <v-file-upload v-model="internalValue" :inset-file-list="inset" bg-color="primary" :scrim="scrim" :color="color"
+        :accept="computedAccept" :multiple="multiple" :density="density" :variant="variant" :title="title"
+        :subtitle="subtitle" :icon="icon" :disabled="disabled" :clearable="clearable" :show-size="showSize" :hint="hint"
+        :persistent-hint="persistent" :error="hasError" :error-messages="displayedErrorMessages" v-bind="filteredAttrs"
+        @update:model-value="handleChange">
 
-            <template v-for="(_, slot) in $slots" #[slot]="scope">
-                <slot :name="slot" v-bind="scope" />
-            </template>
+        <template v-for="(_, slot) in $slots" #[slot]="scope">
+            <slot :name="slot" v-bind="scope" />
+        </template>
 
-            <template #single="{ file, props: itemProps }">
-                <v-file-upload-item v-bind="itemProps" :file="file" :show-size="showSize" :clearable="clearable"
-                    class="border-0">
-                    <template #prepend>
-                        <v-avatar size="46" class="border">
-                            <v-img v-if="file.type?.startsWith('image/')" :src="getPreviewUrl(file)" :cover="false"
-                                alt="" />
-                            <component v-else :is="getFileIconComponent(file)" size="24" />
-                        </v-avatar>
-                    </template>
-                    <template v-slot:clear="{ props: clearProps }">
-                        <v-btn :icon="mdiTrashCan" v-bind="clearProps"></v-btn>
-                    </template>
-                </v-file-upload-item>
-            </template>
+        <template #single="{ file, props: itemProps }">
+            <v-file-upload-item v-bind="itemProps" :file="file" :show-size="showSize" :clearable="clearable"
+                class="border-0">
+                <template #prepend>
+                    <v-avatar size="46" class="border">
+                        <v-img v-if="file.type?.startsWith('image/')" :src="getPreviewUrl(file)" :cover="false"
+                            alt="" />
+                        <v-icon v-else :class="getFileIconComponent(file)" size="24" />
+                    </v-avatar>
+                </template>
+                <template v-slot:clear="{ props: clearProps }">
+                    <v-btn icon="i-mdi-trash-can" v-bind="clearProps"></v-btn>
+                </template>
+            </v-file-upload-item>
+        </template>
 
-            <template #item="{ file, props: itemProps }">
-                <v-file-upload-item v-bind="itemProps" :file="file" :show-size="showSize" :clearable="clearable"
-                    class="border-0">
-                    <template #prepend>
-                        <v-avatar size="46" class="border">
-                            <v-img v-if="file.type?.startsWith('image/')" :src="getPreviewUrl(file)" :cover="false"
-                                class="border" alt="" />
-                            <component v-else :is="getFileIconComponent(file)" size="24" />
-                        </v-avatar>
-                    </template>
-                    <template v-slot:clear="{ props: clearProps }">
-                        <v-btn :icon="mdiTrashCan" v-bind="clearProps"></v-btn>
-                    </template>
-                </v-file-upload-item>
-            </template>
+        <template #item="{ file, props: itemProps }">
+            <v-file-upload-item v-bind="itemProps" :file="file" :show-size="showSize" :clearable="clearable"
+                class="border-0">
+                <template #prepend>
+                    <v-avatar size="46" class="border">
+                        <v-img v-if="file.type?.startsWith('image/')" :src="getPreviewUrl(file)" :cover="false"
+                            class="border" alt="" />
+                        <v-icon v-else :class="getFileIconComponent(file)" size="24" />
+                    </v-avatar>
+                </template>
+                <template v-slot:clear="{ props: clearProps }">
+                    <v-btn icon="i-mdi-trash-can" v-bind="clearProps"></v-btn>
+                </template>
+            </v-file-upload-item>
+        </template>
 
-            <template #browse="{ props: browseProps }">
-                <v-btn v-bind="browseProps" variant="tonal" color="primary" rounded="lg" text="Browse File"
-                    class="mt-3" />
-            </template>
+        <template #browse="{ props: browseProps }">
+            <v-btn v-bind="browseProps" variant="tonal" color="revert-color" rounded="lg" text="Browse File"
+                class="mt-3" />
+        </template>
 
-            <template #title>
-                <div class="text-title-medium font-weight-bold">{{ props.title }}</div>
-                <div v-if="props.density != 'compact'" class="text-title-small text-medium-emphasis mt-1">
-                    {{ helperText }}
-                </div>
-            </template>
-        </v-file-upload>
-    </div>
+        <template #title>
+            <div class="text-title-medium font-weight-bold">{{ props.title }}</div>
+            <div v-if="props.density != 'compact'" class="text-title-small text-medium-emphasis mt-1">
+                {{ helperText }}
+            </div>
+        </template>
+    </v-file-upload>
 </template>

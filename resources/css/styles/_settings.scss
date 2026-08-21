@@ -1,4 +1,6 @@
 @forward "vuetify/settings" with (
+    $utilities: false,
+    $color-pack: false,
     $body-font-family: (
         "Roboto",
         sans-serif,
@@ -10,7 +12,5 @@
         lg: 1400px,
         xl: 1400px,
         xxl: 1400px,
-    ),
-    $utilities: false,
-    $color-pack: false
+    )
 );

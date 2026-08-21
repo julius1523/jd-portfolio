@@ -3,6 +3,7 @@ import { onBeforeRouteLeave } from "vue-router";
 import { showConfirmDialog } from "@/composables/useConfirmDialog";
 
 const dirtyForms = reactive(new Set());
+let skipNext = false;
 
 export function useUnsavedChanges(
     metaRef,
@@ -22,6 +23,10 @@ export function useUnsavedChanges(
     onUnmounted(() => dirtyForms.delete(id));
 
     onBeforeRouteLeave(() => {
+        if (skipNext) {
+            skipNext = false;
+            return true;
+        }
         if (!metaRef.value?.dirty) return true;
         return new Promise((resolve) => {
             showConfirmDialog({
@@ -39,4 +44,8 @@ export function useUnsavedChanges(
 
 export function hasUnsavedChanges() {
     return dirtyForms.size > 0;
+}
+
+export function skipNextUnsavedChangesGuard() {
+    skipNext = true;
 }

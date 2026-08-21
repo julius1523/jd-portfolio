@@ -10,11 +10,15 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <v-scale-transition mode="out-in">
-        <v-alert v-if="alert" :type="alert.type" :icon="alert.icon" :color="alert.color" variant="tonal"
-            density="compact" rounded="lg" :class="`border border-opacity-100 border-${alert.color} my-4`"
-            @click:close="clear">
-            {{ alert.text }}
+    <v-fade-transition hide-on-leave>
+        <v-alert v-if="alert" :type="alert.type" :color="alert.color" variant="tonal" density="compact" rounded="lg"
+            :class="`border border-opacity-100 border-${alert.color} my-4`" @click:close="clear">
+            <template #prepend>
+                <v-icon :icon="alert.icon" size="20" />
+            </template>
+            <template #text>
+                {{ alert.text }}
+            </template>
         </v-alert>
-    </v-scale-transition>
+    </v-fade-transition>
 </template>

@@ -1,5 +1,5 @@
 import "virtual:uno.css";
-import "../css/app.scss";
+import "../css/app.css";
 import { createApp } from "vue";
 import { createPinia } from "pinia";
 import "@/plugins/axios";

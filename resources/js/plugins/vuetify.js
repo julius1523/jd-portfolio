@@ -1,14 +1,20 @@
-import "../../css/styles/_layers.scss";
+import "../../css/layers.css";
 import "vuetify/styles";
+import { h } from "vue";
 import { createVuetify } from "vuetify";
-import { aliases, mdi } from "vuetify/iconsets/mdi-svg";
-import { mdiFileDocument } from "@mdi/js";
+import { aliases, mdi } from "vuetify/iconsets/mdi-unocss";
 const savedTheme = localStorage.getItem("theme") ?? "dark";
+const unoIcons = {
+    component: (props) =>
+        h(props.tag ?? "span", {
+            class: [props.icon],
+        }),
+};
 export default createVuetify({
     icons: {
-        defaultSet: "mdi",
+        defaultSet: "uno",
         aliases,
-        sets: { mdi },
+        sets: { mdi, uno: unoIcons },
     },
     theme: {
         defaultTheme: savedTheme,
@@ -18,6 +24,7 @@ export default createVuetify({
                 colors: {
                     "surface-light": "#f5f5f7",
                     "revert-color": "#272727",
+                    grey: "#757575",
                 },
             },
             dark: {
@@ -27,6 +34,7 @@ export default createVuetify({
                     surface: "#1e1e1e",
                     "surface-light": "#232323",
                     "revert-color": "#f5f5f7",
+                    grey: "#757575",
                 },
             },
         },
@@ -69,22 +77,20 @@ export default createVuetify({
             },
         },
         VFileUploadItem: {
-            fileIcon: mdiFileDocument,
+            fileIcon: "i-mdi-file-document",
             density: "compact",
         },
         VFileUploadDropzone: {
             rounded: "lg",
         },
         VMenu: {
-            offset: "7px",
+            offset: "5px",
+        },
+        VBtn: {
+            class: "text-label-large",
         },
         VContainer: {
             maxWidth: 1400,
-        },
-        VField: {
-            style: {
-                overflow: "hidden",
-            },
         },
     },
 });

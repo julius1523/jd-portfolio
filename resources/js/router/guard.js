@@ -4,6 +4,8 @@ export function historyGuard(router) {
     window.addEventListener("pageshow", async (event) => {
         if (!event.persisted) {
             return;
+        } else {
+            window.location.reload();
         }
 
         const redirect = resolveAuthRedirect(router.currentRoute.value);

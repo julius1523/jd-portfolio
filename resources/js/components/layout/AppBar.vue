@@ -1,6 +1,5 @@
 <script setup>
-import { RiMoonLine, RiSunLine, RiMenu2Fill, RiMenu3Fill } from "vue-remix-icons";
-import { ref, watch, computed } from "vue";
+import { computed } from "vue";
 import { storeToRefs } from "pinia";
 import { useTheme } from "vuetify";
 import { useRoute } from "vue-router";
@@ -40,7 +39,7 @@ const toggleTheme = (e) => {
 
                 <div class="d-flex ga-2 align-center ml-auto">
                     <div v-if="$vuetify.display.mdAndUp"
-                        class="border pa-1 order-1 order-md-0 rounded-pill d-flex ga-1 align-center">
+                        class="border border-opacity-25 pa-1 order-1 order-md-0 rounded-pill d-flex ga-1 align-center">
                         <v-btn height="31" :color="isActive('home') ? 'primary' : undefined" rounded="pill" text="Home"
                             :to="{ name: 'home' }" />
                         <v-btn height="31" :color="isActive('about') ? 'primary' : undefined" rounded="pill"
@@ -51,19 +50,19 @@ const toggleTheme = (e) => {
                             text="Contact" :to="{ name: 'contact' }" />
                     </div>
 
-                    <v-icon-btn size="40" icon-size="small" :icon="themeStore.isDark ? RiMoonLine : RiSunLine"
-                        class="border"
+                    <v-icon-btn size="40" icon-size="small"
+                        :icon="themeStore.isDark ? 'i-ri-moon-line' : 'i-ri-sun-line'" class="border border-opacity-25"
                         v-tooltip="{ text: themeStore.isDark ? 'Light Mode' : 'Dark Mode', location: 'bottom' }"
                         @click="toggleTheme" />
 
-                    <v-icon-btn v-if="$vuetify.display.smAndDown" size="40" icon-size="23" :icon="RiMenu3Fill"
-                        class="border" @click="layout.toggleDrawer()" />
+                    <v-icon-btn v-if="$vuetify.display.smAndDown" size="40" icon-size="23" icon="i-ri-menu-3-fill"
+                        class="border border-opacity-25" @click="layout.toggleDrawer()" />
 
                 </div>
             </template>
             <template v-else>
                 <div class="d-flex flex-row justify-space-between align-center w-100">
-                    <v-btn size="small" :icon="RiMenu2Fill" class="border" @click="layout.toggleDrawer()" />
+                    <v-btn size="small" icon="i-ri-menu-2-fill" class="border" @click="layout.toggleDrawer()" />
                     <div class="text-title-medium font-weight-bold">Portfolio</div>
                     <ProfileMenu />
                 </div>

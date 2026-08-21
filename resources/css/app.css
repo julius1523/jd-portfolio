@@ -1,0 +1,16 @@
+@import "./styles/_animations.scss";
+@import "./styles/_components.scss";
+@import "./styles/_utilities.scss";
+
+html {
+    overflow-y: scroll;
+    touch-action: manipulation;
+}
+
+a {
+    color: inherit;
+}
+
+.v-overlay-container * {
+    backface-visibility: hidden;
+}

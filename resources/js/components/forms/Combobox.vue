@@ -18,7 +18,6 @@ const props = defineProps({
 });
 const emit = defineEmits(['update:modelValue']);
 const search = ref('');
-const wrapperRef = ref(null);
 const comboRef = ref(null);
 const mirrorRef = ref(null);
 const visibleCount = ref(0);
@@ -66,21 +65,22 @@ watch(() => props.modelValue, recalcVisibleCount, { deep: true });
 </script>
 
 <template>
-    <div class="position-relative" ref="wrapperRef">
+    <div class="position-relative">
         <v-combobox ref="comboRef" :model-value="modelValue" @update:model-value="$emit('update:modelValue', $event)"
             v-model:search="search" :hide-no-data="false" :items="items" :variant="variant" :flat="flat" :label="label"
             :rounded="rounded" :density="density" :hint="hint" :persistent-hint="persistentHint" :multiple="multiple"
-            :list-props="{ rounded: 'lg' }" :error-messages="errorMessages" :item-title="itemTitle"
-            :item-value="itemValue" autocomplete="off">
+            :list-props="{ rounded: 'lg', nav: true, variant: 'plain', density: 'compact', prependGap: 15, activeClass: 'opacity-100' }"
+            :error-messages="errorMessages" :item-title="itemTitle" :item-value="itemValue" autocomplete="off">
             <template v-for="(_, slotName) in $slots" v-slot:[slotName]="slotProps">
                 <slot :name="slotName" v-bind="slotProps ?? {}" />
             </template>
 
             <template v-slot:selection="{ item, index }">
-                <v-chip v-if="index < visibleCount" size="small" closable @click:close="removeItem(item)">
+                <v-chip v-if="index < visibleCount" size="small" density="comfortable" closable
+                    @click:close="removeItem(item)">
                     {{ resolveText(item) }}
                 </v-chip>
-                <v-chip v-else-if="index === visibleCount" size="small" variant="tonal">
+                <v-chip v-else-if="index === visibleCount" size="small" density="comfortable" variant="tonal">
                     +{{ modelValue.length - visibleCount }}
                 </v-chip>
             </template>
@@ -121,5 +121,9 @@ watch(() => props.modelValue, recalcVisibleCount, { deep: true });
     font-size: 0.8125rem;
     height: 24px;
     line-height: 24px;
+}
+
+:deep(.v-field__input) {
+    flex-wrap: nowrap;
 }
 </style>

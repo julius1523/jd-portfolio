@@ -1,6 +1,5 @@
 <script setup>
 import { ref } from "vue";
-import { RiEyeLine, RiEyeOffLine } from "vue-remix-icons";
 const model = defineModel({
     type: String,
     default: '',
@@ -20,6 +19,6 @@ const show = ref(false);
 
 <template>
     <v-text-field v-model="model" :type="show ? 'text' : 'password'" :label="label" :error-messages="errorMessages"
-        :append-inner-icon="show ? RiEyeOffLine : RiEyeLine" @click:append-inner="show = !show" color="primary"
-        variant="solo" flat rounded="lg" density="comfortable" autocomplete="off" />
+        :append-inner-icon="show ? 'i-ri-eye-off-line' : 'i-ri-eye-line'" @click:append-inner="show = !show"
+        color="primary" variant="solo" flat rounded="lg" density="comfortable" autocomplete="off" />
 </template>

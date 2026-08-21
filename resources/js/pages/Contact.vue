@@ -18,17 +18,17 @@
                         </div>
                         <div class="d-flex flex-row justify-center justify-md-start ga-3 my-4 my-md-10">
                             <div class="reveal-item">
-                                <v-btn :icon="RiFacebookFill" class="translate-content" variant="tonal" color="primary"
-                                    href="https://www.facebook.com/JuliusDolana/" target="_blank">
+                                <v-btn icon="i-ri-facebook-fill" class="translate-content" variant="tonal"
+                                    color="primary" href="https://www.facebook.com/JuliusDolana/" target="_blank">
                                 </v-btn>
                             </div>
                             <div class="reveal-item">
-                                <v-btn :icon="RiInstagramFill" class="translate-content" variant="tonal" color="primary"
-                                    href="https://www.instagram.com/juliussss1998/" target="_blank">
+                                <v-btn icon="i-ri-instagram-fill" class="translate-content" variant="tonal"
+                                    color="primary" href="https://www.instagram.com/juliussss1998/" target="_blank">
                                 </v-btn>
                             </div>
                             <div class="reveal-item">
-                                <v-btn :icon="RiLinkedinBoxFill" class="translate-content" variant="tonal"
+                                <v-btn icon="i-ri-linkedin-box-fill" class="translate-content" variant="tonal"
                                     color="primary" href="https://www.linkedin.com/in/julius-dolana-783bb1371/"
                                     target="_blank">
                                 </v-btn>
@@ -72,7 +72,8 @@
                         </v-col>
                         <v-col cols="12">
                             <v-btn type="submit" color="primary" variant="flat" rounded="pill" size="x-large" block
-                                :prepend-icon="RiSendPlaneFill" :loading="loading" :disabled="!meta.dirty || loading">
+                                prepend-icon="i-ri-send-plane-fill" :loading="loading"
+                                :disabled="!meta.dirty || loading">
                                 Send Email
                             </v-btn>
                         </v-col>
@@ -86,7 +87,6 @@
 <script setup>
 import axios from "@/plugins/axios";
 import { ref } from "vue";
-import { RiSendPlaneFill, RiFacebookFill, RiInstagramFill, RiLinkedinBoxFill } from "vue-remix-icons";
 import * as yup from "yup";
 import { useValidatedForm } from "@/composables/useValidatedForm";
 import { useUnsavedChanges } from "@/composables/useUnsavedChanges";

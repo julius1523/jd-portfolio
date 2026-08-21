@@ -1,6 +1,4 @@
 <script setup>
-import { mdiPencilOutline, mdiCogOutline, mdiHomeOutline, mdiInformationOutline, mdiBriefcaseVariantOutline, mdiPhoneOutline } from "@mdi/js";
-import { RiLayoutLeft2Line } from "vue-remix-icons";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/stores/auth";
 import { useLayoutStore } from "@/stores/layout";
@@ -12,11 +10,10 @@ const layout = useLayoutStore();
 <template>
     <v-navigation-drawer :key="$vuetify.display.smAndDown ? 'mobile' : 'desktop'" v-model="layout.drawer" elevation="0"
         :rail="layout.rail" :location="$vuetify.display.smAndDown ? 'bottom' : undefined" color="surface-light" floating
-        :floating="$vuetify.display.smAndDown" :permanent="$vuetify.display.mdAndUp"
-        :class="$vuetify.display.smAndDown ? 'rounded-t-xl' : undefined" width="250">
+        :permanent="$vuetify.display.mdAndUp" :class="{ 'rounded-t-xl': $vuetify.display.smAndDown }" width="250">
         <template #prepend>
             <template v-if="$vuetify.display.mdAndUp">
-                <v-list variant="plain" density="compact" slim nav>
+                <v-list variant="plain" density="compact" slim nav class="bg-transparent">
                     <v-list-item exact rounded="lg" :ripple="false" class="opacity-100"
                         :class="{ 'justify-center': layout.rail }" :to="{ name: 'home' }">
                         <template #title>
@@ -26,7 +23,7 @@ const layout = useLayoutStore();
                         </template>
 
                         <template #append>
-                            <v-icon-btn variant="text" rounded="lg" :icon="RiLayoutLeft2Line"
+                            <v-icon-btn variant="text" rounded="lg" icon="i-ri-layout-left-2-line"
                                 :class="{ 'me-n2': !layout.rail }" class="opacity-70" v-tooltip="{
                                     text: layout.rail ? 'Open sidebar' : 'Close sidebar',
                                     location: 'end',
@@ -47,14 +44,14 @@ const layout = useLayoutStore();
             </v-list-subheader>
 
             <template v-if="isAuthenticated">
-                <v-list-item :prepend-icon="mdiPencilOutline" title="Manage Content" exact rounded="lg"
+                <v-list-item prepend-icon="i-mdi-pencil-outline" title="Manage Content" exact rounded="lg"
                     value="home-content" :to="{ name: 'manage-content' }" v-tooltip="{
                         text: 'Manage Content',
                         location: 'end',
                         disabled: !layout.rail
                     }" />
 
-                <v-list-item :prepend-icon="mdiCogOutline" title="System Settings" exact rounded="lg"
+                <v-list-item prepend-icon="i-mdi-cog-outline" title="System Settings" exact rounded="lg"
                     value="system-settings" :to="{ name: 'system-settings' }" v-tooltip="{
                         text: 'System Settings',
                         location: 'end',
@@ -63,16 +60,16 @@ const layout = useLayoutStore();
             </template>
 
             <template v-else>
-                <v-list-item :prepend-icon="mdiHomeOutline" title="Home" exact rounded="lg" value="home"
+                <v-list-item prepend-icon="i-mdi-home-outline" title="Home" exact rounded="lg" value="home"
                     :to="{ name: 'home' }" />
 
-                <v-list-item :prepend-icon="mdiInformationOutline" title="About" exact rounded="lg" value="about"
+                <v-list-item prepend-icon="i-mdi-information-outline" title="About" exact rounded="lg" value="about"
                     :to="{ name: 'about' }" />
 
-                <v-list-item :prepend-icon="mdiBriefcaseVariantOutline" title="Projects" exact rounded="lg"
+                <v-list-item prepend-icon="i-mdi-briefcase-variant-outline" title="Projects" exact rounded="lg"
                     value="projects" :to="{ name: 'projects' }" />
 
-                <v-list-item :prepend-icon="mdiPhoneOutline" title="Contact" exact rounded="lg" value="contact"
+                <v-list-item prepend-icon="i-mdi-phone-outline" title="Contact" exact rounded="lg" value="contact"
                     :to="{ name: 'contact' }" />
             </template>
         </v-list>

@@ -1,4 +1,4 @@
-import "../../css/layers.css";
+import "@/../css/layers.css";
 import "vuetify/styles";
 import { h } from "vue";
 import { createVuetify } from "vuetify";
@@ -40,57 +40,21 @@ export default createVuetify({
         },
     },
     defaults: {
-        VCard: {
-            ripple: "center",
-        },
-        VBtn: {
-            style: {
-                "webkit-user-drag": "none",
-            },
-        },
-        VChip: {
-            style: {
-                userSelect: "none",
-            },
-        },
-        VImg: {
-            draggable: false,
-        },
-        VAppBar: {
-            style: {
-                userSelect: "none",
-            },
-        },
-        VCarousel: {
-            style: {
-                height: "100%",
-            },
-        },
-        VCardTitle: {
-            style: {
-                textWrap: "wrap",
-            },
-        },
-        VNavigationDrawer: {
-            style: {
-                userSelect: "none",
-            },
-        },
+        VCard: { ripple: "center" },
+        VChip: { style: { userSelect: "none" } },
+        VImg: { draggable: false },
+        VAppBar: { style: { userSelect: "none" } },
+        VCarousel: { style: { height: "100%" } },
+        VCardTitle: { style: { textWrap: "wrap" } },
+        VNavigationDrawer: { style: { userSelect: "none" } },
         VFileUploadItem: {
             fileIcon: "i-mdi-file-document",
             density: "compact",
         },
-        VFileUploadDropzone: {
-            rounded: "lg",
-        },
-        VMenu: {
-            offset: "5px",
-        },
-        VBtn: {
-            class: "text-label-large",
-        },
-        VContainer: {
-            maxWidth: 1400,
-        },
+        VFileUploadDropzone: { rounded: "lg" },
+        VMenu: { offset: "5px" },
+        VBtn: { class: "text-label-large" },
+        VContainer: { maxWidth: 1400 },
+        VTabs: { activeClass: "opacity-100" },
     },
 });

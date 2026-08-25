@@ -1,6 +1,6 @@
 <template>
     <Shimmer :loading="pageLoading">
-        <v-card flat class="py-5 px-2 rounded-b-lg">
+        <v-card flat class="pa-4 mt-5 rounded-lg">
             <v-form @submit.prevent="submit" :disabled="loading">
                 <v-row>
                     <v-col cols="12" lg="6">
@@ -19,7 +19,8 @@
                                     autocomplete="off" data-shimmer-no-children />
                             </v-col>
                             <v-col cols="12">
-                                <Combobox v-model="title" :items="jobTitles" label="Job Title" hint="Maximum of 4 tags"
+                                <Combobox :key="`file-${formResetKey}`" v-model="title" :items="jobTitles"
+                                    label="Job Title" hint="Maximum of 4 tags" persistent-hint
                                     :error-messages="errors.title" data-shimmer-no-children></Combobox>
                             </v-col>
                             <v-col cols="12">
@@ -71,13 +72,14 @@
                                 </div>
                             </v-col>
                             <v-col cols="12" lg="6">
-                                <FileUpload v-model="file" file-type="pdf" :max-files="1" inset :disabled="loading"
-                                    :show-size="true" density="comfortable" hint="The CV file for download"
-                                    :persistent-hint="true" :error-messages="errors.file" data-shimmer-no-children />
+                                <FileUpload :key="`file-${formResetKey}`" v-model="file" file-type="pdf" :max-files="1"
+                                    inset :disabled="loading" :show-size="true" density="comfortable"
+                                    hint="The CV file for download" :persistent-hint="true"
+                                    :error-messages="errors.file" data-shimmer-no-children />
                             </v-col>
                             <v-col cols="12" lg="6">
-                                <FileUpload v-model="image" file-type="image" :max-files="1" inset :disabled="loading"
-                                    :show-size="true" density="comfortable"
+                                <FileUpload :key="`file-${formResetKey}`" v-model="image" file-type="image"
+                                    :max-files="1" inset :disabled="loading" :show-size="true" density="comfortable"
                                     hint="The image to display on your home page" :persistent-hint="true"
                                     :error-messages="errors.image" data-shimmer-no-children />
                             </v-col>
@@ -85,7 +87,7 @@
                     </v-col>
                     <v-col cols="12">
                         <div class="d-flex flex-column flex-md-row ga-3 justify-end mt-8">
-                            <v-btn variant="flat" text="Cancel Edit" rounded="pill" color="grey" size="x-large"
+                            <v-btn variant="plain" text="Cancel Edit" rounded="pill" size="x-large"
                                 :disabled="!meta.dirty || loading" @click="cancelEdit" />
                             <v-btn type="submit" text="Save Changes" variant="flat" rounded="pill" color="primary"
                                 size="x-large" class="order-first order-md-last" :disabled="!meta.dirty || loading"
@@ -108,7 +110,6 @@ import { useSnackBarQueue } from "@/composables/useSnackBarQueue";
 import Combobox from "@/components/forms/Combobox";
 import FileUpload from "@/components/forms/FileUpload";
 const { info, error } = useSnackBarQueue();
-const search = ref(null);
 const pageLoading = ref(true);
 const jobTitles = ref([
     "Full Stack Developer",
@@ -171,8 +172,10 @@ const [primary_btn_link] = defineField('primary_btn_link');
 const [secondary_btn_text] = defineField('secondary_btn_text');
 const [file] = defineField('file');
 const [image] = defineField('image');
+const formResetKey = ref(0);
 const cancelEdit = () => {
     resetForm();
+    formResetKey.value++;
     info("No changes made.");
 };
 async function getHomeContent() {

@@ -3,14 +3,15 @@ const currentYear = new Date().getFullYear();
 </script>
 
 <template>
-    <v-footer app absolute v-if="$vuetify.display.mdAndUp">
-        <v-container class="d-flex justify-space-between text-title-small">
+    <v-footer app absolute>
+        <v-container class="d-flex justify-center justify-md-space-between text-title-small">
             <div class="text-medium-emphasis">
                 © {{ currentYear }} Julius Dolana
             </div>
 
-            <div class="d-flex ga-6">
-                <router-link to="/home" class="text-decoration-none text-medium-emphasis">
+            <div v-if="$vuetify.display.mdAndUp" class="d-flex ga-6">
+                <router-link to="/home" class="text-decoration-none"
+                    style="color: rgba(var(--v-theme-on-background), var(--v-medium-emphasis-opacity));">
                     Home
                 </router-link>
                 <router-link to="/about" class="text-decoration-none text-medium-emphasis">

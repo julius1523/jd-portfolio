@@ -39,7 +39,7 @@ const toggleTheme = (e) => {
 
                 <div class="d-flex ga-2 align-center ml-auto">
                     <div v-if="$vuetify.display.mdAndUp"
-                        class="border border-opacity-25 pa-1 order-1 order-md-0 rounded-pill d-flex ga-1 align-center">
+                        class="border pa-1 order-1 order-md-0 rounded-pill d-flex ga-1 align-center">
                         <v-btn height="31" :color="isActive('home') ? 'primary' : undefined" rounded="pill" text="Home"
                             :to="{ name: 'home' }" />
                         <v-btn height="31" :color="isActive('about') ? 'primary' : undefined" rounded="pill"

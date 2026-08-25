@@ -34,7 +34,7 @@ export function useUnsavedChanges(
                 message,
                 confirmText: "Leave",
                 cancelText: "Stay",
-                confirmColor: "red",
+                confirmColor: "error",
                 onConfirm: () => resolve(true),
                 onCancel: () => resolve(false),
             });

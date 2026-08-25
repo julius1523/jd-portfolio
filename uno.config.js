@@ -31,7 +31,6 @@ const rules = Object.entries(borderSides).map(([suffix, sides]) => [
 
 export default defineConfig({
     content: {
-        filesystem: ["resources/js/composables/**/*.{js,ts}"],
         pipeline: {
             include: [
                 /\.(vue|svelte|[jt]sx|mdx?|astro|elm|php|phtml|html)($|\?)/,
@@ -54,15 +53,16 @@ export default defineConfig({
             };
         },
     ],
-
     safelist: [
-        "text-red",
-        "text-primary",
-        "text-success",
-        "text-warning",
         ...Array.from({ length: 6 }, (_, i) => `elevation-${i}`),
-        ["", "-0", "-sm", "-lg", "-xl", "-pill", "-circle", "-shaped"].map(
+        ...["", "-0", "-sm", "-lg", "-xl", "-pill", "-circle", "-shaped"].map(
             (suffix) => `rounded${suffix}`,
         ),
+        "bg-primary",
+        "text-primary",
+        "bg-success",
+        "text-success",
+        "bg-error",
+        "text-error",
     ],
 });

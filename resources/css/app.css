@@ -11,6 +11,11 @@ a {
     color: inherit;
 }
 
+.v-btn,
+.v-list-item {
+    -webkit-user-drag: none;
+}
+
 .v-overlay-container * {
     backface-visibility: hidden;
 }

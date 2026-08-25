@@ -3,15 +3,12 @@
         <h1 class="text-headline-small text-headline-md-medium mt-0">{{ route.meta.title }}</h1>
 
         <v-sheet class="mt-8" elevation="0">
-            <v-divider />
-
             <div class="tabs-fade-wrapper">
-                <v-tabs v-model="tab" density="compact" hide-slider :grow="$vuetify.display.smAndDown" color="primary"
-                    slider-transition="grow" class="my-2">
-                    <v-tab variant="flat" :value="1" class="me-2 rounded-lg">Home</v-tab>
-                    <v-tab variant="flat" :value="2" class="me-2 rounded-lg">About</v-tab>
-                    <v-tab variant="flat" :value="3" class="me-2 rounded-lg">Projects</v-tab>
-                    <v-tab variant="flat" :value="4" class="me-2 rounded-lg">Contact</v-tab>
+                <v-tabs v-model="tab" density="comfortable" :grow="$vuetify.display.smAndDown" color="primary">
+                    <v-tab variant="plain" :value="1" class="rounded-t-md" :ripple="false">Home</v-tab>
+                    <v-tab variant="plain" :value="2" class="rounded-t-md" :ripple="false">About</v-tab>
+                    <v-tab variant="plain" :value="3" class="rounded-t-md" :ripple="false">Projects</v-tab>
+                    <v-tab variant="plain" :value="4" class="rounded-t-md" :ripple="false">Contact</v-tab>
                 </v-tabs>
             </div>
 
@@ -47,6 +44,10 @@ const route = useRoute();
 </script>
 
 <style lang="css" scoped>
+.v-tab--selected {
+    opacity: 1;
+}
+
 .tabs-fade-wrapper {
     position: relative;
     overflow: hidden;

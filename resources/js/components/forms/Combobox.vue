@@ -66,7 +66,7 @@ watch(() => props.modelValue, recalcVisibleCount, { deep: true });
 
 <template>
     <div class="position-relative">
-        <v-combobox ref="comboRef" :model-value="modelValue" @update:model-value="$emit('update:modelValue', $event)"
+        <v-select ref="comboRef" :model-value="modelValue" @update:model-value="$emit('update:modelValue', $event)"
             v-model:search="search" :hide-no-data="false" :items="items" :variant="variant" :flat="flat" :label="label"
             :rounded="rounded" :density="density" :hint="hint" :persistent-hint="persistentHint" :multiple="multiple"
             :list-props="{ rounded: 'lg', nav: true, variant: 'plain', density: 'compact', prependGap: 15, activeClass: 'opacity-100' }"
@@ -94,7 +94,7 @@ watch(() => props.modelValue, recalcVisibleCount, { deep: true });
                     </v-list-item-subtitle>
                 </v-list-item>
             </template>
-        </v-combobox>
+        </v-select>
 
         <div ref="mirrorRef" class="chip-mirror">
             <span v-for="item in modelValue" :key="resolveText(item)" class="chip-mirror__chip">

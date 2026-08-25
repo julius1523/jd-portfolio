@@ -10,7 +10,7 @@ const layout = useLayoutStore();
 <template>
     <v-navigation-drawer :key="$vuetify.display.smAndDown ? 'mobile' : 'desktop'" v-model="layout.drawer" elevation="0"
         :rail="layout.rail" :location="$vuetify.display.smAndDown ? 'bottom' : undefined" color="surface-light" floating
-        :permanent="$vuetify.display.mdAndUp" :class="{ 'rounded-t-xl': $vuetify.display.smAndDown }" width="250">
+        :permanent="$vuetify.display.mdAndUp" width="250">
         <template #prepend>
             <template v-if="$vuetify.display.mdAndUp">
                 <v-list variant="plain" density="compact" slim nav class="bg-transparent">
@@ -35,8 +35,8 @@ const layout = useLayoutStore();
             </template>
         </template>
 
-        <v-list :class="$vuetify.display.smAndDown ? 'pa-6' : undefined" density="compact" nav color="primary"
-            :prepend-gap="$vuetify.display.mdAndUp ? 8 : 20">
+        <v-list :class="$vuetify.display.smAndDown ? 'pa-7' : undefined" density="compact" nav
+            :prepend-gap="$vuetify.display.mdAndUp ? 8 : 20" color="primary">
             <v-list-subheader v-if="$vuetify.display.mdAndUp" class="text-uppercase">
                 <template v-if="!layout.rail">
                     Menu
@@ -60,16 +60,15 @@ const layout = useLayoutStore();
             </template>
 
             <template v-else>
-                <v-list-item prepend-icon="i-mdi-home-outline" title="Home" exact rounded="lg" value="home"
-                    :to="{ name: 'home' }" />
+                <v-list-item title="Home" exact rounded="lg" value="home" class="text-center" :to="{ name: 'home' }" />
 
-                <v-list-item prepend-icon="i-mdi-information-outline" title="About" exact rounded="lg" value="about"
+                <v-list-item title="About" exact rounded="lg" value="about" class="text-center"
                     :to="{ name: 'about' }" />
 
-                <v-list-item prepend-icon="i-mdi-briefcase-variant-outline" title="Projects" exact rounded="lg"
-                    value="projects" :to="{ name: 'projects' }" />
+                <v-list-item title="Projects" exact rounded="lg" value="projects" class="text-center"
+                    :to="{ name: 'projects' }" />
 
-                <v-list-item prepend-icon="i-mdi-phone-outline" title="Contact" exact rounded="lg" value="contact"
+                <v-list-item title="Contact" exact rounded="lg" value="contact" class="text-center"
                     :to="{ name: 'contact' }" />
             </template>
         </v-list>

@@ -261,11 +261,6 @@ onBeforeUnmount(() => {
             </v-file-upload-item>
         </template>
 
-        <template #browse="{ props: browseProps }">
-            <v-btn v-bind="browseProps" variant="tonal" color="revert-color" rounded="lg" text="Browse File"
-                class="mt-3" />
-        </template>
-
         <template #title>
             <div class="text-title-medium font-weight-bold">{{ props.title }}</div>
             <div v-if="props.density != 'compact'" class="text-title-small text-medium-emphasis mt-1">

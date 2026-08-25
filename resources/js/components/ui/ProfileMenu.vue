@@ -29,7 +29,7 @@ const logout = () => {
         message: "Are you sure you want to log out?",
         confirmText: "Log Out",
         cancelText: "Cancel",
-        confirmColor: "red",
+        confirmColor: "error",
         onConfirm: () => {
             wrap(async () => {
                 try {
@@ -47,7 +47,7 @@ const logout = () => {
 </script>
 
 <template>
-    <v-menu :close-on-content-click="false">
+    <v-menu :offset="[8, 30]" :close-on-content-click="false">
         <template #activator="{ props: activatorProps }">
             <v-icon-btn v-if="variant === 'icon'" v-bind="activatorProps" variant="tonal" color="primary"
                 icon="i-mdi-account" />

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Public\ContactController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\HomeContentController;
+use App\Http\Controllers\Admin\AboutContentController;
 
 Route::post('/contact', [ContactController::class, 'store']);
 
@@ -17,4 +18,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/getHomeContent', [HomeContentController::class, 'getHomeContent']);
     Route::post('/updateHomeContent', [HomeContentController::class, 'updateHomeContent']);
+    Route::get('/getAboutContent', [AboutContentController::class, 'getAboutContent']);
+    Route::post('/updateAboutContent', [AboutContentController::class, 'updateAboutContent']);
 });

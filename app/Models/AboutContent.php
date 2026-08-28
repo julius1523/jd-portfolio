@@ -4,21 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * @property string|null $cv_path
- * @property string|null $image_path
- */
-class HomeContent extends Model
+class AboutContent extends Model
 {
-
     protected $guarded = ['id'];
 
     protected function casts(): array
     {
         return [
-            'subheading' => 'array',
-            'secondary_btn_file' => 'array',
+            'skills' => 'array',
             'profile_image' => 'array',
+            'random_facts' => 'array',
+            'others' => 'array',
         ];
     }
 }

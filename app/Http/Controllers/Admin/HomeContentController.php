@@ -16,41 +16,56 @@ class HomeContentController extends Controller
 
     public function getHomeContent()
     {
-        return response()->json(
-            HomeContent::select([
-                'greeting',
-                'title',
-                'description',
-                'primary_btn_text',
-                'primary_btn_link',
-                'secondary_btn_text',
-                'file',
-                'image',
-            ])->first()
-        );
+        $data = HomeContent::select([
+            'profile_image',
+            'heading',
+            'subheading',
+            'description',
+            'primary_btn_text',
+            'primary_btn_link',
+            'secondary_btn_text',
+            'secondary_btn_file',
+        ])->first();
+
+        return response()->json([
+            'profileImage' => $data?->profile_image,
+            'heading' => $data?->heading,
+            'subheading' => $data?->subheading ?? [],
+            'description' => $data?->description,
+            'primaryBtnText' => $data?->primary_btn_text,
+            'primaryBtnLink' => $data?->primary_btn_link,
+            'secondaryBtnText' => $data?->secondary_btn_text,
+            'secondaryBtnFile' => $data?->secondary_btn_file,
+        ]);
     }
 
     public function updateHomeContent(Request $request)
     {
         $validated = $request->validate([
-            'greeting' => ['nullable', 'string', 'max:255'],
-            'title' => ['nullable', 'array', 'min:1', 'max:4'],
+            'profileImage' => ['nullable', 'image', 'mimes:jpeg,png,gif,webp', 'max:10240'],
+            'heading' => ['nullable', 'string', 'max:255'],
+            'subheading' => ['nullable', 'array', 'min:1', 'max:4'],
+            'subheading.*' => ['string'],
             'description' => ['nullable', 'string'],
-            'primary_btn_text' => ['nullable', 'string', 'max:255'],
-            'primary_btn_link' => ['nullable', 'string', 'max:255'],
-            'secondary_btn_text' => ['nullable', 'string', 'max:255'],
-            'file' => ['nullable', 'file', 'mimes:pdf', 'max:10240'],
-            'image' => ['nullable', 'image', 'mimes:jpeg,png,gif,webp', 'max:10240'],
-            'remove_file' => ['nullable', 'boolean'],
-            'remove_image' => ['nullable', 'boolean'],
+            'primaryBtnText' => ['nullable', 'string', 'max:255'],
+            'primaryBtnLink' => ['nullable', 'string', 'max:255'],
+            'secondaryBtnText' => ['nullable', 'string', 'max:255'],
+            'secondaryBtnFile' => ['nullable', 'file', 'mimes:pdf', 'max:10240'],
         ]);
 
         $data = HomeContent::firstOrCreate([]);
 
-        $data->fill(collect($validated)->except(['file', 'image', 'remove_file', 'remove_image'])->toArray());
+        $data->fill([
+            'heading' => $validated['heading'] ?? $data->heading,
+            'subheading' => $validated['subheading'] ?? $data->subheading,
+            'description' => $validated['description'] ?? $data->description,
+            'primary_btn_text' => $validated['primaryBtnText'] ?? $data->primary_btn_text,
+            'primary_btn_link' => $validated['primaryBtnLink'] ?? $data->primary_btn_link,
+            'secondary_btn_text' => $validated['secondaryBtnText'] ?? $data->secondary_btn_text,
+        ]);
 
-        $this->fileUploadService->handle($request, $data, 'file', 'file', 'uploads/files');
-        $this->fileUploadService->handle($request, $data, 'image', 'image', 'uploads/images');
+        $this->fileUploadService->handle($request, $data, 'secondaryBtnFile', 'secondary_btn_file', 'uploads/files');
+        $this->fileUploadService->handle($request, $data, 'profileImage', 'profile_image', 'uploads/images');
 
         $data->save();
 

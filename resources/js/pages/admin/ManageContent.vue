@@ -47,20 +47,4 @@ const route = useRoute();
 .v-tab--selected {
     opacity: 1;
 }
-
-.tabs-fade-wrapper {
-    position: relative;
-    overflow: hidden;
-}
-
-.tabs-fade-wrapper::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: 40px;
-    pointer-events: none;
-    background: linear-gradient(to right, transparent, rgb(var(--v-theme-surface)) 90%);
-}
 </style>

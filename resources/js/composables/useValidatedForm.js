@@ -30,11 +30,7 @@ export function useValidatedForm(schema, onSubmit, options = {}) {
     const { resetOnSuccess = true, useAlertForErrors = false } = options;
     const { loading, wrap } = useFormLoading();
     const { success: notifySuccess, error: notifyError } = useSnackBarQueue();
-    const {
-        success: alertSuccess,
-        error: alertError,
-        clear: clearAlerts,
-    } = useAlert();
+    const { error: alertError, clear: clearAlerts } = useAlert();
 
     const initialValues = buildInitialValues(schema);
 

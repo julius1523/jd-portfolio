@@ -40,7 +40,6 @@ export default createVuetify({
         },
     },
     defaults: {
-        VCard: { ripple: "center" },
         VChip: { style: { userSelect: "none" } },
         VImg: { draggable: false },
         VAppBar: { style: { userSelect: "none" } },

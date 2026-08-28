@@ -14,6 +14,7 @@ const props = defineProps({
     subtitle: { type: String, default: undefined },
     icon: { type: String, default: "i-mdi-cloud-upload" },
     density: { type: String, default: 'default' },
+    hideBrowse: { type: Boolean, default: false },
     variant: { type: String, default: 'default' },
     disabled: { type: Boolean, default: false },
     clearable: { type: Boolean, default: true },
@@ -220,10 +221,10 @@ onBeforeUnmount(() => {
 
 <template>
     <v-file-upload v-model="internalValue" :inset-file-list="inset" bg-color="primary" :scrim="scrim" :color="color"
-        :accept="computedAccept" :multiple="multiple" :density="density" :variant="variant" :title="title"
-        :subtitle="subtitle" :icon="icon" :disabled="disabled" :clearable="clearable" :show-size="showSize" :hint="hint"
-        :persistent-hint="persistent" :error="hasError" :error-messages="displayedErrorMessages" v-bind="filteredAttrs"
-        @update:model-value="handleChange">
+        :accept="computedAccept" :multiple="multiple" :density="density" :hide-browse="hideBrowse" :variant="variant"
+        :title="title" :subtitle="subtitle" :icon="icon" :disabled="disabled" :clearable="clearable"
+        :show-size="showSize" :hint="hint" :persistent-hint="persistent" :error="hasError"
+        :error-messages="displayedErrorMessages" v-bind="filteredAttrs" @update:model-value="handleChange">
 
         <template v-for="(_, slot) in $slots" #[slot]="scope">
             <slot :name="slot" v-bind="scope" />
@@ -240,7 +241,7 @@ onBeforeUnmount(() => {
                     </v-avatar>
                 </template>
                 <template v-slot:clear="{ props: clearProps }">
-                    <v-btn icon="i-mdi-trash-can" v-bind="clearProps"></v-btn>
+                    <v-icon icon="i-mdi-trash-can" v-bind="clearProps"></v-icon>
                 </template>
             </v-file-upload-item>
         </template>
@@ -256,7 +257,7 @@ onBeforeUnmount(() => {
                     </v-avatar>
                 </template>
                 <template v-slot:clear="{ props: clearProps }">
-                    <v-btn icon="i-mdi-trash-can" v-bind="clearProps"></v-btn>
+                    <v-icon icon="i-mdi-trash-can" v-bind="clearProps"></v-icon>
                 </template>
             </v-file-upload-item>
         </template>

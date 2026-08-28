@@ -39,8 +39,8 @@ namespace App\Models{
  * @property string|null $cv_path
  * @property string|null $image_path
  * @property int $id
- * @property string|null $greeting
- * @property array<array-key, mixed>|null $title
+ * @property string|null $heading
+ * @property array<array-key, mixed>|null $subheading
  * @property string|null $description
  * @property string|null $primary_btn_text
  * @property string|null $primary_btn_link

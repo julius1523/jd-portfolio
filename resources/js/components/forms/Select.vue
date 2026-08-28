@@ -18,7 +18,7 @@ const props = defineProps({
 });
 const emit = defineEmits(['update:modelValue']);
 const search = ref('');
-const comboRef = ref(null);
+const selectRef = ref(null);
 const mirrorRef = ref(null);
 const visibleCount = ref(0);
 function resolveText(item) {
@@ -31,7 +31,7 @@ function removeItem(item) {
 }
 async function recalcVisibleCount() {
     await nextTick();
-    const fieldEl = comboRef.value?.$el?.querySelector('.v-field__field');
+    const fieldEl = selectRef.value?.$el?.querySelector('.v-field__field');
     const mirrorEl = mirrorRef.value;
     if (!fieldEl || !mirrorEl || props.modelValue.length === 0) {
         visibleCount.value = props.modelValue.length;
@@ -52,7 +52,7 @@ async function recalcVisibleCount() {
 let resizeObserver;
 onMounted(() => {
     recalcVisibleCount();
-    const fieldEl = comboRef.value?.$el?.querySelector('.v-field__field');
+    const fieldEl = selectRef.value?.$el?.querySelector('.v-field__field');
     if (fieldEl && 'ResizeObserver' in window) {
         resizeObserver = new ResizeObserver(() => recalcVisibleCount());
         resizeObserver.observe(fieldEl);
@@ -66,13 +66,26 @@ watch(() => props.modelValue, recalcVisibleCount, { deep: true });
 
 <template>
     <div class="position-relative">
-        <v-select ref="comboRef" :model-value="modelValue" @update:model-value="$emit('update:modelValue', $event)"
-            v-model:search="search" :hide-no-data="false" :items="items" :variant="variant" :flat="flat" :label="label"
-            :rounded="rounded" :density="density" :hint="hint" :persistent-hint="persistentHint" :multiple="multiple"
-            :list-props="{ rounded: 'lg', nav: true, variant: 'plain', density: 'compact', prependGap: 15, activeClass: 'opacity-100' }"
+        <v-select ref="selectRef" :model-value="modelValue" @update:model-value="$emit('update:modelValue', $event)"
+            no-auto-scroll v-model:search="search" :hide-no-data="false" :items="items" :variant="variant" :flat="flat"
+            :label="label" :rounded="rounded" :density="density" :hint="hint" :persistent-hint="persistentHint"
+            :multiple="multiple" :list-props="{ density: 'comfortable', prependGap: 15, class: 'py-0' }"
             :error-messages="errorMessages" :item-title="itemTitle" :item-value="itemValue" autocomplete="off">
-            <template v-for="(_, slotName) in $slots" v-slot:[slotName]="slotProps">
-                <slot :name="slotName" v-bind="slotProps ?? {}" />
+            <template v-for="(_, slot) in $slots" #[slot]="scope">
+                <slot :name="slot" v-bind="scope" />
+            </template>
+
+            <template v-slot:item="{ item, props: itemProps, index }">
+                <v-list-item v-bind="itemProps" :title="undefined">
+                    <template v-slot:prepend="{ isSelected }">
+                        <v-checkbox-btn color="primary" :model-value="isSelected" density="compact" :ripple="false"
+                            @click.stop="itemProps.onClick" />
+                    </template>
+
+                    <v-list-item-title class="text-label-medium">
+                        {{ resolveText(item) }}
+                    </v-list-item-title>
+                </v-list-item>
             </template>
 
             <template v-slot:selection="{ item, index }">
@@ -87,10 +100,8 @@ watch(() => props.modelValue, recalcVisibleCount, { deep: true });
 
             <template v-slot:no-data>
                 <v-list-item>
-                    <v-list-item-subtitle>
-                        No results matching "<strong>{{ search }}</strong>". Press
-                        <kbd>enter</kbd>
-                        to create a new one
+                    <v-list-item-subtitle class="text-center">
+                        No data available
                     </v-list-item-subtitle>
                 </v-list-item>
             </template>

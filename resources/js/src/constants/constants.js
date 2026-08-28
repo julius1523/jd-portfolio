@@ -1,0 +1,108 @@
+// src/constants/siteOptions.js
+
+export const DEVELOPER_TITLES = [
+    "Full Stack Developer",
+    "Web Developer",
+    "Laravel Developer",
+    "VueJS Developer",
+    "Frontend Developer",
+    "Backend Developer",
+    "Software Developer",
+    "Application Developer",
+    "System Developer",
+    "PHP Developer",
+    "UI/UX-Focused Developer",
+    "JavaScript Developer",
+    "Database Developer",
+    "API Developer",
+    "Information Systems Developer",
+];
+
+export const SKILL_CATEGORIES = [
+    {
+        key: "frontend",
+        title: "Front-End Development",
+        skills: [
+            "HTML5",
+            "CSS3",
+            "Bootstrap",
+            "VueJS",
+            "Vuetify",
+            "JavaScript",
+            "Responsive Design",
+            "SASS/SCSS",
+            "Tailwind CSS",
+            "Vue Router",
+            "Pinia / Vuex",
+            "Axios",
+        ],
+    },
+    {
+        key: "backend",
+        title: "Back-End & Systems",
+        skills: [
+            "PHP",
+            "Laravel",
+            "MySQL",
+            "GitHub Desktop",
+            "RESTful APIs",
+            "Composer",
+            "Laravel Eloquent",
+            "Postman",
+            "XAMPP",
+            "Git",
+        ],
+    },
+    {
+        key: "design",
+        title: "Design & Creative Tools",
+        skills: [
+            "Canva",
+            "Photoshop",
+            "Capcut",
+            "Figma (Basic)",
+            "Adobe Illustrator",
+            "Adobe Premiere Pro",
+            "UI/UX Design",
+        ],
+    },
+    {
+        key: "soft",
+        title: "Soft Skills",
+        skills: [
+            "Communication",
+            "Attention to Details",
+            "Continuous Learning",
+            "Collaboration",
+            "Creativity",
+            "Focus",
+            "Problem Solving",
+            "Time Management",
+            "Adaptability",
+            "Critical Thinking",
+        ],
+    },
+];
+
+export const RANDOM_FACTS = [
+    {
+        icon: "i-mdi-controller-classic",
+        text: "My peak mmr in DotA 2 was 14k",
+    },
+    {
+        icon: "i-mdi-hand-peace",
+        text: "I am a perfectionist",
+    },
+    {
+        icon: "i-mdi-paw",
+        text: "I love cats and dogs",
+    },
+    {
+        icon: "i-mdi-spotify",
+        text: "I love listening to pop music",
+    },
+    {
+        icon: "i-mdi-emoticon-happy",
+        text: "I am an introvert and a picky eater",
+    },
+];

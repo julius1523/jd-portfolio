@@ -143,7 +143,7 @@ const schema = yup.object({
                 yup
                     .array()
                     .of(yup.string().required())
-                    .min(1, `Please select at least one ${category.title.toLowerCase()}.`)
+                    .min(1, `At least one ${category.title.toLowerCase()} is required.`)
                     .label(category.title),
             ])
         )

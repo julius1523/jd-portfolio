@@ -40,6 +40,12 @@ export default defineConfig({
     },
     presets: [presetVuetify(), presetIcons()],
     rules,
+    shortcuts: {
+        "dialog-style": {
+            "border-radius": "15px",
+            "box-shadow": "0 4px 12px rgba(0, 0, 0, 0.08)",
+        },
+    },
     variants: [
         (matcher) => {
             const match = matcher.match(/^(.+)-(sm|md|lg|xl|xxl)-(.+)$/);

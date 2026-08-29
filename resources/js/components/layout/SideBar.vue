@@ -23,12 +23,11 @@ const layout = useLayoutStore();
                         </template>
 
                         <template #append>
-                            <v-icon-btn variant="text" rounded="lg" icon="i-ri-layout-left-2-line"
-                                :class="{ 'me-n2': !layout.rail }" class="opacity-70" v-tooltip="{
-                                    text: layout.rail ? 'Open sidebar' : 'Close sidebar',
-                                    location: 'end',
-                                    disabled: !layout.rail && $vuetify.display.smAndDown
-                                }" @click.stop.prevent="layout.toggleRail()" />
+                            <v-icon icon="i-ri-layout-left-2-line opacity-70" class="ms-n5" v-tooltip="{
+                                text: layout.rail ? 'Open sidebar' : 'Close sidebar',
+                                location: 'end',
+                                disabled: !layout.rail && $vuetify.display.smAndDown
+                            }" @click.stop.prevent="layout.toggleRail()" />
                         </template>
                     </v-list-item>
                 </v-list>

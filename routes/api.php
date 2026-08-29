@@ -6,6 +6,7 @@ use App\Http\Controllers\Public\ContactController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\HomeContentController;
 use App\Http\Controllers\Admin\AboutContentController;
+use App\Http\Controllers\Admin\ProjectContentController;
 
 Route::post('/contact', [ContactController::class, 'store']);
 
@@ -20,4 +21,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/updateHomeContent', [HomeContentController::class, 'updateHomeContent']);
     Route::get('/getAboutContent', [AboutContentController::class, 'getAboutContent']);
     Route::post('/updateAboutContent', [AboutContentController::class, 'updateAboutContent']);
+    Route::get('/getProjectContent', [ProjectContentController::class, 'getProjectContent']);
+    Route::post('/updateProjectContent', [ProjectContentController::class, 'updateProjectContent']);
 });

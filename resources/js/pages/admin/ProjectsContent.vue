@@ -52,11 +52,10 @@
                                 </div>
                             </v-col>
                             <v-col cols="12">
-                                <v-btn variant="tonal" rounded="lg" prepend-icon="i-mdi-plus" text="New Project"
-                                    class="mb-2 float-end" @click="openProjectDialog()" />
-                                <v-data-table :headers="projectHeaders" :items="projects" item-value="id"
-                                    v-model:expanded="expandedRows" show-expand :mobile="$vuetify.display.smAndDown"
-                                    class="border rounded-lg" data-shimmer-no-children>
+                                <DataTable :items="projects" :headers="projectHeaders" :addable="true"
+                                    add-label="New Project" expand-key="description"
+                                    no-data-text="No projects added yet." @add="openProjectDialog"
+                                    @edit="openProjectDialog" @remove="removeProject">
                                     <template #item.materials="{ item }">
                                         <div class="d-flex flex-wrap ga-1 py-2"
                                             :class="{ 'justify-end': $vuetify.display.smAndDown }">
@@ -73,28 +72,7 @@
                                             :src="projectImagePreview(item)" />
                                         <span v-else class="text-medium-emphasis">—</span>
                                     </template>
-
-                                    <template #item.action="{ item, index }">
-                                        <div class="d-flex ga-2 justify-end">
-                                            <v-icon icon="i-mdi-pencil-outline opacity-70" size="small"
-                                                @click="openProjectDialog(item, index)" />
-                                            <v-icon icon="i-mdi-delete-outline opacity-70" size="small"
-                                                @click="removeProject(index)" />
-                                        </div>
-                                    </template>
-
-                                    <template #expanded-row="{ columns, item }">
-                                        <tr>
-                                            <td :colspan="columns.length" class="py-3 font-italic text-medium-emphasis">
-                                                "{{ item.description }}"
-                                            </td>
-                                        </tr>
-                                    </template>
-
-                                    <template #no-data>
-                                        <div class="text-medium-emphasis py-4">No projects added yet.</div>
-                                    </template>
-                                </v-data-table>
+                                </DataTable>
                             </v-col>
                         </v-row>
                     </v-col>
@@ -112,93 +90,61 @@
         </v-card>
     </Shimmer>
 
-    <v-dialog v-model="projectDialog" scrollable max-width="500" max-height="630"
-        :fullscreen="$vuetify.display.smAndDown">
-        <v-card :class="$vuetify.display.mdAndUp ? 'dialog-style' : undefined">
-            <v-toolbar density="compact" color="surface" class="border-b">
-                <template #title>
-                    <span class="ms-2 text-title-medium font-weight-bold">
-                        {{ editingIndex > -1 ? 'Edit Project' : 'Add Project' }}
-                    </span>
-                </template>
-                <template #append>
-                    <v-btn icon="i-mdi-close" variant="text" size="x-small" class="me-3"
-                        @click="closeProjectDialog()" />
-                </template>
-            </v-toolbar>
-            <v-card-text class="pa-5">
-                <v-form @submit.prevent="addProject">
-                    <v-row :gap="13">
-                        <v-col cols="12">
-                            <Select v-model="pCategory" :items="categoryOptions" label="Category" color="primary"
-                                variant="solo" flat rounded="lg" density="comfortable" :multiple="false" :chip="false"
-                                :error-messages="projectErrors.category" />
-                        </v-col>
-                        <v-col cols="12">
-                            <v-text-field v-model="pName" label="Project Name" color="primary" variant="solo" flat
-                                rounded="lg" density="comfortable" clearable :error-messages="projectErrors.name"
-                                autocomplete="off" />
-                        </v-col>
-                        <v-col cols="12">
-                            <v-textarea v-model="pDescription" label="Description" color="primary" auto-grow
-                                variant="solo" flat rounded="lg" density="comfortable" clearable
-                                :error-messages="projectErrors.description" autocomplete="off" />
-                        </v-col>
-                        <v-col cols="12">
-                            <Select :key="`file-${formResetKey}`" v-model="pMaterials" :items="activeCategoryItems"
-                                item-title="text" item-value="text" label="Materials"
-                                :error-messages="projectErrors.materials" data-shimmer-no-children>
-                                <template v-slot:menu-header>
-                                    <v-tabs v-model="materialsTab" slider-color="primary" mobile grow class="border-b"
-                                        @keydown.enter.stop>
-                                        <v-tab v-for="(,category) in PROJECT_MATERIALS" :key="category"
-                                            :value="category">
-                                            {{ formatLabel(category) }}
-                                        </v-tab>
-                                    </v-tabs>
-                                </template>
-                            </Select>
-                        </v-col>
-                        <v-col cols="12">
-                            <FileUpload :key="`project-image-${projectFormResetKey}`" v-model="pImage" file-type="image"
-                                :max-files="1" inset density="comfortable" :show-size="true"
-                                hint="The image for this project" :error-messages="projectErrors.image" />
-                        </v-col>
-                        <v-col cols="12">
-                            <div class="text-title-small text-medium-emphasis mb-2">Link</div>
-                            <v-btn-toggle v-model="pLinkType" color="primary" variant="outlined" density="compact"
-                                rounded="lg" mandatory divided class="mb-3">
-                                <v-btn value="upload" text="Upload" />
-                                <v-btn value="link" text="Link" />
-                            </v-btn-toggle>
-
-                            <FileUpload v-if="pLinkType === 'upload'" :key="`project-link-file-${projectFormResetKey}`"
-                                v-model="pLinkFile" :max-files="1" inset density="comfortable" :show-size="true"
-                                hint="File to link to this project" :error-messages="projectErrors.linkFile" />
-
-                            <v-text-field v-else v-model="pLinkUrl" label="Link URL" color="primary" variant="solo" flat
-                                rounded="lg" density="comfortable" clearable placeholder="https://..."
-                                :error-messages="projectErrors.linkUrl" autocomplete="off" />
-                        </v-col>
-                    </v-row>
-                </v-form>
-            </v-card-text>
-            <v-card-actions class="d-flex flex-column flex-md-row bg-surface pa-4 border-t">
-                <div class="order-1 order-md-0" :class="{ 'w-100': $vuetify.display.smAndDown }">
-                    <v-btn variant="text" class="border border-opacity-50" rounded="lg" block :slim="false" size="large"
-                        @click="closeProjectDialog">
-                        {{ editingIndex > -1 ? 'Cancel Edit' : 'Cancel' }}
-                    </v-btn>
-                </div>
-                <div :class="{ 'w-100': $vuetify.display.smAndDown }">
-                    <v-btn variant="flat" color="primary" rounded="lg" block :slim="false" size="large"
-                        @click="addProject">
-                        {{ editingIndex > -1 ? 'Save Changes' : 'Add Project' }}
-                    </v-btn>
-                </div>
-            </v-card-actions>
-        </v-card>
-    </v-dialog>
+    <Dialog v-model="projectDialog" :is-editing="editingIndex > -1" add-title="Add Project" edit-title="Edit Project"
+        save-text="Add Project" edit-save-text="Save Changes" cancel-text="Cancel" edit-cancel-text="Cancel Edit"
+        @save="addProject" @cancel="closeProjectDialog">
+        <v-form @submit.prevent="addProject">
+            <v-row :gap="13">
+                <v-col cols="12">
+                    <Select v-model="pCategory" :items="categoryOptions" label="Category" color="primary" variant="solo"
+                        flat rounded="lg" density="comfortable" :multiple="false" :chip="false"
+                        :error-messages="projectErrors.category" />
+                </v-col>
+                <v-col cols="12">
+                    <v-text-field v-model="pName" label="Project Name" color="primary" variant="solo" flat rounded="lg"
+                        density="comfortable" clearable :error-messages="projectErrors.name" autocomplete="off" />
+                </v-col>
+                <v-col cols="12">
+                    <v-textarea v-model="pDescription" label="Description" color="primary" auto-grow variant="solo" flat
+                        rounded="lg" density="comfortable" clearable :error-messages="projectErrors.description"
+                        autocomplete="off" />
+                </v-col>
+                <v-col cols="12">
+                    <Select :key="`file-${formResetKey}`" v-model="pMaterials" :items="activeCategoryItems"
+                        item-title="text" item-value="text" label="Materials" :error-messages="projectErrors.materials"
+                        data-shimmer-no-children>
+                        <template v-slot:menu-header>
+                            <v-tabs v-model="materialsTab" slider-color="primary" grow class="border-b"
+                                @keydown.enter.stop>
+                                <v-tab v-for="(_, category) in PROJECT_MATERIALS" :key="category" :value="category">
+                                    {{ formatLabel(category) }}
+                                </v-tab>
+                            </v-tabs>
+                        </template>
+                    </Select>
+                </v-col>
+                <v-col cols="12">
+                    <FileUpload :key="`project-image-${projectFormResetKey}`" v-model="pImage" file-type="image"
+                        :max-files="1" inset density="comfortable" :show-size="true" hint="The image for this project"
+                        :error-messages="projectErrors.image" />
+                </v-col>
+                <v-col cols="12">
+                    <div class="text-title-small text-medium-emphasis mb-2">Link</div>
+                    <v-btn-toggle v-model="pLinkType" color="primary" variant="outlined" density="compact" rounded="lg"
+                        mandatory divided class="mb-3">
+                        <v-btn value="upload" text="Upload" />
+                        <v-btn value="link" text="Link" />
+                    </v-btn-toggle>
+                    <FileUpload v-if="pLinkType === 'upload'" :key="`project-link-file-${projectFormResetKey}`"
+                        v-model="pLinkFile" :max-files="1" inset density="comfortable" :show-size="true"
+                        hint="File to link to this project" :error-messages="projectErrors.linkFile" />
+                    <v-text-field v-else v-model="pLinkUrl" label="Link URL" color="primary" variant="solo" flat
+                        rounded="lg" density="comfortable" clearable placeholder="https://..."
+                        :error-messages="projectErrors.linkUrl" autocomplete="off" />
+                </v-col>
+            </v-row>
+        </v-form>
+    </Dialog>
 </template>
 
 <script setup>
@@ -208,14 +154,15 @@ import * as yup from "yup";
 import { useValidatedForm } from "@/composables/useValidatedForm";
 import { useUnsavedChanges } from "@/composables/useUnsavedChanges";
 import { useSnackBarQueue } from "@/composables/useSnackBarQueue";
+import DataTable from "@/components/data/DataTable";
 import Select from "@/components/forms/Select";
 import FileUpload from "@/components/forms/FileUpload";
+import Dialog from "@/components/forms/Dialog";
 import { PROJECT_MATERIALS } from "@/src/constants/constants";
 const materialsTab = ref(Object.keys(PROJECT_MATERIALS)[0]);
 const activeCategoryItems = computed(() => PROJECT_MATERIALS[materialsTab.value] ?? []);
 const { info, error } = useSnackBarQueue();
 const pageLoading = ref(true);
-const expandedRows = ref([]);
 const schema = yup.object({
     profileImage: yup.mixed().label('Profile Image').nullable(),
     heading: yup.string().label('Heading').required(),
@@ -283,15 +230,11 @@ async function getProjectContent() {
         pageLoading.value = false;
     };
 };
-onMounted(() => {
-    getProjectContent();
-});
 const projectHeaders = [
     { title: 'Category', key: 'category', align: 'start' },
     { title: 'Project Name', key: 'name', align: 'start' },
     { title: 'Materials', key: 'materials', align: 'start' },
     { title: 'Image', key: 'image', align: 'middle' },
-    { title: 'Action', key: 'action', align: 'end', sortable: false },
 ];
 const [projects] = defineField('projects');
 const projectDialog = ref(false);
@@ -303,7 +246,6 @@ const categoryOptions = [
     'Presentations/Multimedia',
 ];
 const projectSchema = yup.object({
-    id: yup.mixed().nullable(),
     category: yup.string().label('Category').oneOf(categoryOptions, 'Select a valid category').required(),
     name: yup.string().label('Project name').required(),
     description: yup.string().label('Description').required(),
@@ -326,7 +268,6 @@ const {
     resetForm: resetProjectForm,
 } = useValidatedForm(projectSchema, async (values) => {
     const project = {
-        id: values.id ?? `temp-${Date.now()}`,
         category: values.category,
         name: values.name,
         description: values.description,
@@ -363,7 +304,6 @@ function openProjectDialog(item = null, index = -1) {
     materialsTab.value = Object.keys(PROJECT_MATERIALS)[0];
     resetProjectForm({
         values: item ? { ...item } : {
-            id: null,
             category: categoryOptions[0],
             name: '',
             description: '',
@@ -389,4 +329,7 @@ function projectImagePreview(item) {
     };
     return item.image.url ?? null;
 };
+onMounted(() => {
+    getProjectContent();
+});
 </script>

@@ -25,8 +25,10 @@ const handleUnauthenticated = (reason = "unauthenticated") => {
     if (auth.isAuthenticated) {
         auth.clearUser();
     }
+
     const currentRoute = router.currentRoute.value;
-    if (currentRoute.meta.middleware === "auth") {
+
+    if (currentRoute.meta?.middleware === "auth") {
         router.replace({
             name: "login",
             query: { reason },
@@ -40,7 +42,13 @@ axios.interceptors.response.use(
     },
 
     (error) => {
-        const { status, data } = error.response;
+        if (!error.response) {
+            const { error: showError } = useSnackBarQueue();
+            showError("Network error. Please check your connection.");
+            return Promise.reject(error);
+        }
+
+        const { status } = error.response;
         const url = error.config?.url ?? "";
 
         switch (status) {
@@ -55,14 +63,8 @@ axios.interceptors.response.use(
                     handleUnauthenticated("session_expired");
                 }
                 break;
-
-            default:
-                if (!error.response) {
-                    const { error } = useSnackBarQueue();
-                    error("Network error. Please check your connection.");
-                }
-                break;
         }
+
         return Promise.reject(error);
     },
 );

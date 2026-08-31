@@ -35,6 +35,7 @@ export default defineConfig({
             include: [
                 /\.(vue|svelte|[jt]sx|mdx?|astro|elm|php|phtml|html)($|\?)/,
                 "resources/js/composables/**/*.{js,ts}",
+                "resources/js/src/constants/**/*.{js,ts}",
             ],
         },
     },

@@ -48,6 +48,8 @@ class AboutContentController extends Controller
             return response()->json(['message' => 'Invalid payload.'], 422);
         }
 
+        $randomFactsInput = $payload['randomFacts'] ?? [];
+
         $merged = [
             ...$payload,
             'profile_image' => $request->file('profile_image'),
@@ -62,7 +64,8 @@ class AboutContentController extends Controller
             'skills.*' => ['array'],
             'skills.*.*' => ['string'],
             'randomFacts' => ['nullable', 'array'],
-            'randomFacts.*' => ['string'],
+            'randomFacts.*.icon' => ['required', 'string', 'max:100'],
+            'randomFacts.*.text' => ['required', 'string'],
             'others' => ['nullable', 'array'],
             'others.title' => ['nullable', 'string', 'max:255'],
             'others.description' => ['nullable', 'string'],
@@ -75,10 +78,20 @@ class AboutContentController extends Controller
             'heading' => $validated['heading'] ?? $data->heading,
             'description' => $validated['description'] ?? $data->description,
             'skills' => $validated['skills'] ?? $data->skills,
-            'random_facts' => $validated['randomFacts'] ?? $data->random_facts,
         ]);
 
         $this->fileUploadService->handle($request, $data, 'profile_image', 'profile_image', 'uploads/images');
+
+        $randomFacts = [];
+
+        foreach ($randomFactsInput as $fact) {
+            $randomFacts[] = [
+                'icon' => $fact['icon'] ?? null,
+                'text' => $fact['text'] ?? null,
+            ];
+        }
+
+        $data->random_facts = $randomFacts;
 
         $others = $data->others ?? [];
         $others['title'] = $validated['others']['title'] ?? ($others['title'] ?? null);

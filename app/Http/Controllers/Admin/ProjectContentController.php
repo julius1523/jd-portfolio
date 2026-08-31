@@ -89,12 +89,10 @@ class ProjectContentController extends Controller
 
         $this->fileUploadService->handle($request, $data, 'profileImage', 'profile_image', 'uploads/images');
 
-        $existingById = collect($data->projects ?? [])->keyBy('id');
-
         $projects = [];
 
         foreach ($projectsInput as $index => $project) {
-            $existing = $existingById->get($project['id'] ?? null);
+            $existing = $data->projects[$index] ?? null;
 
             $imageHolder = new \stdClass();
             $imageHolder->image = $project['image'] ?? $existing['image'] ?? null;
@@ -111,7 +109,6 @@ class ProjectContentController extends Controller
             }
 
             $projects[] = [
-                'id' => $project['id'] ?? (string) Str::uuid(),
                 'category' => $project['category'] ?? null,
                 'name' => $project['name'] ?? null,
                 'description' => $project['description'] ?? null,

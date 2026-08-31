@@ -4,6 +4,7 @@ import laravel from "laravel-vite-plugin";
 import vue from "@vitejs/plugin-vue";
 import vuetify from "vite-plugin-vuetify";
 import path from "path";
+import ViteFonts from "unplugin-fonts/vite";
 
 export default defineConfig({
     plugins: [
@@ -17,6 +18,17 @@ export default defineConfig({
             styles: { configFile: "resources/css/styles/_settings.scss" },
         }),
         UnoCSS(),
+        ViteFonts({
+            fontsource: {
+                families: [
+                    {
+                        name: "Roboto",
+                        weights: [100, 300, 400, 500, 700, 900],
+                        styles: ["normal", "italic"],
+                    },
+                ],
+            },
+        }),
     ],
     optimizeDeps: {
         exclude: ["vuetify"],

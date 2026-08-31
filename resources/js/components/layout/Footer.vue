@@ -10,8 +10,7 @@ const currentYear = new Date().getFullYear();
             </div>
 
             <div v-if="$vuetify.display.mdAndUp" class="d-flex ga-6">
-                <router-link to="/home" class="text-decoration-none"
-                    style="color: rgba(var(--v-theme-on-background), var(--v-medium-emphasis-opacity));">
+                <router-link to="/home" class="text-decoration-none text-medium-emphasis">
                     Home
                 </router-link>
                 <router-link to="/about" class="text-decoration-none text-medium-emphasis">

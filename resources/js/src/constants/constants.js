@@ -178,3 +178,16 @@ export const PROJECT_MATERIALS = {
         "Scrum",
     ],
 };
+
+export const SOCIAL_ICONS = [
+    { name: "GitHub", value: "i-ri-github-fill" },
+    { name: "Twitter/X", value: "i-ri-twitter-x-fill" },
+    { name: "LinkedIn", value: "i-ri-linkedin-box-fill" },
+    { name: "Instagram", value: "i-ri-instagram-fill" },
+    { name: "Facebook", value: "i-ri-facebook-fill" },
+    { name: "YouTube", value: "i-ri-youtube-fill" },
+    { name: "TikTok", value: "i-ri-tiktok-fill" },
+    { name: "Discord", value: "i-ri-discord-fill" },
+    { name: "Website", value: "i-ri-global-line" },
+    { name: "Email", value: "i-ri-mail-line" },
+];

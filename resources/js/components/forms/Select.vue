@@ -93,9 +93,9 @@ watch(() => [props.modelValue, props.chip], recalcVisibleCount, { deep: true });
         <v-select ref="selectRef" :model-value="modelValue" @update:model-value="$emit('update:modelValue', $event)"
             no-auto-scroll v-model:search="search" :hide-no-data="false" :items="items" :variant="variant" :flat="flat"
             :label="label" :rounded="rounded" :density="density" :hint="hint" :persistent-hint="persistentHint"
-            :multiple="multiple" :list-props="{ density: 'comfortable', prependGap: 15, class: 'py-0' }"
+            :multiple="multiple" :list-props="{ density: 'comfortable', nav: true, prependGap: 15, class: 'py-0' }"
             :error-messages="errorMessages" :item-title="itemTitle" :item-value="itemValue"
-            :menu-props="{ maxWidth: '100', width: 'auto' }" autocomplete="off">
+            :menu-props="{ maxWidth: '100', width: 'auto', contentClass: 'rounded-lg' }" autocomplete="off">
             <template v-for="(_, slot) in $slots" #[slot]="scope">
                 <slot :name="slot" v-bind="scope" />
             </template>

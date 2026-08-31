@@ -9,7 +9,7 @@ const layout = useLayoutStore();
 
 <template>
     <v-navigation-drawer :key="$vuetify.display.smAndDown ? 'mobile' : 'desktop'" v-model="layout.drawer" elevation="0"
-        :rail="layout.rail" :location="$vuetify.display.smAndDown ? 'bottom' : undefined" color="surface-light" floating
+        :rail="layout.rail" :location="$vuetify.display.smAndDown ? 'bottom' : undefined"
         :permanent="$vuetify.display.mdAndUp" width="250">
         <template #prepend>
             <template v-if="$vuetify.display.mdAndUp">

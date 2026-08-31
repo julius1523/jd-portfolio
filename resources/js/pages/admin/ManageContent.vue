@@ -4,7 +4,8 @@
 
         <v-sheet class="mt-8" elevation="0">
             <div class="tabs-fade-wrapper">
-                <v-tabs v-model="tab" density="comfortable" :grow="$vuetify.display.smAndDown" color="primary">
+                <v-tabs v-model="tab" density="comfortable" :grow="$vuetify.display.smAndDown" color="primary"
+                    slider-transition="shift">
                     <v-tab variant="plain" :value="1" class="rounded-t-md" :ripple="false">Home</v-tab>
                     <v-tab variant="plain" :value="2" class="rounded-t-md" :ripple="false">About</v-tab>
                     <v-tab variant="plain" :value="3" class="rounded-t-md" :ripple="false">Projects</v-tab>

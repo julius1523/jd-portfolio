@@ -58,7 +58,7 @@
                             </v-col>
                         </v-row>
                     </v-col>
-                    <v-col cols="12" lg="6">
+                    <v-col cols="12">
                         <v-row :gap="13">
                             <v-col cols="12">
                                 <div>
@@ -69,9 +69,16 @@
                                 </div>
                             </v-col>
                             <v-col cols="12">
-                                <Select :key="`file-${formResetKey}`" v-model="randomFacts" :items="RANDOM_FACTS"
-                                    item-title="text" item-value="text" label="Random Facts"
-                                    :error-messages="errors.randomFacts" data-shimmer-no-children />
+                                <DataTable :items="randomFacts" :headers="randomFactHeaders" :addable="true"
+                                    :expandable="false" add-label="New Fact" no-data-text="No facts added yet."
+                                    @add="openFactDialog" @edit="openFactDialog" @remove="removeFact">
+                                    <template #item.text="{ item }">
+                                        <div class="d-flex ga-2" :class="{ 'justify-end': $vuetify.display.smAndDown }">
+                                            <v-icon :class="item.icon" color="primary" />
+                                            <span>{{ item.text }}</span>
+                                        </div>
+                                    </template>
+                                </DataTable>
                             </v-col>
                         </v-row>
                     </v-col>
@@ -118,6 +125,42 @@
             </v-form>
         </v-card>
     </Shimmer>
+
+    <Dialog v-model="factDialog" :is-editing="editingFactIndex > -1" add-title="Add Fact" edit-title="Edit Fact"
+        save-text="Add Fact" edit-save-text="Save Changes" cancel-text="Cancel" edit-cancel-text="Cancel Edit"
+        @save="addFact" @cancel="closeFactDialog">
+        <v-form @submit.prevent="addFact">
+            <v-row :gap="13">
+                <v-col cols="12">
+                    <Select v-model="fIcon" label="Icon" color="primary" variant="solo" flat rounded="lg"
+                        density="comfortable" :items="SOCIAL_ICONS" item-title="name" item-value="value"
+                        :multiple="false" :chip="false" :error-messages="factErrors.icon">
+                        <template #item="{ item, props: itemProps }">
+                            <v-list-item v-bind="itemProps" :title="undefined">
+                                <template #prepend>
+                                    <v-icon color="primary opacity-100">{{ resolveIcon(item)?.value }}</v-icon>
+                                </template>
+                                <template #title>
+                                    <span class="text-label-medium">{{ resolveIcon(item)?.name }}</span>
+                                </template>
+                            </v-list-item>
+                        </template>
+
+                        <template #selection="{ item }">
+                            <template v-if="resolveIcon(item)">
+                                <v-icon :icon="resolveIcon(item).value" color="primary" size="small" class="mr-2" />
+                                {{ resolveIcon(item).name }}
+                            </template>
+                        </template>
+                    </Select>
+                </v-col>
+                <v-col cols="12">
+                    <v-text-field v-model="fText" label="Fact" color="primary" variant="solo" flat rounded="lg"
+                        density="comfortable" clearable :error-messages="factErrors.text" autocomplete="off" />
+                </v-col>
+            </v-row>
+        </v-form>
+    </Dialog>
 </template>
 
 <script setup>
@@ -127,9 +170,11 @@ import * as yup from "yup";
 import { useValidatedForm } from "@/composables/useValidatedForm";
 import { useUnsavedChanges } from "@/composables/useUnsavedChanges";
 import { useSnackBarQueue } from "@/composables/useSnackBarQueue";
+import DataTable from "@/components/data/DataTable";
 import Select from "@/components/forms/Select";
 import FileUpload from "@/components/forms/FileUpload";
-import { SKILL_CATEGORIES, RANDOM_FACTS } from "@/src/constants/constants";
+import Dialog from "@/components/forms/Dialog";
+import { SKILL_CATEGORIES, SOCIAL_ICONS } from "@/src/constants/constants";
 const { info, error } = useSnackBarQueue();
 const pageLoading = ref(true);
 const schema = yup.object({
@@ -148,7 +193,16 @@ const schema = yup.object({
             ])
         )
     ).label('Skills'),
-    randomFacts: yup.array().of(yup.string().required()).min(1, "At least one fact is required").label("Subheading"),
+    randomFacts: yup
+        .array()
+        .of(
+            yup.object({
+                icon: yup.string().label('Icon').required(),
+                text: yup.string().label('Fact').required(),
+            })
+        )
+        .min(1, "At least one fact is required")
+        .label("Random Facts"),
     others: yup.object({
         title: yup.string().label('Title').required(),
         description: yup.string().label('Description').required(),
@@ -190,7 +244,6 @@ useUnsavedChanges(meta);
 const [profileImage] = defineField('profileImage');
 const [heading] = defineField('heading');
 const [description] = defineField('description');
-const [randomFacts] = defineField('randomFacts');
 const [othersTitle] = defineField('others.title');
 const [othersDescription] = defineField('others.description');
 const [othersImage] = defineField('others.image');
@@ -227,4 +280,60 @@ async function getAboutContent() {
 onMounted(() => {
     getAboutContent();
 });
+
+const randomFactHeaders = [
+    { title: 'Fact', key: 'text', align: 'start' },
+];
+const [randomFacts] = defineField('randomFacts');
+const factDialog = ref(false);
+const editingFactIndex = ref(-1);
+const factFormResetKey = ref(0);
+const factSchema = yup.object({
+    icon: yup.string().label('Icon').required(),
+    text: yup.string().label('Fact').required(),
+});
+const {
+    defineField: defineFactField,
+    errors: factErrors,
+    submit: submitFactForm,
+    resetForm: resetFactForm,
+} = useValidatedForm(factSchema, async (values) => {
+    const fact = {
+        icon: values.icon,
+        text: values.text,
+    };
+    if (editingFactIndex.value > -1) {
+        randomFacts.value.splice(editingFactIndex.value, 1, fact);
+    } else {
+        randomFacts.value.push(fact);
+    }
+    closeFactDialog();
+}, { resetOnSuccess: false });
+const [fIcon] = defineFactField('icon');
+const [fText] = defineFactField('text');
+function addFact() {
+    submitFactForm();
+};
+function openFactDialog(item = null, index = -1) {
+    editingFactIndex.value = index;
+    factFormResetKey.value++;
+    resetFactForm({
+        values: item ? { ...item } : {
+            icon: null,
+            text: '',
+        },
+    });
+    factDialog.value = true;
+};
+function closeFactDialog() {
+    factDialog.value = false;
+};
+function removeFact(index) {
+    randomFacts.value.splice(index, 1);
+};
+function resolveIcon(item) {
+    const raw = item?.raw ?? item;
+    if (!raw || typeof raw !== 'object') return null;
+    return raw;
+};
 </script>

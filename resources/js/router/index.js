@@ -4,16 +4,14 @@ import {
     isNavigationFailure,
 } from "vue-router";
 import routes from "./routes";
-import { useAuthStore } from "@/stores/auth";
 import { resolveAuthRedirect } from "@/middleware/auth";
-import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const router = createRouter({
     history: createWebHistory(),
     routes,
 
-    scrollBehavior(to, from, savedPosition) {
+    scrollBehavior(savedPosition) {
         if (savedPosition) return savedPosition;
         return new Promise((resolve) => {
             setTimeout(() => resolve({ left: 0, top: 0 }), 150);

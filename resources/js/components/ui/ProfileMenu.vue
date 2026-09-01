@@ -32,14 +32,8 @@ const logout = () => {
         confirmColor: "error",
         onConfirm: () => {
             wrap(async () => {
-                try {
-                    await auth.logout();
-                    router.replace({ name: "login" });
-                } catch (error) {
-                    notifyError(
-                        error.response?.data?.message ?? "Failed to log out."
-                    );
-                }
+                router.replace({ name: "login" });
+                await auth.logout();
             });
         },
     });

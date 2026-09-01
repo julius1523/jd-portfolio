@@ -1,7 +1,8 @@
 <template>
     <div>
         <div v-if="addable" class="d-flex justify-end mb-2">
-            <v-btn variant="tonal" rounded="lg" prepend-icon="i-mdi-plus" :text="addLabel" @click="$emit('add')" />
+            <v-btn variant="flat" color="revert-color" rounded="lg" prepend-icon="i-mdi-plus" :text="addLabel"
+                @click="$emit('add')" />
         </div>
 
         <v-data-table :headers="tableHeaders" :items="items" :item-value="itemValue" v-model:expanded="expandedRows"

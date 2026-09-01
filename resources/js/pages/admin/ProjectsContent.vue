@@ -69,7 +69,7 @@
                                     <template #item.image="{ item }">
                                         <v-img v-if="projectImagePreview(item)" height="48" width="48" rounded
                                             class="border" :class="{ 'ml-auto': $vuetify.display.smAndDown }"
-                                            :src="projectImagePreview(item)" />
+                                            :src="projectImagePreview(item)" eager />
                                         <span v-else class="text-medium-emphasis">—</span>
                                     </template>
                                 </DataTable>
@@ -114,8 +114,8 @@
                         item-title="text" item-value="text" label="Materials" :error-messages="projectErrors.materials"
                         data-shimmer-no-children>
                         <template v-slot:menu-header>
-                            <v-tabs v-model="materialsTab" slider-color="primary" grow class="border-b"
-                                @keydown.enter.stop>
+                            <v-tabs v-model="materialsTab" slider-color="primary" density="comfortable" grow
+                                class="border-b" @keydown.enter.stop>
                                 <v-tab v-for="(_, category) in PROJECT_MATERIALS" :key="category" :value="category">
                                     {{ formatLabel(category) }}
                                 </v-tab>
@@ -157,7 +157,7 @@ import { useSnackBarQueue } from "@/composables/useSnackBarQueue";
 import DataTable from "@/components/data/DataTable";
 import Select from "@/components/forms/Select";
 import FileUpload from "@/components/forms/FileUpload";
-import Dialog from "@/components/forms/Dialog";
+import Dialog from "@/components/forms/FormDialog";
 import { PROJECT_MATERIALS } from "@/src/constants/constants";
 const materialsTab = ref(Object.keys(PROJECT_MATERIALS)[0]);
 const activeCategoryItems = computed(() => PROJECT_MATERIALS[materialsTab.value] ?? []);

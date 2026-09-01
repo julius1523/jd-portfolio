@@ -236,7 +236,7 @@ onBeforeUnmount(() => {
                 <template #prepend>
                     <v-avatar size="46" class="border">
                         <v-img v-if="file.type?.startsWith('image/')" :src="getPreviewUrl(file)" :cover="false"
-                            alt="" />
+                            alt="Uploaded Image" eager />
                         <v-icon v-else :class="getFileIconComponent(file)" size="24" />
                     </v-avatar>
                 </template>
@@ -252,7 +252,7 @@ onBeforeUnmount(() => {
                 <template #prepend>
                     <v-avatar size="46" class="border">
                         <v-img v-if="file.type?.startsWith('image/')" :src="getPreviewUrl(file)" :cover="false"
-                            class="border" alt="" />
+                            class="border" alt="Uploaded Image" eager />
                         <v-icon v-else :class="getFileIconComponent(file)" size="24" />
                     </v-avatar>
                 </template>

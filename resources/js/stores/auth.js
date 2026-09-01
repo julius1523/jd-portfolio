@@ -33,12 +33,9 @@ export const useAuthStore = defineStore("auth", () => {
     }
 
     async function logout() {
-        try {
-            skipNextUnsavedChangesGuard();
-            await axios.post("/api/logout");
-        } finally {
-            clearUser();
-        }
+        skipNextUnsavedChangesGuard();
+        clearUser();
+        axios.post("/api/logout").catch(() => {});
     }
 
     return {

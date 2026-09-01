@@ -129,7 +129,7 @@ import { useSnackBarQueue } from "@/composables/useSnackBarQueue";
 import DataTable from "@/components/data/DataTable";
 import Select from "@/components/forms/Select";
 import FileUpload from "@/components/forms/FileUpload";
-import Dialog from "@/components/forms/Dialog";
+import Dialog from "@/components/forms/FormDialog";
 import { SOCIAL_ICONS } from "@/src/constants/constants";
 const { info, error } = useSnackBarQueue();
 const pageLoading = ref(true);

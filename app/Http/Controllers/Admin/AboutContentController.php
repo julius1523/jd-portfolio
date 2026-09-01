@@ -64,7 +64,9 @@ class AboutContentController extends Controller
             'skills.*' => ['array'],
             'skills.*.*' => ['string'],
             'randomFacts' => ['nullable', 'array'],
-            'randomFacts.*.icon' => ['required', 'string', 'max:100'],
+            'randomFacts.*.icon' => ['required', 'array'],
+            'randomFacts.*.icon.name' => ['required', 'string', 'max:150'],
+            'randomFacts.*.icon.svg' => ['required', 'string', 'max:5000', 'regex:/^<svg[^>]*>.*<\/svg>$/s'],
             'randomFacts.*.text' => ['required', 'string'],
             'others' => ['nullable', 'array'],
             'others.title' => ['nullable', 'string', 'max:255'],
@@ -86,7 +88,10 @@ class AboutContentController extends Controller
 
         foreach ($randomFactsInput as $fact) {
             $randomFacts[] = [
-                'icon' => $fact['icon'] ?? null,
+                'icon' => [
+                    'name' => $fact['icon']['name'] ?? null,
+                    'svg' => $fact['icon']['svg'] ?? null,
+                ],
                 'text' => $fact['text'] ?? null,
             ];
         }

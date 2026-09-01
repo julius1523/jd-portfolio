@@ -1,4 +1,3 @@
-// @/composables/useIconPicker.js
 import { ref } from "vue";
 import axios from "@/plugins/axios";
 
@@ -10,19 +9,19 @@ function debounce(fn, delay = 300) {
     };
 }
 
-export function useIconPicker(perPage = 48) {
+export function useIconPicker(perPage = 24, initialSets = ["mdi"]) {
     const icons = ref([]);
     const search = ref("");
-    const sets = ref(["mdi", "ri"]);
+    const sets = ref([...initialSets]);
     const page = ref(1);
     const total = ref(0);
     const loading = ref(false);
     const cache = new Map();
 
-    async function fetchPage(reset = false) {
+    async function getIcons(reset = false) {
         loading.value = true;
         try {
-            const { data } = await axios.get(`/api/icons`, {
+            const { data } = await axios.get(`/api/icons/getIcons`, {
                 params: {
                     sets: sets.value.join(","),
                     search: search.value,
@@ -44,38 +43,19 @@ export function useIconPicker(perPage = 48) {
     const onSearch = debounce((val) => {
         search.value = val ?? "";
         page.value = 1;
-        fetchPage(true);
+        getIcons(true);
     }, 300);
 
     function onSetsChange(newSets) {
-        sets.value = newSets?.length ? newSets : ["mdi", "ri"];
+        sets.value = newSets?.length ? newSets : [...initialSets];
         page.value = 1;
-        fetchPage(true);
+        getIcons(true);
     }
 
     function loadMore() {
         if (loading.value || icons.value.length >= total.value) return;
         page.value++;
-        fetchPage();
-    }
-
-    async function resolveSvg(name) {
-        if (!name) return "";
-        if (cache.has(name)) return cache.get(name);
-
-        // Normalize "i-ri-github-fill" -> "ri:github-fill"
-        let normalized = name;
-        if (!name.includes(":") && name.startsWith("i-")) {
-            const parts = name.slice(2).split("-");
-            const set = parts.shift();
-            normalized = `${set}:${parts.join("-")}`;
-        }
-
-        const { data } = await axios.get(`/api/icons/lookup`, {
-            params: { name: normalized },
-        });
-        cache.set(name, data.svg); // cache under original key too
-        return data.svg;
+        getIcons();
     }
 
     return {
@@ -84,10 +64,9 @@ export function useIconPicker(perPage = 48) {
         sets,
         loading,
         total,
-        fetchPage,
+        getIcons,
         onSearch,
         onSetsChange,
         loadMore,
-        resolveSvg,
     };
 }

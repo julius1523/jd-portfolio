@@ -18,7 +18,7 @@ const borderSides = {
     "-x": ["left", "right"],
     "-y": ["top", "bottom"],
 };
-const rules = Object.entries(borderSides).map(([suffix, sides]) => [
+const borderRules = Object.entries(borderSides).map(([suffix, sides]) => [
     `border${suffix}`,
     Object.fromEntries(
         sides.flatMap((side) => [
@@ -28,6 +28,22 @@ const rules = Object.entries(borderSides).map(([suffix, sides]) => [
         ]),
     ),
 ]);
+
+const iconSizes = {
+    sm: "18px",
+    md: "20px",
+    lg: "24px",
+};
+const iconRules = Object.entries(iconSizes).map(([suffix, size]) => [
+    `icon-${suffix}`,
+    {
+        display: "inline-flex",
+        width: size,
+        height: size,
+    },
+]);
+
+const rules = [...borderRules, ...iconRules];
 
 export default defineConfig({
     content: {

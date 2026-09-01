@@ -16,14 +16,14 @@
                     <v-checkbox v-model="remember" color="primary" hide-details density="compact"
                         class="text-label-large">
                         <template #label>
-                            <span class="text-label-large">Remember me</span>
+                            <span class="text-label-large text-medium-emphasis">Remember me</span>
                         </template>
                     </v-checkbox>
                     <v-btn type="submit" color="primary" variant="flat" rounded="pill" size="x-large" block
                         class="my-3">
                         Log In
                     </v-btn>
-                    <v-btn variant="plain" color="surface-variant" rounded="pill" size="x-large" class="opacity-100"
+                    <v-btn variant="plain" color="surface-variant" rounded="pill" size="x-large"
                         prepend-icon="i-mdi-arrow-left" block text="Go back to home"
                         @click="$router.replace({ name: 'home' })">
                     </v-btn>

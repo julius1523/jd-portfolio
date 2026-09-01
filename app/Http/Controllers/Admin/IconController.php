@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use function array_slice;
 use function count;
 use function in_array;
+use function strlen;
 
 class IconController extends Controller
 {
@@ -26,13 +28,41 @@ class IconController extends Controller
         return "<svg viewBox=\"{$viewBox}\" fill=\"currentColor\">{$icon['body']}</svg>";
     }
 
+    protected function toName(string $set, string $name): string
+    {
+        return "i-{$set}-{$name}";
+    }
+
+    protected function parseName(string $full): ?array
+    {
+        if (str_contains($full, ':')) {
+            [$set, $name] = explode(':', $full, 2);
+            return in_array($set, $this->allowedSets) ? [$set, $name] : null;
+        }
+
+        if (!str_starts_with($full, 'i-')) {
+            return null;
+        }
+
+        $rest = substr($full, 2);
+        foreach ($this->allowedSets as $set) {
+            $prefix = "{$set}-";
+            if (str_starts_with($rest, $prefix)) {
+                $name = substr($rest, strlen($prefix));
+                return $name !== '' ? [$set, $name] : null;
+            }
+        }
+
+        return null;
+    }
+
     protected function setsFromRequest(Request $request): array
     {
         $requested = array_filter(explode(',', $request->query('sets', 'mdi,ri')));
         return array_values(array_intersect($requested, $this->allowedSets)) ?: $this->allowedSets;
     }
 
-    public function index(Request $request)
+    public function getIcons(Request $request)
     {
         $sets = $this->setsFromRequest($request);
         $search = $request->query('search', '');
@@ -49,14 +79,14 @@ class IconController extends Controller
         sort($all);
 
         $page = (int) $request->query('page', 1);
-        $perPage = (int) $request->query('per_page', 48);
+        $perPage = (int) $request->query('per_page', 24);
         $slice = array_slice($all, ($page - 1) * $perPage, $perPage);
 
         $items = array_map(function ($full) {
             [$set, $name] = explode(':', $full, 2);
             $data = $this->loadSet($set);
             return [
-                'name' => $full,
+                'name' => $this->toName($set, $name),
                 'svg' => $this->toSvg($data, $data['icons'][$name]),
             ];
         }, $slice);
@@ -66,29 +96,6 @@ class IconController extends Controller
             'total' => count($all),
             'page' => $page,
             'per_page' => $perPage,
-        ]);
-    }
-
-    public function show(Request $request)
-    {
-        $full = $request->query('name', '');
-        if (!str_contains($full, ':')) {
-            return response()->json(['message' => 'Invalid icon name'], 422);
-        }
-        [$set, $name] = explode(':', $full, 2);
-
-        if (!in_array($set, $this->allowedSets)) {
-            return response()->json(['message' => 'Unknown set'], 422);
-        }
-
-        $data = $this->loadSet($set);
-        if (!isset($data['icons'][$name])) {
-            return response()->json(['message' => 'Icon not found'], 404);
-        }
-
-        return response()->json([
-            'name' => $full,
-            'svg' => $this->toSvg($data, $data['icons'][$name]),
         ]);
     }
 }

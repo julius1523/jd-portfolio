@@ -72,11 +72,10 @@
                                 <DataTable :items="randomFacts" :headers="randomFactHeaders" :addable="true"
                                     :expandable="false" add-label="New Fact" no-data-text="No facts added yet."
                                     @add="openFactDialog" @edit="openFactDialog" @remove="removeFact">
-                                    <template #item.text="{ item }">
-                                        <div class="d-flex ga-2" :class="{ 'justify-end': $vuetify.display.smAndDown }">
-                                            <v-icon :class="item.icon" color="primary" />
-                                            <span>{{ item.text }}</span>
-                                        </div>
+                                    <template #item.icon="{ item }">
+                                        <v-icon color="primary">
+                                            <span v-html="item.icon?.svg ?? ''" class="icon-lg" />
+                                        </v-icon>
                                     </template>
                                 </DataTable>
                             </v-col>
@@ -132,27 +131,17 @@
         <v-form @submit.prevent="addFact">
             <v-row :gap="13">
                 <v-col cols="12">
-                    <Select v-model="fIcon" label="Icon" color="primary" variant="solo" flat rounded="lg"
-                        density="comfortable" :items="SOCIAL_ICONS" item-title="name" item-value="value"
-                        :multiple="false" :chip="false" :error-messages="factErrors.icon">
-                        <template #item="{ item, props: itemProps }">
-                            <v-list-item v-bind="itemProps" :title="undefined">
-                                <template #prepend>
-                                    <v-icon color="primary opacity-100">{{ resolveIcon(item)?.value }}</v-icon>
-                                </template>
-                                <template #title>
-                                    <span class="text-label-medium">{{ resolveIcon(item)?.name }}</span>
-                                </template>
-                            </v-list-item>
+                    <v-text-field :model-value="fIcon?.name" label="Icon" color="primary" variant="solo" flat
+                        rounded="lg" density="comfortable" :error-messages="factErrors.icon" readonly>
+                        <template #default>
+                            <v-icon color="primary">
+                                <span v-html="fIcon?.svg" class="icon-sm" />
+                            </v-icon>
                         </template>
-
-                        <template #selection="{ item }">
-                            <template v-if="resolveIcon(item)">
-                                <v-icon :icon="resolveIcon(item).value" color="primary" size="small" class="mr-2" />
-                                {{ resolveIcon(item).name }}
-                            </template>
+                        <template #append-inner>
+                            <IconPicker v-model="fIcon" />
                         </template>
-                    </Select>
+                    </v-text-field>
                 </v-col>
                 <v-col cols="12">
                     <v-text-field v-model="fText" label="Fact" color="primary" variant="solo" flat rounded="lg"
@@ -173,10 +162,15 @@ import { useSnackBarQueue } from "@/composables/useSnackBarQueue";
 import DataTable from "@/components/data/DataTable";
 import Select from "@/components/forms/Select";
 import FileUpload from "@/components/forms/FileUpload";
-import Dialog from "@/components/forms/Dialog";
-import { SKILL_CATEGORIES, SOCIAL_ICONS } from "@/src/constants/constants";
+import Dialog from "@/components/forms/FormDialog";
+import IconPicker from "@/components/forms/IconPicker";
+import { SKILL_CATEGORIES } from "@/src/constants/constants";
 const { info, error } = useSnackBarQueue();
 const pageLoading = ref(true);
+const iconSchema = yup.object({
+    name: yup.string().required(),
+    svg: yup.string().required(),
+});
 const schema = yup.object({
     profileImage: yup.mixed().label('Image').nullable(),
     heading: yup.string().label('Heading').required(),
@@ -197,7 +191,7 @@ const schema = yup.object({
         .array()
         .of(
             yup.object({
-                icon: yup.string().label('Icon').required(),
+                icon: iconSchema.label('Icon').required(),
                 text: yup.string().label('Fact').required(),
             })
         )
@@ -259,29 +253,8 @@ const cancelEdit = () => {
     formResetKey.value++;
     info("No changes made.");
 };
-async function getAboutContent() {
-    try {
-        const { data } = await axios.get('/api/getAboutContent');
-        if (!data) return;
-        resetForm({
-            values: {
-                ...data,
-                skills: Object.fromEntries(
-                    SKILL_CATEGORIES.map((category) => [category.key, data.skills?.[category.key] ?? []])
-                ),
-            },
-        });
-    } catch (err) {
-        error(err?.response?.data?.message ?? "Failed to load home content.");
-    } finally {
-        pageLoading.value = false;
-    }
-};
-onMounted(() => {
-    getAboutContent();
-});
-
 const randomFactHeaders = [
+    { title: 'Icon', key: 'icon', align: 'start' },
     { title: 'Fact', key: 'text', align: 'start' },
 ];
 const [randomFacts] = defineField('randomFacts');
@@ -289,7 +262,7 @@ const factDialog = ref(false);
 const editingFactIndex = ref(-1);
 const factFormResetKey = ref(0);
 const factSchema = yup.object({
-    icon: yup.string().label('Icon').required(),
+    icon: iconSchema.label('Icon').required(),
     text: yup.string().label('Fact').required(),
 });
 const {
@@ -331,9 +304,25 @@ function closeFactDialog() {
 function removeFact(index) {
     randomFacts.value.splice(index, 1);
 };
-function resolveIcon(item) {
-    const raw = item?.raw ?? item;
-    if (!raw || typeof raw !== 'object') return null;
-    return raw;
+async function getAboutContent() {
+    try {
+        const { data } = await axios.get('/api/getAboutContent');
+        if (!data) return;
+        resetForm({
+            values: {
+                ...data,
+                skills: Object.fromEntries(
+                    SKILL_CATEGORIES.map((category) => [category.key, data.skills?.[category.key] ?? []])
+                ),
+            },
+        });
+    } catch (err) {
+        error(err?.response?.data?.message ?? "Failed to load home content.");
+    } finally {
+        pageLoading.value = false;
+    }
 };
+onMounted(() => {
+    getAboutContent();
+});
 </script>

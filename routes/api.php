@@ -19,8 +19,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', fn(Request $request) => $request->user()->only(['name', 'email']));
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    Route::get('/icons', [IconController::class, 'index']);
-    Route::get('/icons/lookup', [IconController::class, 'show']);
+    Route::get('/icons/getIcons', [IconController::class, 'getIcons']);
 
     Route::get('/getHomeContent', [HomeContentController::class, 'getHomeContent']);
     Route::post('/updateHomeContent', [HomeContentController::class, 'updateHomeContent']);

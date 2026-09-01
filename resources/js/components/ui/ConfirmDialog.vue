@@ -28,19 +28,19 @@ watch(
 </script>
 
 <template>
-    <v-dialog v-model="state.visible" max-width="420" persistent>
-        <v-card class="pa-3" rounded="xl">
-            <v-card-title class="text-center font-weight-bold">{{ state.title }}</v-card-title>
-            <v-card-text class="text-center pt-2 px-4">{{ state.message }}</v-card-text>
+    <v-dialog v-model="state.visible" max-width="400" persistent>
+        <v-card class="pa-2" rounded="xl">
+            <v-card-title class="pt-3 px-6 font-weight-bold">{{ state.title }}</v-card-title>
+            <v-card-text class="pt-0 px-6 text-grey">{{ state.message }}</v-card-text>
             <v-card-actions>
                 <v-row gap="7">
                     <v-col cols="6">
-                        <v-btn variant="flat" color="surface-light" :text="state.cancelText" rounded="pill" size="large"
-                            block @click="cancel" />
+                        <v-btn variant="tonal" :text="state.cancelText" rounded="pill" size="x-large" block
+                            @click="cancel" />
                     </v-col>
                     <v-col cols="6">
-                        <v-btn variant="flat" color="surface-light" :class="`text-${state.confirmColor}`"
-                            :text="state.confirmText" rounded="pill" size="large" block @click="confirm" />
+                        <v-btn variant="tonal" :class="`text-${state.confirmColor}`" :text="state.confirmText"
+                            rounded="pill" size="x-large" block @click="confirm" />
                     </v-col>
                 </v-row>
             </v-card-actions>

@@ -40,6 +40,7 @@ export default createVuetify({
         },
     },
     defaults: {
+        VField: { style: { overflow: "hidden" } },
         VChip: { style: { userSelect: "none" } },
         VImg: { draggable: false },
         VAppBar: { style: { userSelect: "none" } },

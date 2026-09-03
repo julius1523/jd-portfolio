@@ -22,8 +22,65 @@ export function useScrollReveal(targetRef, options = {}) {
     } = options;
 
     let ctx;
+    const processed = new WeakSet();
 
-    onMounted(() => {
+    function batchElements(rootEl, elements) {
+        const newEls = elements.filter((el) => !processed.has(el));
+        if (!newEls.length) return;
+        newEls.forEach((el) => processed.add(el));
+
+        gsap.set(newEls, { y, opacity });
+
+        ScrollTrigger.batch(newEls, {
+            start,
+            onEnter: (batch) =>
+                gsap.to(batch, {
+                    y: 0,
+                    opacity: 1,
+                    duration,
+                    ease,
+                    stagger,
+                    overwrite: true,
+                }),
+            onEnterBack: once
+                ? undefined
+                : (batch) =>
+                      gsap.to(batch, {
+                          y: 0,
+                          opacity: 1,
+                          duration,
+                          ease,
+                          stagger,
+                          overwrite: true,
+                      }),
+            onLeave: once
+                ? undefined
+                : (batch) => gsap.set(batch, { y, opacity }),
+            onLeaveBack: once
+                ? undefined
+                : (batch) => gsap.set(batch, { y, opacity }),
+        });
+    }
+
+    function setupRoot(rootEl) {
+        gsap.set(rootEl, { y, opacity });
+
+        gsap.to(rootEl, {
+            y: 0,
+            opacity: 1,
+            duration,
+            ease,
+            scrollTrigger: {
+                trigger: rootEl,
+                start,
+                toggleActions: once
+                    ? "play none none none"
+                    : "play none none reverse",
+            },
+        });
+    }
+
+    function init() {
         const rootEl = resolveEl(targetRef.value);
         if (!rootEl) return;
 
@@ -32,60 +89,33 @@ export function useScrollReveal(targetRef, options = {}) {
                 const elements = gsap.utils.toArray(
                     rootEl.querySelectorAll(selector),
                 );
-                if (!elements.length) return;
-
-                gsap.set(elements, { y, opacity });
-
-                ScrollTrigger.batch(elements, {
-                    start,
-                    onEnter: (batch) =>
-                        gsap.to(batch, {
-                            y: 0,
-                            opacity: 1,
-                            duration,
-                            ease,
-                            stagger,
-                            overwrite: true,
-                        }),
-                    onEnterBack: once
-                        ? undefined
-                        : (batch) =>
-                              gsap.to(batch, {
-                                  y: 0,
-                                  opacity: 1,
-                                  duration,
-                                  ease,
-                                  stagger,
-                                  overwrite: true,
-                              }),
-                    onLeave: once
-                        ? undefined
-                        : (batch) => gsap.set(batch, { y, opacity }),
-                    onLeaveBack: once
-                        ? undefined
-                        : (batch) => gsap.set(batch, { y, opacity }),
-                });
+                if (elements.length) batchElements(rootEl, elements);
             } else {
-                gsap.set(rootEl, { y, opacity });
-
-                gsap.to(rootEl, {
-                    y: 0,
-                    opacity: 1,
-                    duration,
-                    ease,
-                    scrollTrigger: {
-                        trigger: rootEl,
-                        start,
-                        toggleActions: once
-                            ? "play none none none"
-                            : "play none none reverse",
-                    },
-                });
+                setupRoot(rootEl);
             }
         }, rootEl);
-    });
+    }
+
+    function refresh() {
+        if (!selector) return;
+        const rootEl = resolveEl(targetRef.value);
+        if (!rootEl || !ctx) return;
+
+        ctx.add(() => {
+            const elements = gsap.utils.toArray(
+                rootEl.querySelectorAll(selector),
+            );
+            batchElements(rootEl, elements);
+        });
+
+        ScrollTrigger.refresh();
+    }
+
+    onMounted(init);
 
     onBeforeUnmount(() => {
         ctx && ctx.kill(false);
     });
+
+    return { refresh };
 }

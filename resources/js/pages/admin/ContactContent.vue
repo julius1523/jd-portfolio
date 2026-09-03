@@ -1,6 +1,6 @@
 <template>
     <Shimmer :loading="pageLoading">
-        <v-card flat class="pa-4 mt-2 rounded-lg">
+        <v-card flat class="pa-3 mt-2 rounded-lg">
             <v-form @submit.prevent="submit" :disabled="loading">
                 <v-row>
                     <v-col cols="12">
@@ -12,8 +12,8 @@
                                         Update your profile to display to home page
                                     </span>
                                 </div>
-                                <FileUpload :key="`file-${formResetKey}`" v-model="profileImage" file-type="image"
-                                    :max-files="1" inset :disabled="loading" :show-size="true" density="comfortable"
+                                <FileUpload v-model="profileImage" file-type="image" :max-files="1" inset
+                                    :disabled="loading" :show-size="true" density="comfortable"
                                     hint="The image to display on your home page" :persistent-hint="true"
                                     :error-messages="errors.profileImage" data-shimmer-no-children />
                             </v-col>
@@ -53,8 +53,8 @@
                             </v-col>
                             <v-col cols="12">
                                 <DataTable :items="socials" :headers="socialHeaders" :addable="true" :expandable="false"
-                                    add-label="New Social" no-data-text="No socials added yet." @add="openSocialDialog"
-                                    @edit="openSocialDialog" @remove="removeSocial">
+                                    add-label="New Social" no-data-text="No socials added yet." :disabled="loading"
+                                    @add="openSocialDialog" @edit="openSocialDialog" @remove="removeSocial">
                                     <template #item.name="{ item }">
                                         <div class="d-flex ga-2" :class="{ 'justify-end': $vuetify.display.smAndDown }">
                                             <v-icon :class="item.icon" color="primary" />
@@ -98,19 +98,17 @@
                         density="comfortable" :items="SOCIAL_ICONS" item-title="name" item-value="value"
                         :multiple="false" :chip="false" :error-messages="socialErrors.icon">
                         <template #item="{ item, props: itemProps }">
-                            <v-list-item v-bind="itemProps" :prepend-icon="resolveIcon(item)?.value" color="primary"
+                            <v-list-item v-bind="itemProps" :prepend-icon="item?.value" color="primary"
                                 :title="undefined">
                                 <template #title>
-                                    <span class="text-label-medium">{{ resolveIcon(item)?.name }}</span>
+                                    <span class="text-label-medium">{{ item?.name }}</span>
                                 </template>
                             </v-list-item>
                         </template>
 
                         <template #selection="{ item }">
-                            <template v-if="resolveIcon(item)">
-                                <v-icon :icon="resolveIcon(item).value" color="primary" size="small" class="mr-2" />
-                                {{ resolveIcon(item).name }}
-                            </template>
+                            <v-icon :icon="item?.value" color="primary" size="small" class="mr-2" />
+                            {{ item?.name }}
                         </template>
                     </Select>
                 </v-col>
@@ -163,10 +161,8 @@ useUnsavedChanges(meta);
 const [profileImage] = defineField('profileImage');
 const [heading] = defineField('heading');
 const [description] = defineField('description');
-const formResetKey = ref(0);
 const cancelEdit = () => {
     resetForm();
-    formResetKey.value++;
     info("No changes made.");
 };
 async function getContactContent() {
@@ -187,7 +183,6 @@ const socialHeaders = [
 const [socials] = defineField('socials');
 const socialDialog = ref(false);
 const editingIndex = ref(-1);
-const socialFormResetKey = ref(0);
 const socialSchema = yup.object({
     name: yup.string().label('Social Name').required(),
     linkUrl: yup.string().label('Link URL').required(),
@@ -200,6 +195,7 @@ const {
     resetForm: resetSocialForm,
 } = useValidatedForm(socialSchema, async (values) => {
     const social = {
+        id: values.id,
         name: values.name,
         linkUrl: values.linkUrl,
         icon: values.icon,
@@ -217,9 +213,8 @@ const [sIcon] = defineSocialField('icon');
 function addSocial() {
     submitSocialForm();
 };
-function openSocialDialog(item = null, index = -1) {
-    editingIndex.value = index;
-    socialFormResetKey.value++;
+function openSocialDialog(item = null) {
+    editingIndex.value = item ? socials.value.findIndex(p => p.id === item.id) : -1;
     resetSocialForm({
         values: item ? { ...item } : {
             name: '',
@@ -232,13 +227,9 @@ function openSocialDialog(item = null, index = -1) {
 function closeSocialDialog() {
     socialDialog.value = false;
 };
-function removeSocial(index) {
-    socials.value.splice(index, 1);
-};
-function resolveIcon(item) {
-    const raw = item?.raw ?? item;
-    if (!raw || typeof raw !== 'object') return null;
-    return raw;
+function removeSocial(item) {
+    const idx = socials.value.findIndex(s => s.id === item.id);
+    if (idx > -1) socials.value.splice(idx, 1);
 };
 onMounted(() => {
     getContactContent();

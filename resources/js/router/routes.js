@@ -1,3 +1,10 @@
+import {
+    useHomeStore,
+    useAboutStore,
+    useProjectsStore,
+    useContactStore,
+} from "@/stores/resources";
+
 const pages = import.meta.glob("../pages/**/*.vue");
 
 const page = (name) => pages[`../pages/${name}.vue`];
@@ -15,6 +22,7 @@ export default [
             title: "Home",
             middleware: "guest",
             layout: "public",
+            store: useHomeStore,
         },
     },
     {
@@ -25,6 +33,7 @@ export default [
             title: "About",
             middleware: "guest",
             layout: "public",
+            store: useAboutStore,
         },
     },
     {
@@ -35,6 +44,7 @@ export default [
             title: "Projects",
             middleware: "guest",
             layout: "public",
+            store: useProjectsStore,
         },
     },
     {
@@ -45,6 +55,7 @@ export default [
             title: "Contact",
             middleware: "guest",
             layout: "public",
+            store: useContactStore,
         },
     },
     {

@@ -22,7 +22,7 @@ function onCancel() {
 <template>
     <v-dialog :model-value="modelValue" @update:model-value="$emit('update:modelValue', $event)" scrollable
         :max-width="maxWidth" :max-height="maxHeight" :fullscreen="$vuetify.display.smAndDown">
-        <v-card :class="$vuetify.display.mdAndUp ? 'dialog-style' : undefined">
+        <v-card :class="$vuetify.display.mdAndUp ? 'rounded-2xl' : undefined">
             <v-toolbar density="compact" color="surface" class="border-b">
                 <template #title>
                     <span class="ms-2 text-title-medium font-weight-bold">

@@ -62,13 +62,11 @@ const { defineField, errors, loading, submit } = useValidatedForm(schema, async 
 const [email] = defineField('email');
 const [password] = defineField('password');
 const [remember] = defineField('remember');
-onMounted(() => {
-    if (route.query.reason === 'session_expired') {
-        warning('Your session has expired. Please log in again.');
-    } else if (route.query.reason === 'unauthenticated') {
-        error('You are unauthenticated. Please log in again.');
-    }
-    router.replace({ name: 'login' });
-});
 useScrollReveal(loginSection, { selector: '.reveal-item', y: 20 });
+onMounted(() => {
+    const { reason } = route.query;
+    if (reason === 'session_expired') warning('Your session has expired. Please log in again.');
+    else if (reason === 'unauthenticated') error('You are unauthenticated. Please log in again.');
+    if (reason) router.replace({ name: 'login' });
+});
 </script>

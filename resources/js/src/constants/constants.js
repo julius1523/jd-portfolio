@@ -20,7 +20,6 @@ export const DEVELOPER_TITLES = [
 
 export const SKILL_CATEGORIES = [
     {
-        key: "frontend",
         title: "Front-End Development",
         skills: [
             "HTML5",
@@ -38,7 +37,6 @@ export const SKILL_CATEGORIES = [
         ],
     },
     {
-        key: "backend",
         title: "Back-End & Systems",
         skills: [
             "PHP",
@@ -54,7 +52,6 @@ export const SKILL_CATEGORIES = [
         ],
     },
     {
-        key: "design",
         title: "Design & Creative Tools",
         skills: [
             "Canva",
@@ -67,7 +64,6 @@ export const SKILL_CATEGORIES = [
         ],
     },
     {
-        key: "soft",
         title: "Soft Skills",
         skills: [
             "Communication",
@@ -81,29 +77,6 @@ export const SKILL_CATEGORIES = [
             "Adaptability",
             "Critical Thinking",
         ],
-    },
-];
-
-export const RANDOM_FACTS = [
-    {
-        icon: "i-mdi-controller-classic",
-        text: "My peak mmr in DotA 2 was 14k",
-    },
-    {
-        icon: "i-mdi-hand-peace",
-        text: "I am a perfectionist",
-    },
-    {
-        icon: "i-mdi-paw",
-        text: "I love cats and dogs",
-    },
-    {
-        icon: "i-mdi-spotify",
-        text: "I love listening to pop music",
-    },
-    {
-        icon: "i-mdi-emoticon-happy",
-        text: "I am an introvert and a picky eater",
     },
 ];
 
@@ -123,31 +96,10 @@ export const PROJECT_MATERIALS = {
         "Bootstrap",
         "Sass",
         "SCSS",
-        "Responsive Design",
     ],
-    backend: [
-        "Laravel",
-        "PHP",
-        "Node.js",
-        "Express.js",
-        "REST API",
-        "GraphQL",
-        "Laravel Sanctum",
-        "Authentication",
-        "Authorization",
-    ],
+    backend: ["Laravel", "PHP", "Node.js", "Express.js", "REST API", "GraphQL"],
     database: ["MySQL", "PostgreSQL", "SQLite", "MongoDB", "Firebase", "SQL"],
-    design: [
-        "Figma",
-        "Photoshop",
-        "Illustrator",
-        "Adobe XD",
-        "Canva",
-        "UI/UX Design",
-        "Wireframing",
-        "Prototyping",
-        "Design Systems",
-    ],
+    design: ["Figma", "Photoshop", "Illustrator", "Adobe XD", "Canva"],
     tools: [
         "Git",
         "GitHub",
@@ -158,6 +110,7 @@ export const PROJECT_MATERIALS = {
         "Composer",
         "Vite",
         "Docker",
+        "CapCut",
     ],
     testing: ["PHPUnit", "Jest", "Cypress", "Unit Testing", "API Testing"],
     deployment: [
@@ -182,7 +135,7 @@ export const PROJECT_MATERIALS = {
 export const SOCIAL_ICONS = [
     { name: "GitHub", value: "i-ri-github-fill" },
     { name: "Twitter/X", value: "i-ri-twitter-x-fill" },
-    { name: "LinkedIn", value: "i-ri-linkedin-box-fill" },
+    { name: "LinkedIn", value: "i-ri-linkedin-fill" },
     { name: "Instagram", value: "i-ri-instagram-fill" },
     { name: "Facebook", value: "i-ri-facebook-fill" },
     { name: "YouTube", value: "i-ri-youtube-fill" },

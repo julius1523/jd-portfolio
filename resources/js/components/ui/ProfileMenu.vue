@@ -41,15 +41,16 @@ const logout = () => {
 </script>
 
 <template>
-    <v-menu :offset="[8, 30]" :close-on-content-click="false">
+    <v-menu :offset="[8, 0]" :close-on-content-click="false">
         <template #activator="{ props: activatorProps }">
-            <v-icon-btn v-if="variant === 'icon'" v-bind="activatorProps" variant="tonal" color="primary"
+            <v-icon-btn v-if="variant === 'icon'" v-bind="activatorProps" variant="flat" color="primary"
                 icon="i-mdi-account" />
 
             <template v-else>
                 <v-divider />
-                <v-list density="comfortable" class="pa-0" :prepend-gap="10">
-                    <v-list-item v-bind="activatorProps" :height="60" :class="layout.rail ? 'px-2' : undefined"
+                <v-list variant="plain" density="comfortable" class="pa-0 opacity-100" :prepend-gap="10">
+                    <v-list-item v-bind="activatorProps" :height="60" class="opacity-100"
+                        :class="layout.rail ? 'px-2' : undefined"
                         v-tooltip="{ text: 'Account', location: 'end', disabled: !layout.rail }">
                         <template #prepend>
                             <v-icon-btn color="primary" variant="tonal" icon="i-mdi-account" />

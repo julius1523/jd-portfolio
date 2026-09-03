@@ -6,6 +6,7 @@ use App\Services\FileUploadService;
 use App\Http\Controllers\Controller;
 use App\Models\AboutContent;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use function is_array;
 
 class AboutContentController extends Controller
@@ -48,6 +49,7 @@ class AboutContentController extends Controller
             return response()->json(['message' => 'Invalid payload.'], 422);
         }
 
+        $skillsInput = $payload['skills'] ?? [];
         $randomFactsInput = $payload['randomFacts'] ?? [];
 
         $merged = [
@@ -61,12 +63,12 @@ class AboutContentController extends Controller
             'heading' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'skills' => ['nullable', 'array'],
-            'skills.*' => ['array'],
-            'skills.*.*' => ['string'],
+            'skills.*.category' => ['required', 'string', 'max:150'],
+            'skills.*.skill' => ['required', 'array', 'min:1'],
+            'skills.*.skill.*' => ['required', 'string', 'max:150'],
+            'skills.*.icon' => ['nullable', 'string', 'max:150'],
             'randomFacts' => ['nullable', 'array'],
-            'randomFacts.*.icon' => ['required', 'array'],
-            'randomFacts.*.icon.name' => ['required', 'string', 'max:150'],
-            'randomFacts.*.icon.svg' => ['required', 'string', 'max:5000', 'regex:/^<svg[^>]*>.*<\/svg>$/s'],
+            'randomFacts.*.icon' => ['required', 'string', 'max:150'],
             'randomFacts.*.text' => ['required', 'string'],
             'others' => ['nullable', 'array'],
             'others.title' => ['nullable', 'string', 'max:255'],
@@ -79,19 +81,33 @@ class AboutContentController extends Controller
         $data->fill([
             'heading' => $validated['heading'] ?? $data->heading,
             'description' => $validated['description'] ?? $data->description,
-            'skills' => $validated['skills'] ?? $data->skills,
         ]);
 
         $this->fileUploadService->handle($request, $data, 'profile_image', 'profile_image', 'uploads/images');
 
+        $skills = [];
+
+        foreach ($skillsInput as $index => $skill) {
+            $existing = $data->skills[$index] ?? null;
+
+            $skills[] = [
+                'id' => $skill['id'] ?? $existing['id'] ?? (string) Str::uuid(),
+                'category' => $skill['category'] ?? null,
+                'skill' => array_values($skill['skill'] ?? []),
+                'icon' => $skill['icon'] ?? null,
+            ];
+        }
+
+        $data->skills = $skills;
+
         $randomFacts = [];
 
-        foreach ($randomFactsInput as $fact) {
+        foreach ($randomFactsInput as $index => $fact) {
+            $existing = $data->random_facts[$index] ?? null;
+
             $randomFacts[] = [
-                'icon' => [
-                    'name' => $fact['icon']['name'] ?? null,
-                    'svg' => $fact['icon']['svg'] ?? null,
-                ],
+                'id' => $fact['id'] ?? $existing['id'] ?? (string) Str::uuid(),
+                'icon' => $fact['icon'] ?? null,
                 'text' => $fact['text'] ?? null,
             ];
         }

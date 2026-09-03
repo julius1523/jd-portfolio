@@ -66,8 +66,8 @@ onBeforeUnmount(() => {
 
     <div v-if="($vuetify.display.mdAndDown || items.length > 4) && (canScrollLeft || canScrollRight)"
         class="d-flex ga-3 justify-end reveal-item">
-        <v-btn icon="i-mdi-arrow-left" variant="tonal" size="x-small" :disabled="!canScrollLeft" @click="scroll(-1)" />
-        <v-btn icon="i-mdi-arrow-right" variant="tonal" size="x-small" :disabled="!canScrollRight" @click="scroll(1)" />
+        <v-btn icon="i-mdi-arrow-left" variant="tonal" size="small" :disabled="!canScrollLeft" @click="scroll(-1)" />
+        <v-btn icon="i-mdi-arrow-right" variant="tonal" size="small" :disabled="!canScrollRight" @click="scroll(1)" />
     </div>
 </template>
 

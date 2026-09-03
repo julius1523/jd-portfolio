@@ -6,6 +6,7 @@ use App\Services\FileUploadService;
 use App\Http\Controllers\Controller;
 use App\Models\ContactContent;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use function is_array;
 
 class ContactContentController extends Controller
@@ -68,8 +69,11 @@ class ContactContentController extends Controller
 
         $socials = [];
 
-        foreach ($socialsInput as $social) {
+        foreach ($socialsInput as $index => $social) {
+            $existing = $data->socials[$index] ?? null;
+
             $socials[] = [
+                'id' => $social['id'] ?? $existing['id'] ?? (string) Str::uuid(),
                 'name' => $social['name'] ?? null,
                 'linkUrl' => $social['linkUrl'] ?? null,
                 'icon' => $social['icon'] ?? null,

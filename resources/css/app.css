@@ -1,6 +1,4 @@
-@import "./styles/_animations.scss";
 @import "./styles/_components.scss";
-@import "./styles/_utilities.scss";
 
 html {
     overflow-y: scroll;

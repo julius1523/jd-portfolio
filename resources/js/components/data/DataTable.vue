@@ -2,7 +2,7 @@
     <div>
         <div v-if="addable" class="d-flex justify-end mb-2">
             <v-btn variant="flat" color="revert-color" rounded="lg" prepend-icon="i-mdi-plus" :text="addLabel"
-                @click="$emit('add')" />
+                :disabled="disabled" @click="$emit('add')" />
         </div>
 
         <v-data-table :headers="tableHeaders" :items="items" :item-value="itemValue" v-model:expanded="expandedRows"
@@ -16,10 +16,10 @@
             <template v-if="canEdit || canRemove" #item.action="{ item, index }">
                 <slot name="item.action" :item="item" :index="index">
                     <div class="d-flex ga-2 justify-end">
-                        <v-icon v-if="canEdit" icon="i-mdi-pencil-outline opacity-70" size="small"
+                        <v-icon v-if="canEdit" icon="i-mdi-pencil-outline opacity-70" size="small" :disabled="disabled"
                             @click="$emit('edit', item, index)" />
                         <v-icon v-if="canRemove" icon="i-mdi-delete-outline opacity-70" size="small"
-                            @click="$emit('remove', index)" />
+                            :disabled="disabled" @click="$emit('remove', item)" />
                     </div>
                 </slot>
             </template>
@@ -56,6 +56,7 @@ const props = defineProps({
     expandable: { type: Boolean, default: true },
     expandKey: { type: String, default: "description" },
     noDataText: { type: String, default: "No items added yet." },
+    disabled: { type: Boolean, default: false },
 });
 defineEmits(["add", "edit", "remove"]);
 const expandedRows = ref([]);

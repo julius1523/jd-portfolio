@@ -1,6 +1,6 @@
 <template>
     <Shimmer :loading="pageLoading">
-        <v-card flat class="pa-4 mt-2 rounded-lg">
+        <v-card flat class="pa-3 mt-2 rounded-lg">
             <v-form @submit.prevent="submit" :disabled="loading">
                 <v-row>
                     <v-col cols="12">
@@ -12,8 +12,8 @@
                                         Update your profile to display to home page
                                     </span>
                                 </div>
-                                <FileUpload :key="`file-${formResetKey}`" v-model="profileImage" file-type="image"
-                                    :max-files="1" inset :disabled="loading" :show-size="true" density="comfortable"
+                                <FileUpload v-model="profileImage" file-type="image" :max-files="1" inset
+                                    :disabled="loading" :show-size="true" density="comfortable"
                                     hint="The image to display on your home page" :persistent-hint="true"
                                     :error-messages="errors.profileImage" data-shimmer-no-children />
                             </v-col>
@@ -54,23 +54,25 @@
                             <v-col cols="12">
                                 <DataTable :items="projects" :headers="projectHeaders" :addable="true"
                                     add-label="New Project" expand-key="description"
-                                    no-data-text="No projects added yet." @add="openProjectDialog"
+                                    no-data-text="No projects added yet." :disabled="loading" @add="openProjectDialog"
                                     @edit="openProjectDialog" @remove="removeProject">
-                                    <template #item.materials="{ item }">
-                                        <div class="d-flex flex-wrap ga-1 py-2"
-                                            :class="{ 'justify-end': $vuetify.display.smAndDown }">
-                                            <v-chip v-for="(material, i) in item.materials" :key="i" size="small"
-                                                color="primary" variant="tonal">
-                                                {{ material }}
-                                            </v-chip>
-                                        </div>
-                                    </template>
-
                                     <template #item.image="{ item }">
                                         <v-img v-if="projectImagePreview(item)" height="48" width="48" rounded
                                             class="border" :class="{ 'ml-auto': $vuetify.display.smAndDown }"
                                             :src="projectImagePreview(item)" eager />
                                         <span v-else class="text-medium-emphasis">—</span>
+                                    </template>
+                                    <template #item.name="{ item }">
+                                        <div class="d-flex flex-column ga-1 py-2">
+                                            <div>{{ item.name }}</div>
+                                            <div class="d-flex flex-wrap ga-1"
+                                                :class="{ 'justify-end': $vuetify.display.smAndDown }">
+                                                <v-chip v-for="(material, i) in item.materials" :key="i" size="small"
+                                                    color="primary" variant="tonal">
+                                                    {{ material }}
+                                                </v-chip>
+                                            </div>
+                                        </div>
                                     </template>
                                 </DataTable>
                             </v-col>
@@ -110,9 +112,8 @@
                         autocomplete="off" />
                 </v-col>
                 <v-col cols="12">
-                    <Select :key="`file-${formResetKey}`" v-model="pMaterials" :items="activeCategoryItems"
-                        item-title="text" item-value="text" label="Materials" :error-messages="projectErrors.materials"
-                        data-shimmer-no-children>
+                    <Select v-model="pMaterials" :items="activeCategoryItems" item-title="text" item-value="text"
+                        label="Materials" :error-messages="projectErrors.materials" data-shimmer-no-children>
                         <template v-slot:menu-header>
                             <v-tabs v-model="materialsTab" slider-color="primary" density="comfortable" grow
                                 class="border-b" @keydown.enter.stop>
@@ -124,9 +125,8 @@
                     </Select>
                 </v-col>
                 <v-col cols="12">
-                    <FileUpload :key="`project-image-${projectFormResetKey}`" v-model="pImage" file-type="image"
-                        :max-files="1" inset density="comfortable" :show-size="true" hint="The image for this project"
-                        :error-messages="projectErrors.image" />
+                    <FileUpload v-model="pImage" file-type="image" :max-files="1" inset density="comfortable"
+                        :show-size="true" hint="The image for this project" :error-messages="projectErrors.image" />
                 </v-col>
                 <v-col cols="12">
                     <div class="text-title-small text-medium-emphasis mb-2">Link</div>
@@ -135,9 +135,9 @@
                         <v-btn value="upload" text="Upload" />
                         <v-btn value="link" text="Link" />
                     </v-btn-toggle>
-                    <FileUpload v-if="pLinkType === 'upload'" :key="`project-link-file-${projectFormResetKey}`"
-                        v-model="pLinkFile" :max-files="1" inset density="comfortable" :show-size="true"
-                        hint="File to link to this project" :error-messages="projectErrors.linkFile" />
+                    <FileUpload v-if="pLinkType === 'upload'" v-model="pLinkFile" :max-files="1" inset
+                        density="comfortable" :show-size="true" hint="File to link to this project"
+                        :error-messages="projectErrors.linkFile" />
                     <v-text-field v-else v-model="pLinkUrl" label="Link URL" color="primary" variant="solo" flat
                         rounded="lg" density="comfortable" clearable placeholder="https://..."
                         :error-messages="projectErrors.linkUrl" autocomplete="off" />
@@ -213,10 +213,8 @@ useUnsavedChanges(meta);
 const [profileImage] = defineField('profileImage');
 const [heading] = defineField('heading');
 const [description] = defineField('description');
-const formResetKey = ref(0);
 const cancelEdit = () => {
     resetForm();
-    formResetKey.value++;
     info("No changes made.");
 };
 async function getProjectContent() {
@@ -232,14 +230,12 @@ async function getProjectContent() {
 };
 const projectHeaders = [
     { title: 'Category', key: 'category', align: 'start' },
-    { title: 'Project Name', key: 'name', align: 'start' },
-    { title: 'Materials', key: 'materials', align: 'start' },
-    { title: 'Image', key: 'image', align: 'middle' },
+    { title: 'Project', key: 'name', align: 'start' },
+    { title: 'Image', key: 'image', align: 'middle', sortable: false },
 ];
 const [projects] = defineField('projects');
 const projectDialog = ref(false);
 const editingIndex = ref(-1);
-const projectFormResetKey = ref(0);
 const categoryOptions = [
     'Software Development',
     'Technical Documentation',
@@ -268,6 +264,7 @@ const {
     resetForm: resetProjectForm,
 } = useValidatedForm(projectSchema, async (values) => {
     const project = {
+        id: values.id,
         category: values.category,
         name: values.name,
         description: values.description,
@@ -294,13 +291,12 @@ const [pLinkFile] = defineProjectField('linkFile');
 const [pLinkUrl] = defineProjectField('linkUrl');
 function formatLabel(key) {
     return key.charAt(0).toUpperCase() + key.slice(1);
-}
+};
 function addProject() {
     submitProjectForm();
 };
-function openProjectDialog(item = null, index = -1) {
-    editingIndex.value = index;
-    projectFormResetKey.value++;
+function openProjectDialog(item = null) {
+    editingIndex.value = item ? projects.value.findIndex(p => p.id === item.id) : -1;
     materialsTab.value = Object.keys(PROJECT_MATERIALS)[0];
     resetProjectForm({
         values: item ? { ...item } : {
@@ -318,10 +314,10 @@ function openProjectDialog(item = null, index = -1) {
 };
 function closeProjectDialog() {
     projectDialog.value = false;
-    editingIndex.value = -1;
 };
-function removeProject(index) {
-    projects.value.splice(index, 1);
+function removeProject(item) {
+    const idx = projects.value.findIndex(p => p.id === item.id);
+    if (idx > -1) projects.value.splice(idx, 1);
 };
 function projectImagePreview(item) {
     if (item.image instanceof File || item.image instanceof Blob) {

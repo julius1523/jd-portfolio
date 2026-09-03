@@ -1,4 +1,5 @@
 import { defineConfig, presetIcons } from "unocss";
+import { presetWind4 } from "unocss/preset-wind4";
 import { presetVuetify } from "unocss-preset-vuetify";
 
 const breakpoints = {
@@ -29,21 +30,7 @@ const borderRules = Object.entries(borderSides).map(([suffix, sides]) => [
     ),
 ]);
 
-const iconSizes = {
-    sm: "18px",
-    md: "20px",
-    lg: "24px",
-};
-const iconRules = Object.entries(iconSizes).map(([suffix, size]) => [
-    `icon-${suffix}`,
-    {
-        display: "inline-flex",
-        width: size,
-        height: size,
-    },
-]);
-
-const rules = [...borderRules, ...iconRules];
+const rules = [...borderRules];
 
 export default defineConfig({
     content: {
@@ -55,13 +42,46 @@ export default defineConfig({
             ],
         },
     },
-    presets: [presetVuetify(), presetIcons()],
+    presets: [
+        presetWind4({
+            preflights: {
+                reset: false,
+            },
+            dark: {
+                dark: ".v-theme--dark",
+                light: ".v-theme--light",
+            },
+        }),
+        presetVuetify(),
+        presetIcons({
+            collections: {
+                ri: () =>
+                    import("@iconify-json/ri/icons.json", {
+                        with: { type: "json" },
+                    }).then((i) => i.default),
+                mdi: () =>
+                    import("@iconify-json/mdi/icons.json", {
+                        with: { type: "json" },
+                    }).then((i) => i.default),
+            },
+        }),
+    ],
     rules,
     shortcuts: {
-        "dialog-style": {
-            "border-radius": "15px",
-            "box-shadow": "0 4px 12px rgba(0, 0, 0, 0.08)",
-        },
+        "fade-bottom":
+            "[mask-image:linear-gradient(to_bottom,black_0%,black_60%,transparent_100%)] " +
+            "[-webkit-mask-image:linear-gradient(to_bottom,black_0%,black_60%,transparent_100%)]",
+        "clamped-img":
+            "w-full min-w-[var(--img-min-w,0)] max-w-[min(var(--img-max-w,100%),90vw)] " +
+            "h-[clamp(var(--img-min-h,150px),40vw,var(--img-max-h,450px))]",
+        "clamped-img--square":
+            "h-auto aspect-square max-w-[min(var(--img-max-w,100%),35vw)]",
+        "translate-y-hover":
+            "transition-transform duration-700 ease-out hover:-translate-y-2",
+        "scale-up-hover":
+            "transition-transform duration-500 ease-in-out hover:scale-105",
+        "scale-down-hover":
+            "transition-transform duration-500 ease-in-out hover:scale-98",
     },
     variants: [
         (matcher) => {

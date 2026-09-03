@@ -9,38 +9,27 @@
                                 Contact
                             </div>
                             <div class="text-headline-small reveal-item">
-                                Get in touch via social media or sending a message.
+                                {{ data.heading }}
                             </div>
-                            <div class="text-medium-emphasis reveal-item">
-                                Have an inquiry or want to collaborate? Reach out to me by messaging me in one
-                                of my socials or sending me a message through email.
+                            <div class="text-medium-emphasis whitespace-pre-line reveal-item">
+                                {{ data.description }}
                             </div>
                         </div>
                         <div class="d-flex flex-row justify-center justify-md-start ga-3 my-4 my-md-10">
-                            <div class="reveal-item">
-                                <v-btn icon="i-ri-facebook-fill" class="translate-content" variant="tonal"
-                                    color="primary" href="https://www.facebook.com/JuliusDolana/" target="_blank">
-                                </v-btn>
-                            </div>
-                            <div class="reveal-item">
-                                <v-btn icon="i-ri-instagram-fill" class="translate-content" variant="tonal"
-                                    color="primary" href="https://www.instagram.com/juliussss1998/" target="_blank">
-                                </v-btn>
-                            </div>
-                            <div class="reveal-item">
-                                <v-btn icon="i-ri-linkedin-box-fill" class="translate-content" variant="tonal"
-                                    color="primary" href="https://www.linkedin.com/in/julius-dolana-783bb1371/"
-                                    target="_blank">
-                                </v-btn>
+                            <div v-for="item in data.socials" class="reveal-item">
+                                <v-icon-btn icon variant="tonal" size="x-large" color="primary"
+                                    class="translate-y-hover" :href="item.linkUrl" target="_blank">
+                                    <v-icon size="33">
+                                        <span v-html="getIconSvg(item.icon)" />
+                                    </v-icon>
+                                </v-icon-btn>
                             </div>
                         </div>
                     </v-col>
                     <v-col cols="12" md="5">
-                        <v-img src="/images/contact.png" :position="$vuetify.display.mdAndUp ? 'right' : 'center'"
-                            alt="Contact Character Image" class="clamped-img fade-bottom reveal-item" :style="{
-                                '--img-min-h': '180px',
-                                '--img-max-h': '285px',
-                            }" />
+                        <v-img :src="data.profileImage?.url" :position="$vuetify.display.mdAndUp ? 'right' : 'center'"
+                            aspect-ratio="1" alt="Project Character Image"
+                            class="clamped-img [--img-min-h:180px] [--img-max-h:285px] fade-bottom reveal-item" />
                     </v-col>
                 </v-row>
             </v-container>
@@ -86,11 +75,16 @@
 
 <script setup>
 import axios from "@/plugins/axios";
-import { ref } from "vue";
+import { ref, nextTick, watch } from "vue";
 import * as yup from "yup";
+import { storeToRefs } from "pinia";
+import { useContactStore } from "@/stores/resources";
 import { useValidatedForm } from "@/composables/useValidatedForm";
 import { useUnsavedChanges } from "@/composables/useUnsavedChanges";
 import { useScrollReveal } from "@/composables/useScrollReveal";
+import { getIconSvg } from "@/src/utils/icon";
+const contactStore = useContactStore();
+const { data: data, loaded } = storeToRefs(contactStore);
 const contactSection = ref(null);
 const contactBodySection = ref(null);
 const schema = yup.object({
@@ -106,6 +100,16 @@ useUnsavedChanges(meta);
 const [name] = defineField('name');
 const [email] = defineField('email');
 const [message] = defineField('message');
-useScrollReveal(contactSection, { selector: '.reveal-item', stagger: 0.15, y: 40 });
-useScrollReveal(contactBodySection, { selector: '.reveal-item', stagger: 0.15, y: 40 });
+const contactReveal = useScrollReveal(contactSection, { selector: '.reveal-item', stagger: 0.15, y: 40 });
+const contactBodyReveal = useScrollReveal(contactBodySection, { selector: '.reveal-item', stagger: 0.15, y: 40 });
+watch(
+    loaded,
+    async (isLoaded) => {
+        if (!isLoaded) return;
+        await nextTick();
+        contactReveal.refresh();
+        contactBodyReveal.refresh();
+    },
+    { immediate: true }
+);
 </script>

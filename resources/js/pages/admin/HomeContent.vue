@@ -1,6 +1,6 @@
 <template>
     <Shimmer :loading="pageLoading">
-        <v-card flat class="pa-4 mt-2 rounded-lg">
+        <v-card flat class="pa-3 mt-2 rounded-lg">
             <v-form @submit.prevent="submit" :disabled="loading">
                 <v-row>
                     <v-col cols="12">
@@ -12,8 +12,8 @@
                                         Update your profile to display to home page
                                     </span>
                                 </div>
-                                <FileUpload :key="`file-${formResetKey}`" v-model="profileImage" file-type="image"
-                                    :max-files="1" inset :disabled="loading" :show-size="true" density="comfortable"
+                                <FileUpload v-model="profileImage" file-type="image" :max-files="1" inset
+                                    :disabled="loading" :show-size="true" density="comfortable"
                                     hint="The image to display on your home page" :persistent-hint="true"
                                     :error-messages="errors.profileImage" data-shimmer-no-children />
                             </v-col>
@@ -35,9 +35,9 @@
                                     autocomplete="off" data-shimmer-no-children />
                             </v-col>
                             <v-col cols="12">
-                                <Select :key="`file-${formResetKey}`" v-model="subheading" :items="subHeadingItems"
-                                    label="Subheading" hint="Maximum of 4 tags" persistent-hint
-                                    :error-messages="errors.title" data-shimmer-no-children />
+                                <Select v-model="subheading" :items="subHeadingItems" label="Subheading"
+                                    hint="Maximum of 4 tags" persistent-hint :error-messages="errors.title"
+                                    data-shimmer-no-children />
                             </v-col>
                             <v-col cols="12">
                                 <v-textarea v-model="description" color="primary" auto-grow variant="solo" flat
@@ -75,9 +75,9 @@
                                     data-shimmer-no-children />
                             </v-col>
                             <v-col cols="12">
-                                <FileUpload :key="`file-${formResetKey}`" v-model="secondaryBtnFile" file-type="pdf"
-                                    :max-files="1" inset :disabled="loading" :show-size="true" density="comfortable"
-                                    :hide-browse="true" hint="The CV file for download" :persistent-hint="true"
+                                <FileUpload v-model="secondaryBtnFile" file-type="pdf" :max-files="1" inset
+                                    :disabled="loading" :show-size="true" density="comfortable" :hide-browse="true"
+                                    hint="The CV file for download" :persistent-hint="true"
                                     :error-messages="errors.secondaryBtnFile" data-shimmer-no-children />
                             </v-col>
                         </v-row>
@@ -158,10 +158,8 @@ const [primaryBtnText] = defineField('primaryBtnText');
 const [primaryBtnLink] = defineField('primaryBtnLink');
 const [secondaryBtnText] = defineField('secondaryBtnText');
 const [secondaryBtnFile] = defineField('secondaryBtnFile');
-const formResetKey = ref(0);
 const cancelEdit = () => {
     resetForm();
-    formResetKey.value++;
     info("No changes made.");
 };
 async function getHomeContent() {

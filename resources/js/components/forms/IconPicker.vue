@@ -2,7 +2,7 @@
     <v-menu v-model="menuOpen" :close-on-content-click="false" :offset="[8, 0]" location="bottom end" width="360"
         @update:model-value="onMenuToggle">
         <template #activator="{ props: activatorProps }">
-            <slot name="activator" :props="activatorProps" :selected="modelValue" :selected-svg="selectedSvg">
+            <slot name="activator" :props="activatorProps" :selected="modelValue">
                 <v-icon-btn v-bind="activatorProps" variant="tonal" rounded="circle" icon="i-mdi-emoticon"
                     color="warning" />
             </slot>
@@ -28,8 +28,8 @@
                 <v-row density="comfortable">
                     <v-col v-for="icon in icons" :key="icon.name" cols="2" class="text-center">
                         <v-icon-btn variant="text" rounded="lg" class="border" v-tooltip.top="icon.name"
-                            :color="icon.name === modelValue?.name ? 'primary' : undefined" @click="pick(icon)">
-                            <span v-html="icon.svg" class="icon-sm" />
+                            :color="icon.name === modelValue ? 'primary' : undefined" @click="pick(icon)">
+                            <span v-html="icon.svg" class="w-6 h-6" />
                         </v-icon-btn>
                     </v-col>
                 </v-row>
@@ -43,10 +43,10 @@
 </template>
 
 <script setup>
-import { ref, watch, nextTick } from "vue";
+import { ref, nextTick } from "vue";
 import { useIconPicker } from "@/composables/useIconPicker";
 const props = defineProps({
-    modelValue: { type: Object, default: null },
+    modelValue: { type: String, default: null },
 });
 const emit = defineEmits(["update:modelValue"]);
 const {
@@ -62,12 +62,7 @@ const {
 } = useIconPicker();
 const menuOpen = ref(false);
 const scrollBox = ref(null);
-const selectedSvg = ref("");
 const activeSet = ref(sets.value[0]);
-function syncSelectedSvg(value) {
-    selectedSvg.value = value?.svg ?? "";
-}
-watch(() => props.modelValue, syncSelectedSvg, { immediate: true });
 function onMenuToggle(open) {
     if (open && icons.value.length === 0) {
         getIcons(true);
@@ -92,8 +87,7 @@ function onScroll(e) {
     }
 };
 function pick(icon) {
-    emit("update:modelValue", { name: icon.name, svg: icon.svg });
-    selectedSvg.value = icon.svg;
+    emit("update:modelValue", icon.name);
     menuOpen.value = false;
 };
 </script>

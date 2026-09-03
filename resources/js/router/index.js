@@ -24,6 +24,21 @@ router.beforeEach((to) => {
     return redirect ? { ...redirect, replace: true } : true;
 });
 
+router.beforeEach(async (to) => {
+    const storeHook = to.meta?.store;
+    if (!storeHook) return;
+
+    const store = storeHook();
+    try {
+        await store.fetch();
+    } catch (err) {
+        console.error(
+            `[router] Failed to prefetch data for "${to.name}":`,
+            err,
+        );
+    }
+});
+
 router.afterEach((to, from, failure) => {
     if (isNavigationFailure(failure)) return;
     requestAnimationFrame(() => ScrollTrigger.refresh());

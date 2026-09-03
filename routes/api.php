@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\AboutContentController;
 use App\Http\Controllers\Admin\ProjectContentController;
 use App\Http\Controllers\Admin\ContactContentController;
 
+
 Route::post('/contact', [ContactController::class, 'store']);
 
 // Route::post('/register', [AuthController::class, 'register']);
@@ -30,3 +31,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/getContactContent', [ContactContentController::class, 'getContactContent']);
     Route::post('/updateContactContent', [ContactContentController::class, 'updateContactContent']);
 });
+
+Route::get('/public/home', [HomeContentController::class, 'getHomeContent']);
+Route::get('/public/about', [AboutContentController::class, 'getAboutContent']);
+Route::get('/public/projects', [ProjectContentController::class, 'getProjectContent']);
+Route::get('/public/contact', [ContactContentController::class, 'getContactContent']);

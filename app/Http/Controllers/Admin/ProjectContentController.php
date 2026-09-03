@@ -109,6 +109,7 @@ class ProjectContentController extends Controller
             }
 
             $projects[] = [
+                'id' => $project['id'] ?? $existing['id'] ?? (string) Str::uuid(),
                 'category' => $project['category'] ?? null,
                 'name' => $project['name'] ?? null,
                 'description' => $project['description'] ?? null,

@@ -29,39 +29,39 @@ const toggleTheme = (e) => {
 </script>
 
 <template>
-    <v-app-bar v-if="!isAppLayout || $vuetify.display.smAndDown" app density="comfortable" scroll-behavior="elevate"
+    <v-app-bar v-if="!isAppLayout || $vuetify.display.smAndDown" app density="compact" scroll-behavior="elevate"
         :order="$vuetify.display.mdAndDown ? 1 : 0">
         <v-container class="d-flex flex-row align-center ga-2">
             <template v-if="!isAppLayout">
                 <router-link :to="{ name: 'home' }">
-                    <v-avatar size="36" color="primary">J</v-avatar>
+                    <v-avatar size="40" color="primary">JD</v-avatar>
                 </router-link>
                 <div class="d-flex ga-2 align-center ml-auto">
-                    <v-toolbar v-if="$vuetify.display.mdAndUp" color="surface" height="40" location="top end" floating
-                        rounded="pill">
+                    <v-toolbar v-if="$vuetify.display.mdAndUp" color="transparent" height="40" location="top end"
+                        floating rounded="pill">
                         <div class="d-flex ga-1">
-                            <v-btn height="36" :color="isActive('home') ? 'primary' : undefined" rounded="pill"
+                            <v-btn height="40" :color="isActive('home') ? 'primary' : undefined" rounded="pill"
                                 text="Home" :to="{ name: 'home' }" />
-                            <v-btn height="36" :color="isActive('about') ? 'primary' : undefined" rounded="pill"
+                            <v-btn height="40" :color="isActive('about') ? 'primary' : undefined" rounded="pill"
                                 text="About" :to="{ name: 'about' }" />
-                            <v-btn height="36" :color="isActive('projects') ? 'primary' : undefined" rounded="pill"
+                            <v-btn height="40" :color="isActive('projects') ? 'primary' : undefined" rounded="pill"
                                 text="Projects" :to="{ name: 'projects' }" />
-                            <v-btn height="36" :color="isActive('contact') ? 'primary' : undefined" rounded="pill"
+                            <v-btn height="40" :color="isActive('contact') ? 'primary' : undefined" rounded="pill"
                                 text="Contact" :to="{ name: 'contact' }" />
                         </div>
                     </v-toolbar>
                     <v-divider v-if="$vuetify.display.mdAndUp" vertical :thickness="2" class="my-2"></v-divider>
-                    <v-icon-btn size="36" :icon="themeStore.isDark ? 'i-ri-moon-line' : 'i-ri-sun-line'"
+                    <v-icon-btn :icon="themeStore.isDark ? 'i-ri-moon-line' : 'i-ri-sun-line'" icon-size="18"
                         v-tooltip="{ text: themeStore.isDark ? 'Light Mode' : 'Dark Mode', location: 'bottom' }"
                         @click="toggleTheme" />
                     <v-divider v-if="$vuetify.display.smAndDown" vertical :thickness="2" class="my-2"></v-divider>
-                    <v-icon-btn v-if="$vuetify.display.smAndDown" size="36" icon="i-ri-menu-fill"
+                    <v-icon-btn v-if="$vuetify.display.smAndDown" icon="i-ri-menu-fill" icon-size="18"
                         @click="layout.toggleDrawer()" />
                 </div>
             </template>
             <template v-else>
                 <div class="d-flex flex-row justify-space-between align-center w-100">
-                    <v-icon-btn variant="flat" icon="i-ri-menu-fill" @click=" layout.toggleDrawer()" />
+                    <v-icon-btn variant="flat" icon="i-ri-menu-fill" icon-size="18" @click=" layout.toggleDrawer()" />
                     <div class="text-title-medium font-weight-bold">Portfolio</div>
                     <ProfileMenu />
                 </div>

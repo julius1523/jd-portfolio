@@ -1,6 +1,6 @@
 import { ref, computed } from "vue";
 import { defineStore } from "pinia";
-import axios from "axios";
+import axios from "@/plugins/axios";
 import { getInitialUser } from "@/bootstrap/auth";
 import { skipNextUnsavedChangesGuard } from "@/composables/useUnsavedChanges";
 

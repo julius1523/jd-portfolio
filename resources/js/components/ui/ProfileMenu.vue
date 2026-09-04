@@ -3,7 +3,6 @@ import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import { useTheme } from "vuetify";
 import { useFormLoading } from "@/composables/useFormLoading";
-import { useSnackBarQueue } from "@/composables/useSnackBarQueue";
 import { showConfirmDialog } from "@/composables/useConfirmDialog";
 import { useAuthStore } from "@/stores/auth";
 import { useLayoutStore } from "@/stores/layout";
@@ -17,7 +16,6 @@ const { user } = storeToRefs(auth);
 const theme = useTheme();
 const themeStore = useThemeStore();
 const { loading, wrap } = useFormLoading();
-const { error: notifyError } = useSnackBarQueue();
 const router = useRouter();
 const toggleTheme = (e) => {
     theme.setTransitionOrigin(e.target);
@@ -43,7 +41,7 @@ const logout = () => {
 <template>
     <v-menu :offset="[8, 0]" :close-on-content-click="false">
         <template #activator="{ props: activatorProps }">
-            <v-icon-btn v-if="variant === 'icon'" v-bind="activatorProps" variant="flat" color="primary"
+            <v-icon-btn v-if="variant === 'icon'" v-bind="activatorProps" variant="tonal" color="primary"
                 icon="i-mdi-account" />
 
             <template v-else>

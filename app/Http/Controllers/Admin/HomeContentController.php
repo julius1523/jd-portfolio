@@ -41,7 +41,19 @@ class HomeContentController extends Controller
 
     public function updateHomeContent(Request $request)
     {
-        $validated = $request->validate([
+        $payload = json_decode($request->input('payload', '{}'), true);
+
+        if (!is_array($payload)) {
+            return response()->json(['message' => 'Invalid payload.'], 422);
+        }
+
+        $merged = [
+            ...$payload,
+            'profileImage' => $request->file('profileImage'),
+            'secondaryBtnFile' => $request->file('secondaryBtnFile'),
+        ];
+
+        $validated = validator($merged, [
             'profileImage' => ['nullable', 'image', 'mimes:jpeg,png,gif,webp', 'max:10240'],
             'heading' => ['nullable', 'string', 'max:255'],
             'subheading' => ['nullable', 'array', 'min:1', 'max:4'],
@@ -51,7 +63,7 @@ class HomeContentController extends Controller
             'primaryBtnLink' => ['nullable', 'string', 'max:255'],
             'secondaryBtnText' => ['nullable', 'string', 'max:255'],
             'secondaryBtnFile' => ['nullable', 'file', 'mimes:pdf', 'max:10240'],
-        ]);
+        ])->validate();
 
         $data = HomeContent::firstOrCreate([]);
 

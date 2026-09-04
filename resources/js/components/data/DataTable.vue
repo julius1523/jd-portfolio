@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="addable" class="d-flex justify-end mb-2">
-            <v-btn variant="flat" color="revert-color" rounded="lg" prepend-icon="i-mdi-plus" :text="addLabel"
+            <v-btn variant="flat" color="surface-variant" rounded="lg" prepend-icon="i-mdi-plus" :text="addLabel"
                 :disabled="disabled" @click="$emit('add')" />
         </div>
 

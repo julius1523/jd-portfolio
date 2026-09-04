@@ -156,7 +156,7 @@
                 </v-col>
                 <v-col cols="12">
                     <Select v-model="sSkill" :items="availableSkills" label="Skills" :multiple="true" :chip="true"
-                        :disabled="!sCategory" :error-messages="skillErrors.skill" />
+                        :error-messages="skillErrors.skill" />
                 </v-col>
                 <v-col cols="12">
                     <v-text-field :model-value="sIcon" label="Icon (optional)" color="primary" variant="solo" flat
@@ -205,7 +205,7 @@
 
 <script setup>
 import axios from "@/plugins/axios";
-import { ref, computed, watch, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import * as yup from "yup";
 import { useValidatedForm } from "@/composables/useValidatedForm";
 import { useUnsavedChanges } from "@/composables/useUnsavedChanges";
@@ -335,17 +335,11 @@ const [sIcon] = defineSkillField('icon');
 const availableSkills = computed(() => {
     return SKILL_CATEGORIES.find((c) => c.title === sCategory.value)?.skills ?? [];
 });
-watch(sCategory, (newVal, oldVal) => {
-    if (oldVal !== undefined && newVal !== oldVal) {
-        sSkill.value = [];
-    }
-});
-
 function addSkill() {
     submitSkillForm();
 };
-function openSkillDialog(item = null, index = -1) {
-    editingSkillIndex.value = index;
+function openSkillDialog(item = null) {
+    editingSkillIndex.value = item ? skills.value.findIndex(s => s.id === item.id) : -1;
     resetSkillForm({
         values: item ? { ...item } : {
             category: null,
@@ -396,8 +390,8 @@ const [fText] = defineFactField('text');
 function addFact() {
     submitFactForm();
 };
-function openFactDialog(item = null, index = -1) {
-    editingFactIndex.value = index;
+function openFactDialog(item = null) {
+    editingFactIndex.value = item ? randomFacts.value.findIndex(r => r.id === item.id) : -1;
     resetFactForm({
         values: item ? { ...item } : {
             icon: null,

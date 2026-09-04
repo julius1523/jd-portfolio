@@ -77,11 +77,11 @@ export default defineConfig({
         "clamped-img--square":
             "h-auto aspect-square max-w-[min(var(--img-max-w,100%),35vw)]",
         "translate-y-hover":
-            "transition-transform duration-700 ease-out hover:-translate-y-2",
+            "transition-transform duration-700 ease-out hover:-translate-y-2 will-change-transform",
         "scale-up-hover":
-            "transition-transform duration-500 ease-in-out hover:scale-105",
+            "transition-transform duration-500 ease-in-out hover:scale-105 will-change-transform",
         "scale-down-hover":
-            "transition-transform duration-500 ease-in-out hover:scale-98",
+            "transition-transform duration-500 ease-in-out hover:scale-98 will-change-transform",
     },
     variants: [
         (matcher) => {

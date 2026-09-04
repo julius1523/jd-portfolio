@@ -1,5 +1,5 @@
-import { defineStore } from "pinia";
 import axios from "@/plugins/axios";
+import { defineStore } from "pinia";
 
 function createResourceStore(id, endpoint) {
     return defineStore(id, {

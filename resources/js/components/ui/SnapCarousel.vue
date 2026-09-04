@@ -56,8 +56,8 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div class="card-carousel-wrapper py-2">
-        <div ref="carousel" class="card-carousel reveal-item ga-4 ga-md-8">
+    <div class="card-carousel-wrapper">
+        <div ref="carousel" class="card-carousel pa-3 ga-4 ga-md-8 reveal-item">
             <div v-for="(item, i) in items" :key="i" class="card-item">
                 <slot :item="item" :index="i" />
             </div>

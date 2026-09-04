@@ -1,8 +1,8 @@
 <template>
     <section id="login" ref="loginSection">
         <v-container>
-            <v-card class="pa-6 mx-auto mt-10 reveal-item" max-width="400" rounded="xl" :loading="loading"
-                :disabled="loading">
+            <v-card flat class="pa-6 mx-auto mt-10 shadow-lg reveal-item" max-width="400" rounded="xl"
+                :loading="loading" :disabled="loading">
                 <template v-if="loading" #loader>
                     <v-progress-linear indeterminate color="primary" />
                 </template>

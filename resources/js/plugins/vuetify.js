@@ -1,4 +1,3 @@
-import "@/../css/layers.css";
 import "vuetify/styles";
 import { h } from "vue";
 import { createVuetify } from "vuetify";
@@ -23,7 +22,6 @@ export default createVuetify({
                 dark: false,
                 colors: {
                     "surface-light": "#f5f5f7",
-                    "revert-color": "#272727",
                     grey: "#757575",
                 },
             },
@@ -33,7 +31,6 @@ export default createVuetify({
                     background: "#1e1e1e",
                     surface: "#1e1e1e",
                     "surface-light": "#232323",
-                    "revert-color": "#f5f5f7",
                     grey: "#757575",
                 },
             },
@@ -53,7 +50,6 @@ export default createVuetify({
         },
         VFileUploadDropzone: { rounded: "lg" },
         VMenu: { offset: "5px" },
-        VBtn: { class: "text-label-large" },
         VContainer: { maxWidth: 1400 },
         VTabs: { activeClass: "opacity-100" },
     },

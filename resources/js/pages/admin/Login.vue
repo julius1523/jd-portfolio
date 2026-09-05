@@ -19,14 +19,11 @@
                             <span class="text-label-large text-medium-emphasis">Remember me</span>
                         </template>
                     </v-checkbox>
-                    <v-btn type="submit" color="primary" variant="flat" rounded="pill" size="x-large" block
-                        class="my-3">
-                        Log In
-                    </v-btn>
-                    <v-btn variant="plain" color="surface-variant" rounded="pill" size="x-large"
-                        prepend-icon="i-mdi-arrow-left" block text="Go back to home"
-                        @click="$router.replace({ name: 'home' })">
-                    </v-btn>
+                    <v-btn type="submit" color="primary" variant="flat" rounded="pill" size="large" block text="Log In"
+                        class="my-3" height="55" />
+                    <v-btn variant="plain" color="surface-variant" rounded="pill" size="large"
+                        prepend-icon="i-mdi-arrow-left" block text="Go back to home" height="55"
+                        @click="$router.replace({ name: 'home' })" />
                 </v-form>
             </v-card>
         </v-container>

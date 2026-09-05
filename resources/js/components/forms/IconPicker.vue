@@ -1,3 +1,60 @@
+<script setup>
+import { ref, nextTick } from "vue";
+import { useIconPicker } from "@/composables/useIconPicker";
+const props = defineProps({
+    modelValue: { type: String, default: null },
+});
+const emit = defineEmits(["update:modelValue", "selected"]);
+const {
+    icons,
+    search,
+    sets,
+    loading,
+    total,
+    getIcons,
+    onSearch: debouncedSearch,
+    onSetsChange: changeSets,
+    loadMore,
+} = useIconPicker();
+const menuOpen = ref(false);
+const scrollBox = ref(null);
+const activeSet = ref(sets.value[0]);
+function onMenuToggle(open) {
+    if (open && icons.value.length === 0) {
+        getIcons(true);
+    }
+};
+function onSearch(val) {
+    debouncedSearch(val);
+};
+function onSetChange(newSet) {
+    if (!newSet) return;
+    activeSet.value = newSet;
+    changeSets([activeSet.value]);
+    nextTick(() => {
+        if (scrollBox.value) scrollBox.value.scrollTop = 0;
+    });
+};
+function onScroll(e) {
+    const el = e.target;
+    const nearBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 80;
+    if (nearBottom && !loading.value && icons.value.length < total.value) {
+        loadMore();
+    }
+};
+function pick(icon) {
+    emit("update:modelValue", icon.name);
+    emit("selected", icon);
+    menuOpen.value = false;
+};
+</script>
+
+<style lang="css" scoped>
+.icon-grid {
+    height: 230px;
+}
+</style>
+
 <template>
     <v-menu v-model="menuOpen" :close-on-content-click="false" :offset="[8, 0]" location="bottom end" width="360"
         @update:model-value="onMenuToggle">
@@ -41,59 +98,3 @@
         </v-card>
     </v-menu>
 </template>
-
-<script setup>
-import { ref, nextTick } from "vue";
-import { useIconPicker } from "@/composables/useIconPicker";
-const props = defineProps({
-    modelValue: { type: String, default: null },
-});
-const emit = defineEmits(["update:modelValue"]);
-const {
-    icons,
-    search,
-    sets,
-    loading,
-    total,
-    getIcons,
-    onSearch: debouncedSearch,
-    onSetsChange: changeSets,
-    loadMore,
-} = useIconPicker();
-const menuOpen = ref(false);
-const scrollBox = ref(null);
-const activeSet = ref(sets.value[0]);
-function onMenuToggle(open) {
-    if (open && icons.value.length === 0) {
-        getIcons(true);
-    }
-};
-function onSearch(val) {
-    debouncedSearch(val);
-};
-function onSetChange(newSet) {
-    if (!newSet) return;
-    activeSet.value = newSet;
-    changeSets([activeSet.value]);
-    nextTick(() => {
-        if (scrollBox.value) scrollBox.value.scrollTop = 0;
-    });
-};
-function onScroll(e) {
-    const el = e.target;
-    const nearBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 80;
-    if (nearBottom && !loading.value && icons.value.length < total.value) {
-        loadMore();
-    }
-};
-function pick(icon) {
-    emit("update:modelValue", icon.name);
-    menuOpen.value = false;
-};
-</script>
-
-<style lang="css" scoped>
-.icon-grid {
-    height: 230px;
-}
-</style>

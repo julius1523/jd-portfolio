@@ -7,8 +7,6 @@
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <title>{{ config('app.name') }}</title>
 
-    <link rel="stylesheet" href="{{ asset('fonts/fonts.css') }}">
-
     <style>
         @layer vuetify-core, vuetify-components, vuetify-overrides, vuetify-utilities, uno, vuetify-final;
     </style>

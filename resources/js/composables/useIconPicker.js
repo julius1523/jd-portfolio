@@ -9,7 +9,7 @@ function debounce(fn, delay = 300) {
     };
 }
 
-export function useIconPicker(perPage = 24, initialSets = ["mdi"]) {
+export function useIconPicker(perPage = 60, initialSets = ["mdi"]) {
     const icons = ref([]);
     const search = ref("");
     const sets = ref([...initialSets]);

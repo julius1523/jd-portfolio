@@ -20,7 +20,7 @@
                                 <v-icon-btn icon variant="tonal" size="x-large" color="primary"
                                     class="translate-y-hover" :href="item.linkUrl" target="_blank">
                                     <v-icon size="33">
-                                        <span v-html="getIconSvg(item.icon)" />
+                                        <span v-html="item.iconSvg" class="inline-flex items-center" />
                                     </v-icon>
                                 </v-icon-btn>
                             </div>
@@ -82,7 +82,6 @@ import { useContactStore } from "@/stores/resources";
 import { useValidatedForm } from "@/composables/useValidatedForm";
 import { useUnsavedChanges } from "@/composables/useUnsavedChanges";
 import { useScrollReveal } from "@/composables/useScrollReveal";
-import { getIconSvg } from "@/src/utils/icon";
 const contactStore = useContactStore();
 const { data: data, loaded } = storeToRefs(contactStore);
 const contactSection = ref(null);

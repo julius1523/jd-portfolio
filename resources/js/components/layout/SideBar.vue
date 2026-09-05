@@ -11,11 +11,11 @@ const { onDragStart, y, dragging } = useDragToClose(() => (layout.drawer = false
 
 <template>
     <v-navigation-drawer :key="$vuetify.display.smAndDown ? 'mobile' : 'desktop'" v-model="layout.drawer"
-        :rail="layout.rail" :location="$vuetify.display.smAndDown ? 'bottom' : undefined"
-        :floating="$vuetify.display.smAndDown" :permanent="$vuetify.display.mdAndUp" width="250" :class="[
+        :rail="layout.rail" :location="$vuetify.display.smAndDown ? 'bottom' : undefined" floating
+        :permanent="$vuetify.display.mdAndUp" width="250" :class="[
             $vuetify.display.smAndDown ? 'rounded-t-xl translate-y-[var(--ty)]' : '',
             $vuetify.display.smAndDown && !dragging ? 'transition-transform duration-200 ease-out' : '',
-        ]" :style="$vuetify.display.smAndDown ? { '--ty': `${y}px` } : undefined">
+        ]" :style="$vuetify.display.smAndDown ? { '--ty': `${y}px` } : undefined" color="surface-light">
         <template #prepend>
             <template v-if="$vuetify.display.mdAndUp">
                 <v-list variant="plain" density="compact" slim nav class="bg-transparent">

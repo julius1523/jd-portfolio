@@ -64,7 +64,7 @@
                             class="pa-3 d-flex flex-column align-center">
                             <div class="h-50 w-100 d-flex align-center justify-center">
                                 <v-icon color="primary" size="50">
-                                    <span v-html="getIconSvg(item.icon)" />
+                                    <span v-html="item.iconSvg" class="inline-flex items-center" />
                                 </v-icon>
                             </div>
                             <div class="flex-grow-1 w-100 d-flex align-center justify-center">
@@ -105,7 +105,6 @@ import { ref, nextTick, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { useAboutStore } from "@/stores/resources";
 import { useScrollReveal } from "@/composables/useScrollReveal";
-import { getIconSvg } from "@/src/utils/icon";
 const aboutStore = useAboutStore();
 const { data: data, loaded } = storeToRefs(aboutStore);
 const aboutSection = ref(null);

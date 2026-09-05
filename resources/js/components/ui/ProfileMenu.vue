@@ -43,7 +43,6 @@ const logout = () => {
         <template #activator="{ props: activatorProps }">
             <v-icon-btn v-if="variant === 'icon'" v-bind="activatorProps" variant="tonal" color="primary"
                 icon="i-mdi-account" />
-
             <template v-else>
                 <v-divider />
                 <v-list variant="plain" density="comfortable" class="pa-0 opacity-100" :prepend-gap="10">

@@ -1,3 +1,4 @@
+import "unfonts.css";
 import "virtual:uno.css";
 import "../css/app.css";
 import { createApp } from "vue";
@@ -9,8 +10,10 @@ import router from "@/router";
 import tooltipPlugin from "@/plugins/tooltip";
 import { Shimmer } from "@shimmer-from-structure/vue";
 import { historyGuard } from "@/router/guard";
+
 const app = createApp(App);
 const pinia = createPinia();
+
 app.component("Shimmer", Shimmer);
 app.use(pinia);
 app.use(vuetify);

@@ -1,12 +1,24 @@
 import { defineConfig } from "vite";
-import UnoCSS from "unocss/vite";
+import Unfonts from "unplugin-fonts/vite";
 import laravel from "laravel-vite-plugin";
 import vue from "@vitejs/plugin-vue";
 import vuetify from "vite-plugin-vuetify";
 import path from "path";
+import UnoCSS from "unocss/vite";
 
 export default defineConfig({
     plugins: [
+        Unfonts({
+            fontsource: {
+                families: [
+                    {
+                        name: "Roboto",
+                        weights: [100, 300, 400, 500, 700, 900],
+                        styles: ["normal", "italic"],
+                    },
+                ],
+            },
+        }),
         laravel({
             input: ["resources/js/app.js"],
             refresh: true,

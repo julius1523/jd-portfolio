@@ -68,9 +68,8 @@
                                         </div>
                                     </template>
                                     <template #item.icon="{ item }">
-                                        <v-icon v-if="item.icon" color="primary" size="x-large">
-                                            <span v-html="getIconSvg(item.icon)" />
-                                        </v-icon>
+                                        <span v-if="item.iconSvg" v-html="item.iconSvg"
+                                            class="text-primary inline-flex items-center w-8 h-8" />
                                         <span v-else class="text-medium-emphasis">—</span>
                                     </template>
                                 </DataTable>
@@ -93,9 +92,8 @@
                                     :disabled="loading" @add="openFactDialog" @edit="openFactDialog"
                                     @remove="removeFact">
                                     <template #item.icon="{ item }">
-                                        <v-icon color="primary" size="x-large">
-                                            <span v-html="getIconSvg(item.icon)" />
-                                        </v-icon>
+                                        <span v-html="item.iconSvg"
+                                            class="text-primary inline-flex items-center w-8 h-8" />
                                     </template>
                                 </DataTable>
                             </v-col>
@@ -163,12 +161,12 @@
                         rounded="lg" density="comfortable" :error-messages="skillErrors.icon" readonly clearable
                         @click:clear="sIcon = null">
                         <template #default>
-                            <v-icon v-if="sIcon" color="primary" class="mr-2">
-                                <span v-html="getIconSvg(sIcon)" />
-                            </v-icon>
+                            <div class="d-flex items-center">
+                                <span v-html="sIconSvg" class="text-primary inline-flex w-[24px] h-[24px] mr-2" />
+                            </div>
                         </template>
                         <template #append-inner>
-                            <IconPicker v-model="sIcon" />
+                            <IconPicker v-model="sIcon" @selected="sIconSvg = $event.svg" />
                         </template>
                     </v-text-field>
                 </v-col>
@@ -185,12 +183,12 @@
                     <v-text-field :model-value="fIcon" label="Icon" color="primary" variant="solo" flat rounded="lg"
                         density="comfortable" :error-messages="factErrors.icon" readonly>
                         <template #default>
-                            <v-icon v-if="fIcon" color="primary" class="mr-2">
-                                <span v-html="getIconSvg(fIcon)" />
-                            </v-icon>
+                            <div class="d-flex items-center">
+                                <span v-html="fIconSvg" class="text-primary inline-flex w-[24px] h-[24px] mr-2" />
+                            </div>
                         </template>
                         <template #append-inner>
-                            <IconPicker v-model="fIcon" />
+                            <IconPicker v-model="fIcon" @selected="fIconSvg = $event.svg" />
                         </template>
                     </v-text-field>
                 </v-col>
@@ -215,7 +213,6 @@ import Select from "@/components/forms/Select";
 import FileUpload from "@/components/forms/FileUpload";
 import Dialog from "@/components/forms/FormDialog";
 import IconPicker from "@/components/forms/IconPicker";
-import { getIconSvg } from "@/src/utils/icon";
 import { SKILL_CATEGORIES } from "@/src/constants/constants";
 const { info, error } = useSnackBarQueue();
 const pageLoading = ref(true);
@@ -332,6 +329,7 @@ const {
 const [sCategory] = defineSkillField('category');
 const [sSkill] = defineSkillField('skill');
 const [sIcon] = defineSkillField('icon');
+const sIconSvg = ref(null);
 const availableSkills = computed(() => {
     return SKILL_CATEGORIES.find((c) => c.title === sCategory.value)?.skills ?? [];
 });
@@ -386,12 +384,14 @@ const {
     closeFactDialog();
 }, { resetOnSuccess: false });
 const [fIcon] = defineFactField('icon');
+const fIconSvg = ref(null);
 const [fText] = defineFactField('text');
 function addFact() {
     submitFactForm();
 };
 function openFactDialog(item = null) {
     editingFactIndex.value = item ? randomFacts.value.findIndex(r => r.id === item.id) : -1;
+    fIconSvg.value = item?.iconSvg ?? null;
     resetFactForm({
         values: item ? { ...item } : {
             icon: null,

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Services\IconResolverService;
 use App\Services\FileUploadService;
 use App\Http\Controllers\Controller;
 use App\Models\ContactContent;
@@ -12,6 +13,7 @@ use function is_array;
 class ContactContentController extends Controller
 {
     public function __construct(
+        private IconResolverService $iconResolverService,
         private FileUploadService $fileUploadService
     ) {
     }
@@ -25,11 +27,16 @@ class ContactContentController extends Controller
             'socials',
         ])->first();
 
+        $socials = collect($data?->socials ?? [])->map(function ($social) {
+            $social['iconSvg'] = $this->iconResolverService->resolveSvg($social['icon'] ?? null);
+            return $social;
+        })->all();
+
         return response()->json([
             'profileImage' => $data?->profile_image,
             'heading' => $data?->heading,
             'description' => $data?->description,
-            'socials' => $data?->socials ?? [],
+            'socials' => $socials,
         ]);
     }
 

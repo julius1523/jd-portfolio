@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Services\IconResolverService;
 use App\Services\FileUploadService;
 use App\Http\Controllers\Controller;
 use App\Models\AboutContent;
@@ -12,6 +13,7 @@ use function is_array;
 class AboutContentController extends Controller
 {
     public function __construct(
+        private IconResolverService $iconResolverService,
         private FileUploadService $fileUploadService
     ) {
     }
@@ -27,12 +29,22 @@ class AboutContentController extends Controller
             'others',
         ])->first();
 
+        $skills = collect($data?->skills ?? [])->map(function ($skill) {
+            $skill['iconSvg'] = $this->iconResolverService->resolveSvg($skill['icon'] ?? null);
+            return $skill;
+        })->all();
+
+        $randomFacts = collect($data?->random_facts ?? [])->map(function ($fact) {
+            $fact['iconSvg'] = $this->iconResolverService->resolveSvg($fact['icon'] ?? null);
+            return $fact;
+        })->all();
+
         return response()->json([
             'profileImage' => $data?->profile_image,
             'heading' => $data?->heading,
             'description' => $data?->description,
-            'skills' => $data?->skills ?? [],
-            'randomFacts' => $data?->random_facts ?? [],
+            'skills' => $skills,
+            'randomFacts' => $randomFacts,
             'others' => [
                 'title' => $data?->others['title'] ?? null,
                 'description' => $data?->others['description'] ?? null,

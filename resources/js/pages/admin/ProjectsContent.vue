@@ -152,7 +152,6 @@ import axios from "@/plugins/axios";
 import { ref, onMounted, computed } from "vue";
 import * as yup from "yup";
 import { useValidatedForm } from "@/composables/useValidatedForm";
-import { useUnsavedChanges } from "@/composables/useUnsavedChanges";
 import { useSnackBarQueue } from "@/composables/useSnackBarQueue";
 import DataTable from "@/components/data/DataTable";
 import Select from "@/components/forms/Select";
@@ -209,7 +208,6 @@ const { defineField, errors, loading, submit, resetForm, meta } = useValidatedFo
 },
     { resetOnSuccess: false }
 );
-useUnsavedChanges(meta);
 const [profileImage] = defineField('profileImage');
 const [heading] = defineField('heading');
 const [description] = defineField('description');

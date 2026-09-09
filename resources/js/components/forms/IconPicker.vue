@@ -73,8 +73,9 @@ function pick(icon) {
                     <v-tab value="ri">Remix</v-tab>
                 </v-tabs>
 
-                <v-text-field :model-value="search" placeholder="Search icons..." variant="solo" flat density="compact"
-                    rounded="lg" clearable hide-details autocomplete="off" @update:model-value="onSearch" />
+                <v-text-field :model-value="search" prepend-inner-icon="i-mdi-magnify" placeholder="Search icons..."
+                    variant="solo-filled" flat density="compact" rounded="lg" clearable hide-details autocomplete="off"
+                    @update:model-value="onSearch" />
             </div>
 
             <v-card-text ref="scrollBox" class="icon-grid overflow-y-auto pa-3" @scroll="onScroll">
@@ -86,7 +87,7 @@ function pick(icon) {
                     <v-col v-for="icon in icons" :key="icon.name" cols="2" class="text-center">
                         <v-icon-btn variant="text" rounded="lg" class="border" v-tooltip.top="icon.name"
                             :color="icon.name === modelValue ? 'primary' : undefined" @click="pick(icon)">
-                            <span v-html="icon.svg" class="w-6 h-6" />
+                            <span v-html="icon.svg" />
                         </v-icon-btn>
                     </v-col>
                 </v-row>

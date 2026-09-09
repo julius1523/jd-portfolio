@@ -7,7 +7,7 @@ const props = defineProps({
     hint: { type: String, default: '' },
     persistentHint: { type: Boolean, default: true },
     multiple: { type: Boolean, default: true },
-    variant: { type: String, default: 'solo' },
+    variant: { type: String },
     flat: { type: Boolean, default: true },
     rounded: { type: [String, Boolean], default: 'lg' },
     density: { type: String, default: 'comfortable' },

@@ -12,14 +12,14 @@
                                         Update your profile to display to home page
                                     </span>
                                 </div>
-                                <FileUpload v-model="profileImage" file-type="image" :max-files="1" inset
+                                <FileUpload v-model="fields.profileImage" file-type="image" :max-files="1" inset
                                     :disabled="loading" :show-size="true" density="comfortable"
                                     hint="The image to display on your home page" :persistent-hint="true"
                                     :error-messages="errors.profileImage" data-shimmer-no-children />
                             </v-col>
                         </v-row>
                     </v-col>
-                    <v-col cols="12" lg="6">
+                    <v-col cols="12">
                         <v-row :gap="13">
                             <v-col cols="12">
                                 <div>
@@ -30,14 +30,14 @@
                                 </div>
                             </v-col>
                             <v-col cols="12">
-                                <v-text-field v-model="heading" color="primary" variant="solo" flat label="Heading"
-                                    rounded="lg" density="comfortable" clearable :error-messages="errors.heading"
-                                    autocomplete="off" data-shimmer-no-children />
+                                <v-text-field v-model="fields.heading" color="primary" variant="solo" flat
+                                    label="Heading" density="comfortable" clearable :error-messages="errors.heading"
+                                    autocomplete="off" class="vfield-outline" data-shimmer-no-children />
                             </v-col>
                             <v-col cols="12">
-                                <v-textarea v-model="description" color="primary" auto-grow variant="solo" flat
-                                    label="Description" rounded="lg" density="comfortable" clearable
-                                    :error-messages="errors.description" autocomplete="off" data-shimmer-no-children />
+                                <v-textarea v-model="fields.description" color="primary" auto-grow variant="solo" flat
+                                    label="Description" density="comfortable" :error-messages="errors.description"
+                                    autocomplete="off" class="vfield-outline" data-shimmer-no-children />
                             </v-col>
                         </v-row>
                     </v-col>
@@ -52,11 +52,12 @@
                                 </div>
                             </v-col>
                             <v-col cols="12">
-                                <DataTable :items="skills" :headers="skillHeaders" :addable="true" :expandable="false"
-                                    add-label="New Skill" no-data-text="No skills added yet." :disabled="loading"
-                                    @add="openSkillDialog" @edit="openSkillDialog" @remove="removeSkill">
+                                <DataTable :items="fields.skills" :headers="skillHeaders" :addable="true"
+                                    :expandable="false" add-label="New Skill" no-data-text="No skills added yet."
+                                    :disabled="loading" @add="openSkillDialog" @edit="openSkillDialog"
+                                    @remove="removeSkill">
                                     <template #item.category="{ item }">
-                                        {{ categoryTitle(item.category) }}
+                                        {{ item.category }}
                                     </template>
                                     <template #item.skill="{ item }">
                                         <div class="d-flex flex-wrap ga-1 py-2"
@@ -68,8 +69,9 @@
                                         </div>
                                     </template>
                                     <template #item.icon="{ item }">
-                                        <span v-if="item.iconSvg" v-html="item.iconSvg"
-                                            class="text-primary inline-flex items-center w-8 h-8" />
+                                        <v-icon v-if="item.iconSvg" color="primary" size="35">
+                                            <span v-html="item.iconSvg" class="inline-flex items-center" />
+                                        </v-icon>
                                         <span v-else class="text-medium-emphasis">—</span>
                                     </template>
                                 </DataTable>
@@ -87,19 +89,20 @@
                                 </div>
                             </v-col>
                             <v-col cols="12">
-                                <DataTable :items="randomFacts" :headers="randomFactHeaders" :addable="true"
+                                <DataTable :items="fields.randomFacts" :headers="randomFactHeaders" :addable="true"
                                     :expandable="false" add-label="New Fact" no-data-text="No facts added yet."
                                     :disabled="loading" @add="openFactDialog" @edit="openFactDialog"
                                     @remove="removeFact">
                                     <template #item.icon="{ item }">
-                                        <span v-html="item.iconSvg"
-                                            class="text-primary inline-flex items-center w-8 h-8" />
+                                        <v-icon color="primary" size="35">
+                                            <span v-html="item.iconSvg" class="inline-flex items-center" />
+                                        </v-icon>
                                     </template>
                                 </DataTable>
                             </v-col>
                         </v-row>
                     </v-col>
-                    <v-col cols="12" lg="6">
+                    <v-col cols="12">
                         <v-row :gap="13">
                             <v-col cols="12">
                                 <div>
@@ -110,19 +113,19 @@
                                 </div>
                             </v-col>
                             <v-col cols="12">
-                                <v-text-field v-model="othersTitle" color="primary" variant="solo" flat label="Title"
-                                    rounded="lg" density="comfortable" clearable
-                                    :error-messages="errors['others.title']" autocomplete="off"
+                                <v-text-field v-model="fields.others.title" color="primary" variant="solo" flat
+                                    label="Title" density="comfortable" clearable
+                                    :error-messages="errors['others.title']" autocomplete="off" class="vfield-outline"
                                     data-shimmer-no-children />
                             </v-col>
                             <v-col cols="12">
-                                <v-textarea v-model="othersDescription" color="primary" auto-grow variant="solo" flat
-                                    label="Description" rounded="lg" density="comfortable" clearable
+                                <v-textarea v-model="fields.others.description" color="primary" auto-grow variant="solo"
+                                    flat label="Description" density="comfortable"
                                     :error-messages="errors['others.description']" autocomplete="off"
-                                    data-shimmer-no-children />
+                                    class="vfield-outline" data-shimmer-no-children />
                             </v-col>
                             <v-col cols="12">
-                                <FileUpload v-model="othersImage" file-type="image" :max-files="1" inset
+                                <FileUpload v-model="fields.others.image" file-type="image" :max-files="1" inset
                                     :disabled="loading" :show-size="true" density="comfortable"
                                     hint="The image to display to others section" :persistent-hint="true"
                                     :error-messages="errors['others.image']" data-shimmer-no-children />
@@ -145,28 +148,28 @@
 
     <Dialog v-model="skillDialog" :is-editing="editingSkillIndex > -1" add-title="Add Skill" edit-title="Edit Skill"
         save-text="Add Skill" edit-save-text="Save Changes" cancel-text="Cancel" edit-cancel-text="Cancel Edit"
-        @save="addSkill" @cancel="closeSkillDialog">
+        @save="addSkill" @cancel="skillDialog = false">
         <v-form @submit.prevent="addSkill">
-            <v-row :gap="13">
+            <v-row no-gutters>
                 <v-col cols="12">
-                    <Select v-model="sCategory" :items="skillCategoryOptions" label="Skill Category" :multiple="false"
-                        :chip="false" :error-messages="skillErrors.category" />
+                    <Select v-model="skillFields.category" :items="skillCategoryOptions" label="Skill Category"
+                        variant="solo" flat :multiple="false" :chip="false" :error-messages="skillErrors.category"
+                        class="vfield-outline" />
                 </v-col>
                 <v-col cols="12">
-                    <Select v-model="sSkill" :items="availableSkills" label="Skills" :multiple="true" :chip="true"
-                        :error-messages="skillErrors.skill" />
+                    <Select v-model="skillFields.skill" :items="availableSkills" label="Skills" variant="solo"
+                        :multiple="true" :chip="true" :error-messages="skillErrors.skill" class="vfield-outline" />
                 </v-col>
                 <v-col cols="12">
-                    <v-text-field :model-value="sIcon" label="Icon (optional)" color="primary" variant="solo" flat
-                        rounded="lg" density="comfortable" :error-messages="skillErrors.icon" readonly clearable
-                        @click:clear="sIcon = null">
+                    <v-text-field :model-value="skillFields.icon" label="Icon (optional)" color="primary" variant="solo"
+                        flat density="comfortable" :error-messages="skillErrors.icon" readonly class="vfield-outline">
                         <template #default>
-                            <div class="d-flex items-center">
-                                <span v-html="sIconSvg" class="text-primary inline-flex w-[24px] h-[24px] mr-2" />
-                            </div>
+                            <v-icon v-if="skillFields.iconSvg" color="primary" size="20" class="mr-2">
+                                <span v-html="skillFields.iconSvg" class="inline-flex items-center" />
+                            </v-icon>
                         </template>
                         <template #append-inner>
-                            <IconPicker v-model="sIcon" @selected="sIconSvg = $event.svg" />
+                            <IconPicker v-model="skillFields.icon" @selected="skillFields.iconSvg = $event.svg" />
                         </template>
                     </v-text-field>
                 </v-col>
@@ -176,25 +179,26 @@
 
     <Dialog v-model="factDialog" :is-editing="editingFactIndex > -1" add-title="Add Fact" edit-title="Edit Fact"
         save-text="Add Fact" edit-save-text="Save Changes" cancel-text="Cancel" edit-cancel-text="Cancel Edit"
-        @save="addFact" @cancel="closeFactDialog">
+        @save="addFact" @cancel="factDialog = false">
         <v-form @submit.prevent="addFact">
-            <v-row :gap="13">
+            <v-row no-gutters>
                 <v-col cols="12">
-                    <v-text-field :model-value="fIcon" label="Icon" color="primary" variant="solo" flat rounded="lg"
-                        density="comfortable" :error-messages="factErrors.icon" readonly>
+                    <v-text-field :model-value="factFields.icon" label="Icon" color="primary" variant="solo" flat
+                        density="comfortable" :error-messages="factErrors.icon" readonly class="vfield-outline">
                         <template #default>
-                            <div class="d-flex items-center">
-                                <span v-html="fIconSvg" class="text-primary inline-flex w-[24px] h-[24px] mr-2" />
-                            </div>
+                            <v-icon v-if="factFields.iconSvg" color="primary" size="20" class="mr-2">
+                                <span v-html="factFields.iconSvg" class="inline-flex items-center" />
+                            </v-icon>
                         </template>
                         <template #append-inner>
-                            <IconPicker v-model="fIcon" @selected="fIconSvg = $event.svg" />
+                            <IconPicker v-model="factFields.icon" @selected="factFields.iconSvg = $event.svg" />
                         </template>
                     </v-text-field>
                 </v-col>
                 <v-col cols="12">
-                    <v-text-field v-model="fText" label="Fact" color="primary" variant="solo" flat rounded="lg"
-                        density="comfortable" clearable :error-messages="factErrors.text" autocomplete="off" />
+                    <v-text-field v-model="factFields.text" label="Fact" color="primary" variant="solo" flat
+                        density="comfortable" clearable :error-messages="factErrors.text" class="vfield-outline"
+                        autocomplete="off" />
                 </v-col>
             </v-row>
         </v-form>
@@ -206,7 +210,6 @@ import axios from "@/plugins/axios";
 import { ref, computed, onMounted } from "vue";
 import * as yup from "yup";
 import { useValidatedForm } from "@/composables/useValidatedForm";
-import { useUnsavedChanges } from "@/composables/useUnsavedChanges";
 import { useSnackBarQueue } from "@/composables/useSnackBarQueue";
 import DataTable from "@/components/data/DataTable";
 import Select from "@/components/forms/Select";
@@ -214,57 +217,59 @@ import FileUpload from "@/components/forms/FileUpload";
 import Dialog from "@/components/forms/FormDialog";
 import IconPicker from "@/components/forms/IconPicker";
 import { SKILL_CATEGORIES } from "@/src/constants/constants";
+
 const { info, error } = useSnackBarQueue();
 const pageLoading = ref(true);
+
 const skillEntrySchema = yup.object({
-    category: yup.string().label('Category').required(),
-    skill: yup
-        .array()
-        .of(yup.string())
-        .label('Skills')
-        .min(1, 'At least one skill is required'),
-    icon: yup.string().label('Icon').nullable().default(null),
+    id: yup.mixed().nullable(),
+    category: yup.string().label("Category").required(),
+    skill: yup.array().of(yup.string()).label("Skills").min(1, "At least one skill is required"),
+    icon: yup.string().label("Icon").nullable().default(null),
+    iconSvg: yup.string().nullable().default(null),
 });
+
+const factSchema = yup.object({
+    id: yup.mixed().nullable(),
+    icon: yup.string().label("Icon").required(),
+    iconSvg: yup.string().nullable().default(null),
+    text: yup.string().label("Fact").required(),
+});
+
 const schema = yup.object({
-    profileImage: yup.mixed().label('Image').nullable(),
-    heading: yup.string().label('Heading').required(),
-    description: yup.string().label('Description').required(),
-    skills: yup
-        .array()
-        .of(skillEntrySchema)
-        .min(1, "At least one skill is required")
-        .label("Skills"),
-    randomFacts: yup
-        .array()
-        .of(
-            yup.object({
-                icon: yup.string().label('Icon').required(),
-                text: yup.string().label('Fact').required(),
-            })
-        )
-        .min(1, "At least one fact is required")
-        .label("Random Facts"),
+    profileImage: yup.mixed().label("Image").nullable(),
+    heading: yup.string().label("Heading").required(),
+    description: yup.string().label("Description").required(),
+    skills: yup.array().of(skillEntrySchema).min(1, "At least one skill is required").label("Skills"),
+    randomFacts: yup.array().of(factSchema).min(1, "At least one fact is required").label("Random Facts"),
     others: yup.object({
-        title: yup.string().label('Title').required(),
-        description: yup.string().label('Description').required(),
-        image: yup.mixed().label('Image').nullable(),
-    }).label('Others'),
+        title: yup.string().label("Title").required(),
+        description: yup.string().label("Description").required(),
+        image: yup.mixed().label("Image").nullable(),
+    }).label("Others"),
 });
-const { defineField, errors, loading, submit, resetForm, meta } = useValidatedForm(schema, async (values) => {
+
+const { fields, errors, loading, submit, resetForm, meta } = useValidatedForm(schema, async (values) => {
     const formData = new FormData();
-    const profileImageFile = (values.profileImage instanceof File || values.profileImage instanceof Blob) ? values.profileImage : null;
-    const othersImageFile = (values.others?.image instanceof File || values.others?.image instanceof Blob) ? values.others.image : null;
+    const profileImageFile = (values.profileImage instanceof File || values.profileImage instanceof Blob)
+        ? values.profileImage
+        : null;
+    const othersImageFile = (values.others?.image instanceof File || values.others?.image instanceof Blob)
+        ? values.others.image
+        : null;
+
     if (profileImageFile) {
-        formData.append('profile_image', profileImageFile);
+        formData.append("profile_image", profileImageFile);
     } else if (!values.profileImage) {
-        formData.append('remove_profile_image', '1');
+        formData.append("remove_profile_image", "1");
     }
     if (othersImageFile) {
-        formData.append('others_image', othersImageFile);
+        formData.append("others_image", othersImageFile);
     } else if (!values.others?.image) {
-        formData.append('remove_others_image', '1');
+        formData.append("remove_others_image", "1");
     }
-    const payload = {
+
+    formData.append("payload", JSON.stringify({
         heading: values.heading,
         description: values.description,
         skills: values.skills,
@@ -273,151 +278,115 @@ const { defineField, errors, loading, submit, resetForm, meta } = useValidatedFo
             title: values.others?.title,
             description: values.others?.description,
         },
-    };
-    formData.append('payload', JSON.stringify(payload));
-    const response = await axios.post('/api/updateAboutContent', formData);
+    }));
+
+    const response = await axios.post("/api/updateAboutContent", formData);
     await getAboutContent();
     return { message: response.data.message };
-},
-    { resetOnSuccess: false }
-);
-useUnsavedChanges(meta);
-const [profileImage] = defineField('profileImage');
-const [heading] = defineField('heading');
-const [description] = defineField('description');
-const [othersTitle] = defineField('others.title');
-const [othersDescription] = defineField('others.description');
-const [othersImage] = defineField('others.image');
-const cancelEdit = () => {
+}, { resetOnSuccess: false });
+
+function cancelEdit() {
     resetForm();
     info("No changes made.");
-};
+}
+
+function useEntryDialog(entrySchema, getList, emptyValues) {
+    const dialog = ref(false);
+    const editingIndex = ref(-1);
+
+    const form = useValidatedForm(entrySchema, async (values) => {
+        const list = getList();
+        const row = { ...values, id: values.id ?? crypto.randomUUID() };
+        if (editingIndex.value > -1) list.splice(editingIndex.value, 1, row);
+        else list.push(row);
+        dialog.value = false;
+    }, { resetOnSuccess: false });
+
+    function open(item = null) {
+        const list = getList();
+        editingIndex.value = item ? list.findIndex((row) => row.id === item.id) : -1;
+        form.resetForm({ values: item ? { ...item } : { ...emptyValues } });
+        dialog.value = true;
+    }
+
+    function remove(item) {
+        const list = getList();
+        const idx = list.findIndex((row) => row.id === item.id);
+        if (idx > -1) list.splice(idx, 1);
+    }
+
+    return {
+        dialog,
+        editingIndex,
+        fields: form.fields,
+        errors: form.errors,
+        submit: form.submit,
+        open,
+        remove,
+    };
+}
+
+const skillHeaders = [
+    { title: "Category", key: "category", align: "start" },
+    { title: "Skills", key: "skill", align: "start" },
+    { title: "Icon", key: "icon", align: "center", sortable: false },
+];
+
+const randomFactHeaders = [
+    { title: "Icon", key: "icon", align: "start" },
+    { title: "Fact", key: "text", align: "start" },
+];
+
 const skillCategoryOptions = SKILL_CATEGORIES.map((category) => ({
     title: category.title,
     value: category.title,
 }));
-function categoryTitle(title) {
-    return SKILL_CATEGORIES.find((c) => c.title === title)?.title ?? title;
-};
-const skillHeaders = [
-    { title: 'Category', key: 'category', align: 'start' },
-    { title: 'Skills', key: 'skill', align: 'start' },
-    { title: 'Icon', key: 'icon', align: 'center', sortable: false },
-];
-const [skills] = defineField('skills');
-const skillDialog = ref(false);
-const editingSkillIndex = ref(-1);
+
 const {
-    defineField: defineSkillField,
+    dialog: skillDialog,
+    editingIndex: editingSkillIndex,
+    fields: skillFields,
     errors: skillErrors,
-    submit: submitSkillForm,
-    resetForm: resetSkillForm,
-} = useValidatedForm(skillEntrySchema, async (values) => {
-    const skill = {
-        id: values.id,
-        category: values.category,
-        skill: values.skill,
-        icon: values.icon ?? null,
-    };
-    if (editingSkillIndex.value > -1) {
-        skills.value.splice(editingSkillIndex.value, 1, skill);
-    } else {
-        skills.value.push(skill);
-    }
-    closeSkillDialog();
-}, { resetOnSuccess: false });
-const [sCategory] = defineSkillField('category');
-const [sSkill] = defineSkillField('skill');
-const [sIcon] = defineSkillField('icon');
-const sIconSvg = ref(null);
-const availableSkills = computed(() => {
-    return SKILL_CATEGORIES.find((c) => c.title === sCategory.value)?.skills ?? [];
+    submit: addSkill,
+    open: openSkillDialog,
+    remove: removeSkill,
+} = useEntryDialog(skillEntrySchema, () => fields.skills, {
+    category: null,
+    skill: [],
+    icon: null,
+    iconSvg: null,
 });
-function addSkill() {
-    submitSkillForm();
-};
-function openSkillDialog(item = null) {
-    editingSkillIndex.value = item ? skills.value.findIndex(s => s.id === item.id) : -1;
-    resetSkillForm({
-        values: item ? { ...item } : {
-            category: null,
-            skill: [],
-            icon: null,
-        },
-    });
-    skillDialog.value = true;
-};
-function closeSkillDialog() {
-    skillDialog.value = false;
-};
-function removeSkill(item) {
-    const idx = skills.value.findIndex((s) => s.id === item.id);
-    if (idx > -1) skills.value.splice(idx, 1);
-};
-const randomFactHeaders = [
-    { title: 'Icon', key: 'icon', align: 'start' },
-    { title: 'Fact', key: 'text', align: 'start' },
-];
-const [randomFacts] = defineField('randomFacts');
-const factDialog = ref(false);
-const editingFactIndex = ref(-1);
-const factSchema = yup.object({
-    icon: yup.string().label('Icon').required(),
-    text: yup.string().label('Fact').required(),
-});
+
 const {
-    defineField: defineFactField,
+    dialog: factDialog,
+    editingIndex: editingFactIndex,
+    fields: factFields,
     errors: factErrors,
-    submit: submitFactForm,
-    resetForm: resetFactForm,
-} = useValidatedForm(factSchema, async (values) => {
-    const fact = {
-        id: values.id,
-        icon: values.icon,
-        text: values.text,
-    };
-    if (editingFactIndex.value > -1) {
-        randomFacts.value.splice(editingFactIndex.value, 1, fact);
-    } else {
-        randomFacts.value.push(fact);
-    }
-    closeFactDialog();
-}, { resetOnSuccess: false });
-const [fIcon] = defineFactField('icon');
-const fIconSvg = ref(null);
-const [fText] = defineFactField('text');
-function addFact() {
-    submitFactForm();
-};
-function openFactDialog(item = null) {
-    editingFactIndex.value = item ? randomFacts.value.findIndex(r => r.id === item.id) : -1;
-    fIconSvg.value = item?.iconSvg ?? null;
-    resetFactForm({
-        values: item ? { ...item } : {
-            icon: null,
-            text: '',
-        },
-    });
-    factDialog.value = true;
-};
-function closeFactDialog() {
-    factDialog.value = false;
-};
-function removeFact(item) {
-    const idx = randomFacts.value.findIndex(r => r.id === item.id);
-    if (idx > -1) randomFacts.value.splice(idx, 1);
-};
+    submit: addFact,
+    open: openFactDialog,
+    remove: removeFact,
+} = useEntryDialog(factSchema, () => fields.randomFacts, {
+    icon: null,
+    iconSvg: null,
+    text: "",
+});
+
+const availableSkills = computed(() => {
+    return SKILL_CATEGORIES.find((c) => c.title === skillFields.category)?.skills ?? [];
+});
+
 async function getAboutContent() {
     try {
-        const { data } = await axios.get('/api/getAboutContent');
+        const { data } = await axios.get("/api/getAboutContent");
         if (!data) return;
         resetForm({ values: { ...data } });
     } catch (err) {
-        error(err?.response?.data?.message ?? "Failed to load home content.");
+        error(err?.response?.data?.message ?? "Failed to load about content.");
     } finally {
         pageLoading.value = false;
     }
-};
+}
+
 onMounted(() => {
     getAboutContent();
 });

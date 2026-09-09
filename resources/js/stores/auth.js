@@ -2,7 +2,6 @@ import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import axios from "@/plugins/axios";
 import { getInitialUser } from "@/bootstrap/auth";
-import { skipNextUnsavedChangesGuard } from "@/composables/useUnsavedChanges";
 
 export const useAuthStore = defineStore("auth", () => {
     const user = ref(getInitialUser());
@@ -33,7 +32,6 @@ export const useAuthStore = defineStore("auth", () => {
     }
 
     async function logout() {
-        skipNextUnsavedChangesGuard();
         clearUser();
         axios.post("/api/logout").catch(() => {});
     }

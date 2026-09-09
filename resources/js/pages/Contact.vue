@@ -38,33 +38,30 @@
 
     <section id="contact-body" ref="contactBodySection">
         <v-card flat tile color="surface-light">
-            <v-container class="d-flex flex-column ga-5 my-5 my-md-13" :max-width="450">
+            <v-container class="d-flex flex-column ga-5 my-5 my-md-13" :max-width="420">
                 <div class="reveal-item">
                     <div class="text-center text-headline-small text-md-headline-medium font-weight-medium">Send Email
                     </div>
                 </div>
                 <v-form @submit.prevent="submit" :disabled="loading">
-                    <v-row gap="13" class="mt-3 reveal-item">
+                    <v-row gap="5" class="mt-3 reveal-item">
                         <v-col cols="12">
-                            <v-text-field v-model="name" color="primary" variant="solo" flat label="Name" rounded="lg"
-                                density="comfortable" clearable :error-messages="errors.name"></v-text-field>
+                            <v-text-field v-model="fields.name" color="primary" variant="solo" flat label="Name"
+                                class="[&_.v-field]:rounded-2xl [&_.v-field]:border" :error-messages="errors.name" />
                         </v-col>
                         <v-col cols="12">
-                            <v-text-field v-model="email" color="primary" variant="solo" flat label="Email" rounded="lg"
-                                density="comfortable" clearable :error-messages="errors.email"></v-text-field>
+                            <v-text-field v-model="fields.email" color="primary" variant="solo" flat label="Email"
+                                class="[&_.v-field]:rounded-2xl [&_.v-field]:border" :error-messages="errors.email" />
                         </v-col>
                         <v-col cols="12">
-                            <v-textarea v-model="message" color="primary" auto-grow variant="solo" flat label="Message"
-                                rounded="lg" density="comfortable" clearable :error-messages="errors.message"
-                                autocomplete="off">
-                            </v-textarea>
+                            <v-textarea v-model="fields.message" color="primary" auto-grow variant="solo" flat
+                                label="Message" class="[&_.v-field]:rounded-2xl [&_.v-field]:border"
+                                :error-messages="errors.message" autocomplete="off" />
                         </v-col>
                         <v-col cols="12">
-                            <v-btn type="submit" color="primary" variant="flat" rounded="pill" size="x-large" block
-                                prepend-icon="i-ri-send-plane-fill" :loading="loading"
-                                :disabled="!meta.dirty || loading">
-                                Send Email
-                            </v-btn>
+                            <v-btn type="submit" color="primary" variant="flat" size="large" height="56" block
+                                text="Send Email" class="rounded-2xl" :loading="loading"
+                                :disabled="!ready || !meta.valid || loading" />
                         </v-col>
                     </v-row>
                 </v-form>
@@ -75,40 +72,36 @@
 
 <script setup>
 import axios from "@/plugins/axios";
-import { ref, nextTick, watch } from "vue";
+import { nextTick, ref, watch } from "vue";
 import * as yup from "yup";
 import { storeToRefs } from "pinia";
 import { useContactStore } from "@/stores/resources";
 import { useValidatedForm } from "@/composables/useValidatedForm";
-import { useUnsavedChanges } from "@/composables/useUnsavedChanges";
 import { useScrollReveal } from "@/composables/useScrollReveal";
+
 const contactStore = useContactStore();
-const { data: data, loaded } = storeToRefs(contactStore);
+const { data, loaded } = storeToRefs(contactStore);
 const contactSection = ref(null);
 const contactBodySection = ref(null);
+
 const schema = yup.object({
-    name: yup.string().label('Name').required().min(2),
+    name: yup.string().label('Name').required(),
     email: yup.string().label('Email').email().required(),
     message: yup.string().label('Message').required(),
 });
-const { defineField, errors, loading, submit, meta } = useValidatedForm(schema, async (values) => {
+
+const { fields, errors, loading, submit, meta, ready } = useValidatedForm(schema, async (values) => {
     const response = await axios.post('/api/contact', values);
     return { message: response.data.message };
 });
-useUnsavedChanges(meta);
-const [name] = defineField('name');
-const [email] = defineField('email');
-const [message] = defineField('message');
+
 const contactReveal = useScrollReveal(contactSection, { selector: '.reveal-item', stagger: 0.15, y: 40 });
 const contactBodyReveal = useScrollReveal(contactBodySection, { selector: '.reveal-item', stagger: 0.15, y: 40 });
-watch(
-    loaded,
-    async (isLoaded) => {
-        if (!isLoaded) return;
-        await nextTick();
-        contactReveal.refresh();
-        contactBodyReveal.refresh();
-    },
-    { immediate: true }
-);
+
+watch(loaded, async (isLoaded) => {
+    if (!isLoaded) return;
+    await nextTick();
+    contactReveal.refresh();
+    contactBodyReveal.refresh();
+}, { immediate: true });
 </script>

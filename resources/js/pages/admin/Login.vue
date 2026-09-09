@@ -8,22 +8,22 @@
                 </template>
                 <v-card-title class="text-center px-0">Hi, Admin!</v-card-title>
                 <v-card-subtitle class="text-center px-0">Log in to your account</v-card-subtitle>
-                <Alert />
+                <Alert rounded="2xl" />
                 <v-form @submit.prevent="submit" class="mt-5">
-                    <v-text-field v-model="email" color="primary" variant="solo" flat label="Email" rounded="lg"
-                        density="comfortable" class="mb-1" clearable :error-messages="errors.email" />
-                    <PasswordField v-model="password" label="Password" :error-messages="errors.password" />
-                    <v-checkbox v-model="remember" color="primary" hide-details density="compact"
+                    <v-text-field v-model="fields.email" color="primary" variant="solo" flat placeholder="Email"
+                        class="[&_.v-field]:rounded-2xl [&_.v-field]:border mb-1" :error-messages="errors.email" />
+                    <PasswordField v-model="fields.password" variant="solo" flat placeholder="Password"
+                        class="[&_.v-field]:rounded-2xl [&_.v-field]:border" :error-messages="errors.password" />
+                    <v-checkbox v-model="fields.remember" color="primary" hide-details density="compact"
                         class="text-label-large">
                         <template #label>
                             <span class="text-label-large text-medium-emphasis">Remember me</span>
                         </template>
                     </v-checkbox>
-                    <v-btn type="submit" color="primary" variant="flat" rounded="pill" size="large" block text="Log In"
-                        class="my-3" height="55" />
-                    <v-btn variant="plain" color="surface-variant" rounded="pill" size="large"
-                        prepend-icon="i-mdi-arrow-left" block text="Go back to home" height="55"
-                        @click="$router.replace({ name: 'home' })" />
+                    <v-btn type="submit" color="primary" variant="flat" height="56" size="large" block text="Log In"
+                        class="rounded-2xl my-3" :disabled="!ready || !meta.valid" />
+                    <v-btn variant="plain" size="large" prepend-icon="i-mdi-arrow-left" block text="Go back to home"
+                        height="56" :ripple="false" class="rounded-2xl" @click="$router.replace({ name: 'home' })" />
                 </v-form>
             </v-card>
         </v-container>
@@ -40,6 +40,7 @@ import PasswordField from "@/components/forms/PasswordField";
 import Alert from "@/components/ui/Alert";
 import { useAlert } from "@/composables/useAlert";
 import { useScrollReveal } from '@/composables/useScrollReveal';
+
 const loginSection = ref(null);
 const route = useRoute();
 const router = useRouter();
@@ -50,16 +51,15 @@ const schema = yup.object({
     password: yup.string().label('Password').required(),
     remember: yup.boolean()
 });
-const { defineField, errors, loading, submit } = useValidatedForm(schema, async (values) => {
+const { fields, errors, loading, submit, meta, ready } = useValidatedForm(schema, async (values) => {
     await auth.login(values);
     router.replace({ name: 'manage-content' });
 },
     { resetOnSuccess: false, useAlertForErrors: true }
 );
-const [email] = defineField('email');
-const [password] = defineField('password');
-const [remember] = defineField('remember');
+
 useScrollReveal(loginSection, { selector: '.reveal-item', y: 20 });
+
 onMounted(() => {
     const { reason } = route.query;
     if (reason === 'session_expired') warning('Your session has expired. Please log in again.');

@@ -1,29 +1,4 @@
-@use "./mixins" as mixins;
 @use "./variables" as vars;
-
-.v-text-field {
-    .v-field.v-field--variant-solo {
-        border: 1px solid rgba(var(--v-border-color), 0.25);
-    }
-
-    &.v-input--focused {
-        .v-field.v-field--variant-solo {
-            @include mixins.focus-ring(--v-theme-primary);
-        }
-    }
-
-    &.v-input--error {
-        .v-field.v-field--variant-solo {
-            border-color: rgb(var(--v-theme-error));
-        }
-    }
-
-    &.v-input--focused.v-input--error {
-        .v-field.v-field--variant-solo {
-            @include mixins.focus-ring(--v-theme-error);
-        }
-    }
-}
 
 .v-tooltip {
     > .v-overlay__content {

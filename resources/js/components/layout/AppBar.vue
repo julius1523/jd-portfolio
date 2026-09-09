@@ -7,7 +7,6 @@ import { useAuthStore } from "@/stores/auth";
 import { useLayoutStore } from "@/stores/layout";
 import { useThemeStore } from "@/stores/theme";
 import ProfileMenu from "../ui/ProfileMenu";
-import useActiveRoute from "@/composables/useActiveRoute";
 
 const isScrolled = ref(false);
 const onScroll = () => {
@@ -19,7 +18,6 @@ const theme = useTheme();
 const route = useRoute();
 const layout = useLayoutStore();
 const themeStore = useThemeStore();
-const { isActive } = useActiveRoute();
 const layoutType = computed(() => {
     if (route.name === "not-found") {
         return isAuthenticated.value ? "app" : "public";
@@ -40,20 +38,22 @@ const toggleTheme = (e) => {
         <v-container class="d-flex flex-row align-center ga-2">
             <template v-if="!isAppLayout">
                 <router-link :to="{ name: 'home' }">
-                    <v-avatar color="primary">JD</v-avatar>
+                    <v-avatar variant="elevated" class="bg-gradient-to-br from-blue-500 to-blue-900 text-white">
+                        JD
+                    </v-avatar>
                 </router-link>
                 <div class="d-flex ga-2 align-center ml-auto">
                     <v-toolbar v-if="$vuetify.display.mdAndUp" color="transparent" height="38" location="top end"
                         floating rounded="pill">
                         <div class="d-flex ga-1">
-                            <v-btn height="32" :color="isActive('home') ? 'primary' : undefined" rounded="pill"
-                                text="Home" :to="{ name: 'home' }" />
-                            <v-btn height="32" :color="isActive('about') ? 'primary' : undefined" rounded="pill"
-                                text="About" :to="{ name: 'about' }" />
-                            <v-btn height="32" :color="isActive('projects') ? 'primary' : undefined" rounded="pill"
-                                text="Projects" :to="{ name: 'projects' }" />
-                            <v-btn height="32" :color="isActive('contact') ? 'primary' : undefined" rounded="pill"
-                                text="Contact" :to="{ name: 'contact' }" />
+                            <v-btn height="32" active-color="primary" rounded="pill" text="Home"
+                                :to="{ name: 'home' }" />
+                            <v-btn height="32" active-color="primary" rounded="pill" text="About"
+                                :to="{ name: 'about' }" />
+                            <v-btn height="32" active-color="primary" rounded="pill" text="Projects"
+                                :to="{ name: 'projects' }" />
+                            <v-btn height="32" active-color="primary" rounded="pill" text="Contact"
+                                :to="{ name: 'contact' }" />
                         </div>
                     </v-toolbar>
                     <v-divider v-if="$vuetify.display.mdAndUp" vertical :thickness="2" class="my-2"></v-divider>

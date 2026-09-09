@@ -2,6 +2,7 @@ import "vuetify/styles";
 import { h } from "vue";
 import { createVuetify } from "vuetify";
 import { aliases, mdi } from "vuetify/iconsets/mdi-unocss";
+
 const savedTheme = localStorage.getItem("theme") ?? "dark";
 const unoIcons = {
     component: (props) =>
@@ -9,6 +10,7 @@ const unoIcons = {
             class: [props.icon],
         }),
 };
+
 export default createVuetify({
     icons: {
         defaultSet: "uno",
@@ -37,7 +39,6 @@ export default createVuetify({
         },
     },
     defaults: {
-        VField: { style: { overflow: "hidden" } },
         VChip: { style: { userSelect: "none" } },
         VImg: { draggable: false },
         VAppBar: { style: { userSelect: "none" } },
@@ -48,7 +49,7 @@ export default createVuetify({
             fileIcon: "i-mdi-file-document",
             density: "compact",
         },
-        VFileUploadDropzone: { rounded: "lg" },
+        VFileUploadDropzone: { class: "rounded-[10px]" },
         VMenu: { offset: "5px" },
         VContainer: { maxWidth: 1400 },
         VTabs: { activeClass: "opacity-100" },

@@ -1,3 +1,4 @@
+import { reactive, ref, onMounted, nextTick } from "vue";
 import { useForm } from "vee-validate";
 import { useSnackBarQueue } from "@/composables/useSnackBarQueue";
 import { useAlert } from "@/composables/useAlert";
@@ -34,21 +35,26 @@ export function useValidatedForm(schema, onSubmit, options = {}) {
 
     const initialValues = buildInitialValues(schema);
 
-    const {
-        defineField: rawDefineField,
-        errors,
-        handleSubmit,
-        resetForm,
-        meta,
-    } = useForm({
+    const { defineField, errors, handleSubmit, resetForm, meta } = useForm({
         validationSchema: schema,
         initialValues,
     });
 
-    function defineField(name, opts) {
-        const [field, props] = rawDefineField(name, opts);
-        return [field, props];
-    }
+    const fields = reactive(
+        Object.fromEntries(
+            Object.keys(schema.fields).map((name) => {
+                const [field] = defineField(name);
+                return [name, field];
+            }),
+        ),
+    );
+
+    const ready = ref(false);
+    onMounted(() => {
+        nextTick(() => {
+            ready.value = true;
+        });
+    });
 
     const submit = handleSubmit((values, actions) =>
         wrap(async () => {
@@ -83,5 +89,14 @@ export function useValidatedForm(schema, onSubmit, options = {}) {
         }),
     );
 
-    return { defineField, errors, loading, submit, resetForm, meta };
+    return {
+        fields,
+        defineField,
+        errors,
+        loading,
+        submit,
+        resetForm,
+        meta,
+        ready,
+    };
 }

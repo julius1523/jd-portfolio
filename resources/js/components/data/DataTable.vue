@@ -1,12 +1,12 @@
 <template>
     <div>
         <div v-if="addable" class="d-flex justify-end mb-2">
-            <v-btn variant="flat" color="surface-variant" rounded="lg" prepend-icon="i-mdi-plus" :text="addLabel"
-                :disabled="disabled" @click="$emit('add')" />
+            <v-btn variant="flat" color="surface-variant" prepend-icon="i-mdi-plus" :text="addLabel"
+                :disabled="disabled" class="rounded-[10px]" @click="$emit('add')" />
         </div>
 
         <v-data-table :headers="tableHeaders" :items="items" :item-value="itemValue" v-model:expanded="expandedRows"
-            :show-expand="expandable" :mobile="$vuetify.display.smAndDown" class="border rounded-lg"
+            :show-expand="expandable" :mobile="$vuetify.display.smAndDown" class="border rounded-[10px]"
             data-shimmer-no-children>
 
             <template v-for="name in forwardedSlotNames" #[name]="slotProps" :key="name">
@@ -45,6 +45,7 @@
 
 <script setup>
 import { computed, ref, useSlots } from "vue";
+
 const props = defineProps({
     items: { type: Array, default: () => [] },
     headers: { type: Array, required: true },
@@ -58,7 +59,7 @@ const props = defineProps({
     noDataText: { type: String, default: "No items added yet." },
     disabled: { type: Boolean, default: false },
 });
-defineEmits(["add", "edit", "remove"]);
+
 const expandedRows = ref([]);
 const canEdit = computed(() => props.addable && props.editable);
 const canRemove = computed(() => props.addable && props.removable);
@@ -74,4 +75,6 @@ const reservedSlotNames = ["item.action", "expanded-row", "no-data"];
 const forwardedSlotNames = computed(() =>
     Object.keys(slots).filter((name) => !reservedSlotNames.includes(name))
 );
+
+defineEmits(["add", "edit", "remove"]);
 </script>

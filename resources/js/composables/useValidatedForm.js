@@ -28,9 +28,17 @@ function buildInitialValues(schema) {
 }
 
 export function useValidatedForm(schema, onSubmit, options = {}) {
-    const { resetOnSuccess = true, useAlertForErrors = false } = options;
+    const {
+        resetOnSuccess = true,
+        useAlertForErrors = false,
+        cancelMessage = "No changes made.",
+    } = options;
     const { loading, wrap } = useFormLoading();
-    const { success: notifySuccess, error: notifyError } = useSnackBarQueue();
+    const {
+        success: notifySuccess,
+        error: notifyError,
+        info: notifyInfo,
+    } = useSnackBarQueue();
     const { error: alertError, clear: clearAlerts } = useAlert();
 
     const initialValues = buildInitialValues(schema);
@@ -89,6 +97,11 @@ export function useValidatedForm(schema, onSubmit, options = {}) {
         }),
     );
 
+    function cancelEdit() {
+        resetForm();
+        notifyInfo(cancelMessage);
+    }
+
     return {
         fields,
         defineField,
@@ -96,6 +109,7 @@ export function useValidatedForm(schema, onSubmit, options = {}) {
         loading,
         submit,
         resetForm,
+        cancelEdit,
         meta,
         ready,
     };

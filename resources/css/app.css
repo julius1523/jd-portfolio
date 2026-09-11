@@ -5,22 +5,6 @@ html {
     touch-action: manipulation;
 }
 
-/* ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-}
-
-::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-    background-color: rgba(var(--v-theme-on-surface), 0.3);
-}
-::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(var(--v-theme-on-surface), 0.5);
-} */
-
 a {
     color: inherit;
 }
@@ -47,10 +31,4 @@ input:-webkit-autofill:focus {
     -webkit-box-shadow: 0 0 0 1000px rgb(var(--v-theme-surface)) inset;
     -webkit-text-fill-color: rgb(var(--v-theme-on-surface));
     transition: background-color 9999s ease-in-out 0s;
-}
-
-input::placeholder,
-textarea::placeholder {
-    opacity: 0.7;
-    color: rgb(var(--v-theme-on-surface));
 }

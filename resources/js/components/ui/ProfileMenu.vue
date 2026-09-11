@@ -39,7 +39,7 @@ const logout = () => {
 </script>
 
 <template>
-    <v-menu :offset="[8, 0]" :close-on-content-click="false">
+    <v-menu :offset="[8, 0]">
         <template #activator="{ props: activatorProps }">
             <v-icon-btn v-if="variant === 'icon'" v-bind="activatorProps" variant="tonal" color="primary"
                 icon="i-mdi-account" />

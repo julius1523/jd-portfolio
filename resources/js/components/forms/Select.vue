@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from "vue";
+
 const props = defineProps({
     modelValue: { type: [Array, String], default: () => [] },
     items: { type: Array, default: () => [] },
@@ -30,6 +31,7 @@ const overflowCount = computed(() => safeList.value.length - visibleCount.value)
 const visibleText = computed(() =>
     safeList.value.slice(0, visibleCount.value).map(resolveText).join(', ')
 );
+
 function resolveText(item) {
     if (typeof item === 'string') return item;
     return item?.[props.itemTitle] ?? '';
@@ -38,6 +40,7 @@ function removeItem(item) {
     const next = safeList.value.filter((i) => resolveText(i) !== resolveText(item));
     emit('update:modelValue', next);
 };
+
 async function recalcVisibleCount() {
     await nextTick();
     const fieldEl = selectRef.value?.$el?.querySelector('.v-field__field');
@@ -73,7 +76,9 @@ async function recalcVisibleCount() {
         visibleCount.value = count >= list.length ? list.length : Math.max(count, 1);
     };
 };
+
 let resizeObserver;
+
 onMounted(() => {
     recalcVisibleCount();
     const fieldEl = selectRef.value?.$el?.querySelector('.v-field__field');
@@ -82,14 +87,16 @@ onMounted(() => {
         resizeObserver.observe(fieldEl);
     }
 });
+
 onBeforeUnmount(() => {
     resizeObserver?.disconnect();
 });
+
 watch(() => [props.modelValue, props.chip], recalcVisibleCount, { deep: true });
 </script>
 
 <template>
-    <div class="position-relative">
+    <div class="position-relative [&_.v-field\_\_input]:flex-nowrap">
         <v-select ref="selectRef" :model-value="modelValue" @update:model-value="$emit('update:modelValue', $event)"
             no-auto-scroll v-model:search="search" :hide-no-data="false" :items="items" :variant="variant" :flat="flat"
             :label="label" :rounded="rounded" :density="density" :hint="hint" :persistent-hint="persistentHint"
@@ -115,8 +122,7 @@ watch(() => [props.modelValue, props.chip], recalcVisibleCount, { deep: true });
 
             <template v-slot:selection="{ item, index }">
                 <template v-if="chip">
-                    <v-chip v-if="index < visibleCount" size="small" density="comfortable" closable
-                        @click:close="removeItem(item)">
+                    <v-chip v-if="index < visibleCount" size="small" closable @click:close="removeItem(item)">
                         {{ resolveText(item) }}
                     </v-chip>
                     <v-chip v-else-if="index === visibleCount" size="small" density="comfortable" variant="tonal">
@@ -140,40 +146,17 @@ watch(() => [props.modelValue, props.chip], recalcVisibleCount, { deep: true });
             </template>
         </v-select>
 
-        <div ref="mirrorRef" class="chip-mirror">
-            <span v-for="item in safeList" :key="resolveText(item)" class="chip-mirror__chip">
+        <div ref="mirrorRef" class="absolute invisible h-0 overflow-hidden whitespace-nowrap pointer-events-none">
+            <span v-for="item in safeList" :key="resolveText(item)"
+                class="chip-mirror__chip inline-block px-3 mr-2 h-6 leading-6 text-[0.8125rem]">
                 {{ resolveText(item) }}
             </span>
         </div>
 
-        <div ref="textMirrorRef" class="chip-mirror">
+        <div ref="textMirrorRef" class="absolute invisible h-0 overflow-hidden whitespace-nowrap pointer-events-none">
             <span v-for="(item, i) in safeList" :key="resolveText(item)" class="text-mirror__item">
                 {{ resolveText(item) }}<template v-if="i < safeList.length - 1">, </template>
             </span>
         </div>
     </div>
 </template>
-
-<style lang="css" scoped>
-.chip-mirror {
-    position: absolute;
-    visibility: hidden;
-    height: 0;
-    overflow: hidden;
-    white-space: nowrap;
-    pointer-events: none;
-}
-
-.chip-mirror__chip {
-    display: inline-block;
-    padding: 0 12px;
-    margin-right: 8px;
-    font-size: 0.8125rem;
-    height: 24px;
-    line-height: 24px;
-}
-
-:deep(.v-field__input) {
-    flex-wrap: nowrap;
-}
-</style>

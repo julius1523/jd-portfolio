@@ -2,27 +2,26 @@
     <Shimmer :loading="pageLoading">
         <v-card flat class="pa-3 mt-2 rounded-lg">
             <v-form @submit.prevent="submit" :disabled="loading">
-                <v-row>
+                <v-row :gap="45">
                     <v-col cols="12">
-                        <v-row :gap="13">
+                        <v-row no-gutters>
                             <v-col cols="12" lg="6">
-                                <div class="mb-2">
+                                <div class="mb-4">
                                     <span class="text-title-medium font-weight-bold">Profile</span><br />
                                     <span class="text-title-small text-medium-emphasis">
                                         Update your profile to display to home page
                                     </span>
                                 </div>
-                                <FileUpload v-model="profileImage" file-type="image" :max-files="1" inset
+                                <FileUpload v-model="fields.profileImage" file-type="image" :max-files="1" inset
                                     :disabled="loading" :show-size="true" density="comfortable"
-                                    hint="The image to display on your home page" :persistent-hint="true"
                                     :error-messages="errors.profileImage" data-shimmer-no-children />
                             </v-col>
                         </v-row>
                     </v-col>
-                    <v-col cols="12" lg="6">
-                        <v-row :gap="13">
+                    <v-col cols="12">
+                        <v-row no-gutters>
                             <v-col cols="12">
-                                <div>
+                                <div class="mb-4">
                                     <span class="text-title-medium font-weight-bold">Text</span><br />
                                     <span class="text-title-small text-medium-emphasis">
                                         Update what users can see and read from your site
@@ -30,21 +29,21 @@
                                 </div>
                             </v-col>
                             <v-col cols="12">
-                                <v-text-field v-model="heading" color="primary" variant="solo" flat label="Heading"
-                                    rounded="lg" density="comfortable" clearable :error-messages="errors.heading"
-                                    autocomplete="off" data-shimmer-no-children />
+                                <v-text-field v-model="fields.heading" color="primary" variant="solo" flat
+                                    label="Heading" density="comfortable" clearable :error-messages="errors.heading"
+                                    autocomplete="off" class="vfield-outline" data-shimmer-no-children />
                             </v-col>
                             <v-col cols="12">
-                                <v-textarea v-model="description" color="primary" auto-grow variant="solo" flat
-                                    label="Description" rounded="lg" density="comfortable" clearable
-                                    :error-messages="errors.description" autocomplete="off" data-shimmer-no-children />
+                                <v-textarea v-model="fields.description" color="primary" auto-grow variant="solo" flat
+                                    label="Description" density="comfortable" :error-messages="errors.description"
+                                    autocomplete="off" class="vfield-outline" data-shimmer-no-children />
                             </v-col>
                         </v-row>
                     </v-col>
                     <v-col cols="12">
-                        <v-row :gap="13">
+                        <v-row no-gutters>
                             <v-col cols="12">
-                                <div>
+                                <div class="mb-4">
                                     <span class="text-title-medium font-weight-bold">Socials</span><br />
                                     <span class="text-title-small text-medium-emphasis">
                                         Update the socials to showcase
@@ -52,12 +51,14 @@
                                 </div>
                             </v-col>
                             <v-col cols="12">
-                                <DataTable :items="socials" :headers="socialHeaders" :addable="true" :expandable="false"
-                                    add-label="New Social" no-data-text="No socials added yet." :disabled="loading"
-                                    @add="openSocialDialog" @edit="openSocialDialog" @remove="removeSocial">
+                                <DataTable :items="fields.socials" :headers="socialHeaders" :addable="true"
+                                    :expandable="false" add-label="New Social" no-data-text="No socials added yet."
+                                    :disabled="loading" @add="socialDialog.open" @edit="socialDialog.open"
+                                    @remove="socialDialog.remove">
                                     <template #item.name="{ item }">
-                                        <div class="d-flex ga-2" :class="{ 'justify-end': $vuetify.display.smAndDown }">
-                                            <v-icon :class="item.icon" color="primary" />
+                                        <div class="d-flex ga-3 align-center"
+                                            :class="{ 'justify-end': $vuetify.display.smAndDown }">
+                                            <v-icon :class="item.icon" size="35" color="primary" />
                                             <span>{{ item.name }}</span>
                                         </div>
                                     </template>
@@ -66,37 +67,34 @@
                         </v-row>
                     </v-col>
                     <v-col cols="12">
-                        <div class="d-flex flex-column flex-md-row ga-3 justify-end mt-8">
-                            <v-btn variant="plain" text="Cancel Edit" rounded="pill" size="x-large"
-                                :disabled="!meta.dirty || loading" @click="cancelEdit" />
-                            <v-btn type="submit" text="Save Changes" variant="flat" rounded="pill" color="primary"
-                                size="x-large" class="order-first order-md-last" :disabled="!meta.dirty || loading"
-                                :loading="loading" />
-                        </div>
+                        <FormActions :dirty="meta.dirty" :ready="ready" :loading="loading" @cancel="cancelEdit" />
                     </v-col>
                 </v-row>
             </v-form>
         </v-card>
     </Shimmer>
 
-    <Dialog v-model="socialDialog" :is-editing="editingIndex > -1" add-title="Add Social" edit-title="Edit Social"
-        save-text="Add Social" edit-save-text="Save Changes" cancel-text="Cancel" edit-cancel-text="Cancel Edit"
-        @save="addSocial" @cancel="closeSocialDialog">
-        <v-form @submit.prevent="addSocial">
-            <v-row :gap="13">
+    <Dialog v-model="socialDialog.dialog.value" :is-editing="socialDialog.isEditing.value" add-title="Add Social"
+        edit-title="Edit Social" save-text="Add social" edit-save-text="Save changes" cancel-text="Cancel"
+        edit-cancel-text="Cancel Edit" :loading="socialDialog.loading.value" @save="socialDialog.submit"
+        @cancel="socialDialog.close">
+        <v-form @submit.prevent="socialDialog.submit">
+            <v-row no-gutters>
                 <v-col cols="12">
-                    <v-text-field v-model="sName" label="Social Name" color="primary" variant="solo" flat rounded="lg"
-                        density="comfortable" clearable :error-messages="socialErrors.name" autocomplete="off" />
+                    <v-text-field v-model="socialDialog.fields.name" label="Social Name" color="primary" variant="solo"
+                        flat density="comfortable" clearable :error-messages="socialDialog.errors.name"
+                        autocomplete="off" class="vfield-outline" />
                 </v-col>
                 <v-col cols="12">
-                    <v-text-field v-model="sLinkUrl" label="Link URL" color="primary" variant="solo" flat rounded="lg"
-                        density="comfortable" clearable placeholder="https://..." :error-messages="socialErrors.linkUrl"
-                        autocomplete="off" />
+                    <v-text-field v-model="socialDialog.fields.linkUrl" label="Link URL" color="primary" variant="solo"
+                        flat density="comfortable" clearable :error-messages="socialDialog.errors.linkUrl"
+                        autocomplete="off" class="vfield-outline" />
                 </v-col>
                 <v-col cols="12">
-                    <Select v-model="sIcon" label="Icon" color="primary" variant="solo" flat rounded="lg"
+                    <Select v-model="socialDialog.fields.icon" label="Icon" color="primary" variant="solo" flat
                         density="comfortable" :items="SOCIAL_ICONS" item-title="name" item-value="value"
-                        :multiple="false" :chip="false" :error-messages="socialErrors.icon">
+                        :multiple="false" :chip="false" :error-messages="socialDialog.errors.icon"
+                        class="vfield-outline">
                         <template #item="{ item, props: itemProps }">
                             <v-list-item v-bind="itemProps" :prepend-icon="item?.value" color="primary"
                                 :title="undefined">
@@ -122,113 +120,81 @@ import axios from "@/plugins/axios";
 import { ref, onMounted } from "vue";
 import * as yup from "yup";
 import { useValidatedForm } from "@/composables/useValidatedForm";
+import { useEntryDialog } from "@/composables/useEntryDialog";
 import { useSnackBarQueue } from "@/composables/useSnackBarQueue";
 import DataTable from "@/components/data/DataTable";
 import Select from "@/components/forms/Select";
 import FileUpload from "@/components/forms/FileUpload";
+import FormActions from "@/components/forms/FormActions";
 import Dialog from "@/components/forms/FormDialog";
 import { SOCIAL_ICONS } from "@/src/constants/constants";
-const { info, error } = useSnackBarQueue();
-const pageLoading = ref(true);
+
+const socialHeaders = [
+    { title: "Social Name", key: "name", align: "start" },
+    { title: "Link URL", key: "linkUrl", align: "start" },
+];
 const schema = yup.object({
-    profileImage: yup.mixed().label('Profile Image').nullable(),
-    heading: yup.string().label('Heading').required(),
-    description: yup.string().label('Description').required(),
-    socials: yup.array().label('Socials').default([]),
+    profileImage: yup.mixed().label("Profile Image").nullable(),
+    heading: yup.string().label("Heading").required(),
+    description: yup.string().label("Description").required(),
+    socials: yup.array().label("Socials").default([]),
 });
-const { defineField, errors, loading, submit, resetForm, meta } = useValidatedForm(schema, async (values) => {
-    const formData = new FormData();
-    const profileImageFile = (values.profileImage instanceof File || values.profileImage instanceof Blob) ? values.profileImage : null;
-    if (profileImageFile) {
-        formData.append('profileImage', profileImageFile);
-    } else if (!values.profileImage) {
-        formData.append('remove_profileImage', '1');
-    };
-    const payload = {
-        heading: values.heading,
-        description: values.description,
-        socials: values.socials,
-    };
-    formData.append('payload', JSON.stringify(payload));
-    const response = await axios.post('/api/updateContactContent', formData);
-    await getContactContent();
-    return { message: response.data.message };
-},
+const socialSchema = yup.object({
+    id: yup.mixed().nullable(),
+    name: yup.string().label("Social Name").required(),
+    linkUrl: yup.string().label("Link URL").required(),
+    icon: yup.string().label("Icon").required(),
+});
+const { error } = useSnackBarQueue();
+const pageLoading = ref(true);
+const { fields, errors, loading, submit, cancelEdit, resetForm, meta, ready } = useValidatedForm(
+    schema,
+    async (values) => {
+        const formData = new FormData();
+        const profileImageFile =
+            values.profileImage instanceof File || values.profileImage instanceof Blob
+                ? values.profileImage
+                : null;
+
+        if (profileImageFile) {
+            formData.append("profileImage", profileImageFile);
+        } else if (!values.profileImage) {
+            formData.append("remove_profileImage", "1");
+        }
+
+        formData.append(
+            "payload",
+            JSON.stringify({
+                heading: values.heading,
+                description: values.description,
+                socials: values.socials,
+            })
+        );
+
+        const response = await axios.post("/api/updateContactContent", formData);
+        await getContactContent();
+        return { message: response.data.message };
+    },
     { resetOnSuccess: false }
 );
-const [profileImage] = defineField('profileImage');
-const [heading] = defineField('heading');
-const [description] = defineField('description');
-const cancelEdit = () => {
-    resetForm();
-    info("No changes made.");
-};
+const socialDialog = useEntryDialog(socialSchema, () => fields.socials, {
+    name: "",
+    linkUrl: "",
+    icon: null,
+});
+
 async function getContactContent() {
     try {
-        const { data } = await axios.get('/api/getContactContent');
+        const { data } = await axios.get("/api/getContactContent");
         if (!data) return;
         resetForm({ values: data });
     } catch (err) {
-        error(err?.response?.data?.message ?? "Failed to load home content.");
+        error(err?.response?.data?.message ?? "Failed to load contact content.");
     } finally {
         pageLoading.value = false;
-    };
-};
-const socialHeaders = [
-    { title: 'Social Name', key: 'name', align: 'start' },
-    { title: 'Link URL', key: 'linkUrl', align: 'start' },
-];
-const [socials] = defineField('socials');
-const socialDialog = ref(false);
-const editingIndex = ref(-1);
-const socialSchema = yup.object({
-    name: yup.string().label('Social Name').required(),
-    linkUrl: yup.string().label('Link URL').required(),
-    icon: yup.string().label('Icon').required(),
-});
-const {
-    defineField: defineSocialField,
-    errors: socialErrors,
-    submit: submitSocialForm,
-    resetForm: resetSocialForm,
-} = useValidatedForm(socialSchema, async (values) => {
-    const social = {
-        id: values.id,
-        name: values.name,
-        linkUrl: values.linkUrl,
-        icon: values.icon,
-    };
-    if (editingIndex.value > -1) {
-        socials.value.splice(editingIndex.value, 1, social);
-    } else {
-        socials.value.push(social);
     }
-    closeSocialDialog();
-}, { resetOnSuccess: false });
-const [sName] = defineSocialField('name');
-const [sLinkUrl] = defineSocialField('linkUrl');
-const [sIcon] = defineSocialField('icon');
-function addSocial() {
-    submitSocialForm();
-};
-function openSocialDialog(item = null) {
-    editingIndex.value = item ? socials.value.findIndex(p => p.id === item.id) : -1;
-    resetSocialForm({
-        values: item ? { ...item } : {
-            name: '',
-            linkUrl: '',
-            icon: null,
-        },
-    });
-    socialDialog.value = true;
-};
-function closeSocialDialog() {
-    socialDialog.value = false;
-};
-function removeSocial(item) {
-    const idx = socials.value.findIndex(s => s.id === item.id);
-    if (idx > -1) socials.value.splice(idx, 1);
-};
+}
+
 onMounted(() => {
     getContactContent();
 });

@@ -1,6 +1,7 @@
 import "unfonts.css";
 import "virtual:uno.css";
 import "../css/app.css";
+import "overlayscrollbars/overlayscrollbars.css";
 import { createApp } from "vue";
 import { createPinia } from "pinia";
 import "@/plugins/axios";

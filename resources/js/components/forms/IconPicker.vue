@@ -1,6 +1,7 @@
 <script setup>
 import { ref, nextTick } from "vue";
 import { useIconPicker } from "@/composables/useIconPicker";
+
 const props = defineProps({
     modelValue: { type: String, default: null },
 });
@@ -19,6 +20,7 @@ const {
 const menuOpen = ref(false);
 const scrollBox = ref(null);
 const activeSet = ref(sets.value[0]);
+
 function onMenuToggle(open) {
     if (open && icons.value.length === 0) {
         getIcons(true);
@@ -49,12 +51,6 @@ function pick(icon) {
 };
 </script>
 
-<style lang="css" scoped>
-.icon-grid {
-    height: 230px;
-}
-</style>
-
 <template>
     <v-menu v-model="menuOpen" :close-on-content-click="false" :offset="[8, 0]" location="bottom end" width="360"
         @update:model-value="onMenuToggle">
@@ -73,12 +69,16 @@ function pick(icon) {
                     <v-tab value="ri">Remix</v-tab>
                 </v-tabs>
 
-                <v-text-field :model-value="search" prepend-inner-icon="i-mdi-magnify" placeholder="Search icons..."
-                    variant="solo-filled" flat density="compact" rounded="lg" clearable hide-details autocomplete="off"
-                    @update:model-value="onSearch" />
+                <v-text-field :model-value="search" placeholder="Search icons..." variant="solo-filled" flat
+                    density="compact" rounded="lg" clearable hide-details autocomplete="off"
+                    @update:model-value="onSearch">
+                    <template #prepend-inner>
+                        <v-icon size="20" icon="i-mdi-magnify" />
+                    </template>
+                </v-text-field>
             </div>
 
-            <v-card-text ref="scrollBox" class="icon-grid overflow-y-auto pa-3" @scroll="onScroll">
+            <v-card-text ref="scrollBox" class="h-[230px] overflow-y-auto pa-3" @scroll="onScroll">
                 <div v-if="!loading && icons.length === 0" class="text-center text-medium-emphasis py-6 text-body-2">
                     No icons found.
                 </div>

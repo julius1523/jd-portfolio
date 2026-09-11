@@ -10,20 +10,23 @@
                 <v-card-subtitle class="text-center px-0">Log in to your account</v-card-subtitle>
                 <Alert rounded="2xl" />
                 <v-form @submit.prevent="submit" class="mt-5">
-                    <v-text-field v-model="fields.email" color="primary" variant="solo" flat placeholder="Email"
-                        class="[&_.v-field]:rounded-2xl [&_.v-field]:border mb-1" :error-messages="errors.email" />
-                    <PasswordField v-model="fields.password" variant="solo" flat placeholder="Password"
-                        class="[&_.v-field]:rounded-2xl [&_.v-field]:border" :error-messages="errors.password" />
+                    <v-text-field v-model="fields.email" color="primary" variant="solo" flat density="comfortable"
+                        placeholder="Email" class="[&_.v-field]:rounded-2xl [&_.v-field]:border mb-1"
+                        :error-messages="errors.email" />
+                    <PasswordField v-model="fields.password" variant="solo" flat density="comfortable"
+                        placeholder="Password" class="[&_.v-field]:rounded-2xl [&_.v-field]:border"
+                        :error-messages="errors.password" />
                     <v-checkbox v-model="fields.remember" color="primary" hide-details density="compact"
                         class="text-label-large">
                         <template #label>
                             <span class="text-label-large text-medium-emphasis">Remember me</span>
                         </template>
                     </v-checkbox>
-                    <v-btn type="submit" color="primary" variant="flat" height="56" size="large" block text="Log In"
+                    <v-btn type="submit" color="primary" variant="flat" height="50" size="large" block text="Log In"
                         class="rounded-2xl my-3" :disabled="!ready || !meta.valid" />
-                    <v-btn variant="plain" size="large" prepend-icon="i-mdi-arrow-left" block text="Go back to home"
-                        height="56" :ripple="false" class="rounded-2xl" @click="$router.replace({ name: 'home' })" />
+                    <v-btn variant="plain" height="50" size="large" prepend-icon="i-mdi-arrow-left" block
+                        text="Go back to home" :ripple="false" class="rounded-2xl"
+                        @click="$router.replace({ name: 'home' })" />
                 </v-form>
             </v-card>
         </v-container>

@@ -3,15 +3,12 @@
         <h1 class="text-headline-small text-headline-md-medium mt-0">{{ route.meta.title }}</h1>
 
         <v-sheet class="mt-8" elevation="0">
-            <div class="tabs-fade-wrapper">
-                <v-tabs v-model="tab" density="comfortable" :grow="$vuetify.display.smAndDown" color="primary"
-                    slider-transition="shift">
-                    <v-tab variant="plain" :value="1" class="rounded-t-md" :ripple="false">Home</v-tab>
-                    <v-tab variant="plain" :value="2" class="rounded-t-md" :ripple="false">About</v-tab>
-                    <v-tab variant="plain" :value="3" class="rounded-t-md" :ripple="false">Projects</v-tab>
-                    <v-tab variant="plain" :value="4" class="rounded-t-md" :ripple="false">Contact</v-tab>
-                </v-tabs>
-            </div>
+            <v-tabs v-model="tab" :grow="$vuetify.display.smAndDown" selected-class="!opacity-100" color="primary">
+                <v-tab variant="plain" :value="1" class="rounded-t-md" :ripple="false">Home</v-tab>
+                <v-tab variant="plain" :value="2" class="rounded-t-md" :ripple="false">About</v-tab>
+                <v-tab variant="plain" :value="3" class="rounded-t-md" :ripple="false">Projects</v-tab>
+                <v-tab variant="plain" :value="4" class="rounded-t-md" :ripple="false">Contact</v-tab>
+            </v-tabs>
 
             <v-divider />
 
@@ -40,12 +37,7 @@ import HomeContent from "./HomeContent";
 import AboutContent from "./AboutContent";
 import ProjectsContent from "./ProjectsContent";
 import ContactContent from "./ContactContent";
+
 const tab = ref(1);
 const route = useRoute();
 </script>
-
-<style lang="css" scoped>
-.v-tab--selected {
-    opacity: 1;
-}
-</style>

@@ -1,6 +1,7 @@
 <script setup>
 import { watch } from "vue";
 import { useConfirmDialogState } from "@/composables/useConfirmDialog";
+
 const state = useConfirmDialogState();
 
 function confirm() {
@@ -9,7 +10,6 @@ function confirm() {
     state.onConfirm = null;
     state.onCancel = null;
 }
-
 function cancel() {
     state.visible = false;
     state.onCancel?.();
@@ -28,21 +28,19 @@ watch(
 </script>
 
 <template>
-    <v-dialog v-model="state.visible" max-width="400" persistent>
-        <v-card class="pa-2" rounded="xl">
-            <v-card-title class="pt-3 px-6 font-weight-bold">{{ state.title }}</v-card-title>
-            <v-card-text class="pt-0 px-6 text-medium-emphasis">{{ state.message }}</v-card-text>
-            <v-card-actions>
-                <v-row gap="7">
-                    <v-col cols="6">
-                        <v-btn :text="state.cancelText" rounded="pill" size="large" block class="border"
-                            @click="cancel" />
-                    </v-col>
-                    <v-col cols="6">
-                        <v-btn variant="flat" :color="state.confirmColor" :text="state.confirmText" rounded="pill"
-                            size="large" block @click="confirm" />
-                    </v-col>
-                </v-row>
+    <v-dialog v-model="state.visible" max-width="400" persistent no-click-animation>
+        <v-card class="pa-3 shadow-lg rounded-[20px] border">
+            <div class="pt-2 px-3 text-label-large font-weight-bold">{{ state.title }}</div>
+            <div class="pb-3 px-3 text-label-large text-medium-emphasis">{{ state.message }}</div>
+            <v-card-actions class="d-flex flex-column flex-md-row">
+                <div class="order-1 order-md-0" :class="{ 'w-100': $vuetify.display.smAndDown }">
+                    <v-btn variant="tonal" :text="state.cancelText" block :slim="false" class="rounded-[10px]"
+                        @click="cancel" />
+                </div>
+                <div :class="{ 'w-100': $vuetify.display.smAndDown }">
+                    <v-btn variant="flat" :color="state.confirmColor" :text="state.confirmText" block :slim="false"
+                        class="rounded-[10px]" @click="confirm" />
+                </div>
             </v-card-actions>
         </v-card>
     </v-dialog>

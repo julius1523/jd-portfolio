@@ -1,28 +1,31 @@
 <script setup>
+import { OverlayScrollbarsComponent } from "overlayscrollbars-vue";
+
 const props = defineProps({
     modelValue: { type: Boolean, default: false },
     isEditing: { type: Boolean, default: false },
     addTitle: { type: String, default: "Add Item" },
     editTitle: { type: String, default: "Edit Item" },
     saveText: { type: String, default: "Add" },
-    editSaveText: { type: String, default: "Save Changes" },
+    editSaveText: { type: String, default: "Save changes" },
     cancelText: { type: String, default: "Cancel" },
-    editCancelText: { type: String, default: "Cancel Edit" },
+    editCancelText: { type: String, default: "Cancel edit" },
     loading: { type: Boolean, default: false },
     maxWidth: { type: [String, Number], default: 500 },
     maxHeight: { type: [String, Number], default: 630 },
 });
 const emit = defineEmits(["update:modelValue", "save", "cancel"]);
+
 function onCancel() {
     emit("update:modelValue", false);
     emit("cancel");
-};
+}
 </script>
 
 <template>
     <v-dialog :model-value="modelValue" @update:model-value="$emit('update:modelValue', $event)" scrollable
         :max-width="maxWidth" :max-height="maxHeight" :fullscreen="$vuetify.display.smAndDown">
-        <v-card class="border shadow-lg" :class="$vuetify.display.mdAndUp ? 'rounded-2xl' : undefined">
+        <v-card class="border shadow-lg" :class="$vuetify.display.mdAndUp ? 'rounded-[20px]' : undefined">
             <v-toolbar density="compact" color="surface" class="border-b">
                 <div class="grid w-full grid-cols-[1fr_auto_1fr] items-center">
                     <div></div>
@@ -35,14 +38,15 @@ function onCancel() {
                 </div>
             </v-toolbar>
 
-            <v-card-text class="pa-5">
+            <OverlayScrollbarsComponent element="div" class="pa-5 overflow-y-auto"
+                :options="{ scrollbars: { autoHide: 'move', theme: $vuetify.theme.current.dark ? 'os-theme-light' : 'os-theme-dark', } }"
+                defer>
                 <slot />
-            </v-card-text>
+            </OverlayScrollbarsComponent>
 
-            <v-card-actions class="d-flex flex-column flex-md-row bg-surface pa-4">
+            <v-card-actions class="pa-4 d-flex flex-column flex-md-row border-t">
                 <div class="order-1 order-md-0" :class="{ 'w-100': $vuetify.display.smAndDown }">
-                    <v-btn variant="text" class="border border-opacity-50 rounded-[10px]" height="40" block
-                        :slim="false" @click="onCancel">
+                    <v-btn variant="tonal" class="rounded-[10px]" height="40" block :slim="false" @click="onCancel">
                         {{ isEditing ? editCancelText : cancelText }}
                     </v-btn>
                 </div>

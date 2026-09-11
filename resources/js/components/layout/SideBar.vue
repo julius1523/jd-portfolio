@@ -4,6 +4,7 @@ import { useAuthStore } from "@/stores/auth";
 import { useLayoutStore } from "@/stores/layout";
 import { useDragToClose } from '@/composables/useDragToClose'
 import ProfileMenu from "../ui/ProfileMenu";
+
 const { isAuthenticated } = storeToRefs(useAuthStore());
 const layout = useLayoutStore();
 const { onDragStart, y, dragging } = useDragToClose(() => (layout.drawer = false))
@@ -28,7 +29,7 @@ const { onDragStart, y, dragging } = useDragToClose(() => (layout.drawer = false
                         </template>
 
                         <template #append>
-                            <v-icon icon="i-ri-layout-left-2-line opacity-70" class="ms-n5" v-tooltip="{
+                            <v-icon icon="i-ri-side-bar-line opacity-70" class="ms-n5" v-tooltip="{
                                 text: layout.rail ? 'Open sidebar' : 'Close sidebar',
                                 location: 'end',
                                 disabled: !layout.rail && $vuetify.display.smAndDown
@@ -39,7 +40,7 @@ const { onDragStart, y, dragging } = useDragToClose(() => (layout.drawer = false
             </template>
             <template v-else>
                 <div class="d-flex justify-center my-3 touch-none cursor-grab" @pointerdown="onDragStart">
-                    <v-icon-btn rounded="pill" color="surface-variant" size="5" width="35"></v-icon-btn>
+                    <v-icon-btn rounded="pill" color="surface-variant" size="4" width="35"></v-icon-btn>
                 </div>
             </template>
         </template>
@@ -51,26 +52,27 @@ const { onDragStart, y, dragging } = useDragToClose(() => (layout.drawer = false
                 </template>
             </v-list-subheader>
             <template v-if="isAuthenticated">
-                <v-list-item prepend-icon="i-mdi-pencil-outline" title="Manage Content" exact rounded="lg"
-                    value="home-content" :to="{ name: 'manage-content' }" v-tooltip="{
+                <v-list-item prepend-icon="i-mdi-pencil-outline" title="Manage Content" exact value="home-content"
+                    class="rounded-[10px]" :to="{ name: 'manage-content' }" v-tooltip="{
                         text: 'Manage Content',
                         location: 'end',
                         disabled: !layout.rail
                     }" />
-                <v-list-item prepend-icon="i-mdi-cog-outline" title="System Settings" exact rounded="lg"
-                    value="system-settings" :to="{ name: 'system-settings' }" v-tooltip="{
+                <v-list-item prepend-icon="i-mdi-cog-outline" title="System Settings" exact value="system-settings"
+                    class="rounded-[10px]" :to="{ name: 'system-settings' }" v-tooltip="{
                         text: 'System Settings',
                         location: 'end',
                         disabled: !layout.rail
                     }" />
             </template>
             <template v-else>
-                <v-list-item title="Home" exact rounded="lg" value="home" class="text-center" :to="{ name: 'home' }" />
-                <v-list-item title="About" exact rounded="lg" value="about" class="text-center"
+                <v-list-item title="Home" exact value="home" class="text-center rounded-[10px]"
+                    :to="{ name: 'home' }" />
+                <v-list-item title="About" exact value="about" class="text-center rounded-[10px]"
                     :to="{ name: 'about' }" />
-                <v-list-item title="Projects" exact rounded="lg" value="projects" class="text-center"
+                <v-list-item title="Projects" exact value="projects" class="text-center rounded-[10px]"
                     :to="{ name: 'projects' }" />
-                <v-list-item title="Contact" exact rounded="lg" value="contact" class="text-center"
+                <v-list-item title="Contact" exact value="contact" class="text-center rounded-[10px]"
                     :to="{ name: 'contact' }" />
             </template>
         </v-list>

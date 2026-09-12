@@ -43,10 +43,11 @@ export function useValidatedForm(schema, onSubmit, options = {}) {
 
     const initialValues = buildInitialValues(schema);
 
-    const { defineField, errors, handleSubmit, resetForm, meta } = useForm({
-        validationSchema: schema,
-        initialValues,
-    });
+    const { defineField, errors, handleSubmit, resetForm, resetField, meta } =
+        useForm({
+            validationSchema: schema,
+            initialValues,
+        });
 
     const fields = reactive(
         Object.fromEntries(
@@ -109,6 +110,7 @@ export function useValidatedForm(schema, onSubmit, options = {}) {
         loading,
         submit,
         resetForm,
+        resetField,
         cancelEdit,
         meta,
         ready,

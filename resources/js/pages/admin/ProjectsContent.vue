@@ -53,8 +53,10 @@
                             <v-col cols="12">
                                 <DataTable :items="fields.projects" :headers="projectHeaders" :addable="true"
                                     add-label="New Project" expand-key="description"
-                                    no-data-text="No projects added yet." :disabled="loading" @add="openProjectDialog"
-                                    @edit="openProjectDialog" @remove="projectDialog.remove">
+                                    v-model:sort-by="projectsOptions.sortBy" v-model:page="projectsOptions.page"
+                                    v-model:items-per-page="projectsOptions.itemsPerPage" :items-length="projectsTotal"
+                                    :loading="projectsLoading" no-data-text="No projects added yet." :disabled="loading"
+                                    @add="openProjectDialog" @edit="openProjectDialog" @remove="projectDialog.remove">
                                     <template #item.image="{ item }">
                                         <v-img v-if="projectImagePreview(item)" height="48" width="48" :aspect-ratio="1"
                                             class="border rounded-[10px] [&_img]:object-fill"
@@ -88,8 +90,9 @@
 
     <Dialog v-model="projectDialog.dialog.value" :is-editing="projectDialog.isEditing.value" add-title="Add Project"
         edit-title="Edit Project" save-text="Add project" edit-save-text="Save changes" cancel-text="Cancel"
-        edit-cancel-text="Cancel edit" :loading="projectDialog.loading.value" @save="projectDialog.submit"
-        @cancel="projectDialog.close">
+        edit-cancel-text="Cancel edit" :loading="projectDialog.loading.value"
+        :disable-save="!projectDialog.meta.value.valid || (projectDialog.isEditing.value && !projectDialog.meta.value.dirty)"
+        @save="projectDialog.submit" @cancel="projectDialog.close">
         <v-form @submit.prevent="projectDialog.submit">
             <v-row no-gutters>
                 <v-col cols="12">
@@ -147,7 +150,7 @@
 
 <script setup>
 import axios from "@/plugins/axios";
-import { ref, computed, onMounted } from "vue";
+import { ref, reactive, computed, onMounted, watch } from "vue";
 import * as yup from "yup";
 import { useValidatedForm } from "@/composables/useValidatedForm";
 import { useEntryDialog } from "@/composables/useEntryDialog";
@@ -195,7 +198,7 @@ const projectSchema = yup.object({
 const { error } = useSnackBarQueue();
 const pageLoading = ref(true);
 const materialsTab = ref(Object.keys(PROJECT_MATERIALS)[0]);
-const { fields, errors, loading, submit, cancelEdit, resetForm, meta, ready } = useValidatedForm(
+const { fields, errors, loading, submit, cancelEdit, resetForm, resetField, meta, ready } = useValidatedForm(
     schema,
     async (values) => {
         const formData = new FormData();
@@ -251,32 +254,61 @@ const projectDialog = useEntryDialog(projectSchema, () => fields.projects, {
     linkUrl: "",
 });
 const activeCategoryItems = computed(() => PROJECT_MATERIALS[materialsTab.value] ?? []);
+const projectsOptions = reactive({ page: 1, itemsPerPage: 10, sortBy: [] });
+const projectsTotal = ref(0);
+const projectsLoading = ref(false);
 
 function formatLabel(key) {
     return key.charAt(0).toUpperCase() + key.slice(1);
-}
+};
 function projectImagePreview(item) {
     if (item.image instanceof File || item.image instanceof Blob) {
         return URL.createObjectURL(item.image);
     }
     return item.image.url ?? null;
-}
+};
 function openProjectDialog(item = null) {
     materialsTab.value = Object.keys(PROJECT_MATERIALS)[0];
     projectDialog.open(item);
-}
+};
 
 async function getProjectContent() {
     try {
-        const { data } = await axios.get("/api/getProjectContent");
+        const { data } = await axios.get("/api/getProjectContent", {
+            params: { page: projectsOptions.page, perPage: projectsOptions.itemsPerPage },
+        });
         if (!data) return;
-        resetForm({ values: data });
+        resetForm({ values: { ...data, projects: data.projects ?? [] } });
+        projectsTotal.value = data.total ?? 0;
     } catch (err) {
         error(err?.response?.data?.message ?? "Failed to load project content.");
     } finally {
         pageLoading.value = false;
     }
-}
+};
+async function fetchProjects() {
+    projectsLoading.value = true;
+    try {
+        const [sort] = projectsOptions.sortBy ?? [];
+        const { data } = await axios.get("/api/getProjectContent", {
+            params: {
+                page: projectsOptions.page,
+                perPage: projectsOptions.itemsPerPage,
+                sortBy: sort?.key,
+                sortOrder: sort?.order,
+            },
+        });
+        if (!data) return;
+        resetField('projects', { value: data.projects ?? [] });
+        projectsTotal.value = data.total ?? 0;
+    } catch (err) {
+        error(err?.response?.data?.message ?? "Failed to load projects.");
+    } finally {
+        projectsLoading.value = false;
+    }
+};
+
+watch(() => [projectsOptions.page, projectsOptions.itemsPerPage, projectsOptions.sortBy], fetchProjects);
 
 onMounted(() => {
     getProjectContent();

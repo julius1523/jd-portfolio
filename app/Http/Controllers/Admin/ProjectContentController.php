@@ -8,6 +8,9 @@ use App\Models\ProjectContent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use App\Support\ArraySort;
+use function array_slice;
+use function count;
 use function is_array;
 
 class ProjectContentController extends Controller
@@ -17,7 +20,7 @@ class ProjectContentController extends Controller
     ) {
     }
 
-    public function getProjectContent()
+    public function getProjectContent(Request $request)
     {
         $data = ProjectContent::select([
             'profile_image',
@@ -26,11 +29,30 @@ class ProjectContentController extends Controller
             'projects',
         ])->first();
 
+        $sorted = ArraySort::byKey(
+            $data?->projects ?? [],
+            $request->query('sortBy'),
+            $request->query('sortOrder', 'asc'),
+            ['category', 'name']
+        );
+
+        $total = count($sorted);
+        $perPage = (int) $request->query('perPage', 10);
+
+        if ($perPage === -1) {
+            $paged = $sorted;
+        } else {
+            $page = max((int) $request->query('page', 1), 1);
+            $perPage = max($perPage, 1);
+            $paged = array_slice($sorted, ($page - 1) * $perPage, $perPage);
+        }
+
         return response()->json([
             'profileImage' => $data?->profile_image,
             'heading' => $data?->heading,
             'description' => $data?->description,
-            'projects' => $data?->projects ?? [],
+            'projects' => $paged,
+            'total' => $total,
         ]);
     }
 

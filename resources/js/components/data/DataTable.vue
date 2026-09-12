@@ -1,13 +1,65 @@
+<script setup>
+import { computed, ref, useSlots } from "vue";
+
+const props = defineProps({
+    items: { type: Array, default: () => [] },
+    headers: { type: Array, required: true },
+    itemValue: { type: String, default: "id" },
+    itemsLength: { type: Number, default: 0 },
+    sortBy: { type: Array, default: () => [] },
+    page: { type: Number, default: 1 },
+    itemsPerPage: { type: Number, default: 10 },
+    loading: { type: Boolean, default: false },
+    addable: { type: Boolean, default: true },
+    addLabel: { type: String, default: "New Item" },
+    editable: { type: Boolean, default: true },
+    removable: { type: Boolean, default: true },
+    expandable: { type: Boolean, default: true },
+    expandKey: { type: String, default: "description" },
+    noDataText: { type: String, default: "No items added yet." },
+    disabled: { type: Boolean, default: false },
+});
+const emit = defineEmits(["add", "edit", "remove", "update:sortBy", "update:page", "update:itemsPerPage"]);
+const sortByModel = computed({
+    get: () => props.sortBy,
+    set: (value) => emit("update:sortBy", value),
+});
+const pageModel = computed({
+    get: () => props.page,
+    set: (value) => emit("update:page", value),
+});
+const itemsPerPageModel = computed({
+    get: () => props.itemsPerPage,
+    set: (value) => emit("update:itemsPerPage", value),
+});
+const expandedRows = ref([]);
+const canEdit = computed(() => props.addable && props.editable);
+const canRemove = computed(() => props.addable && props.removable);
+const tableHeaders = computed(() => {
+    const hasAction = props.headers.some((h) => h.key === "action");
+    if ((canEdit.value || canRemove.value) && !hasAction) {
+        return [...props.headers, { title: "Action", key: "action", align: "end", sortable: false }];
+    }
+    return props.headers;
+});
+const slots = useSlots();
+const reservedSlotNames = ["item.action", "expanded-row", "no-data"];
+const forwardedSlotNames = computed(() =>
+    Object.keys(slots).filter((name) => !reservedSlotNames.includes(name))
+);
+</script>
+
 <template>
     <div>
         <div v-if="addable" class="mb-2">
-            <v-btn variant="flat" color="surface-variant" prepend-icon="i-mdi-plus" :text="addLabel"
-                :disabled="disabled" class="rounded-[10px]" @click="$emit('add')" />
+            <v-btn variant="tonal" prepend-icon="i-mdi-plus" :text="addLabel" :disabled="disabled"
+                class="rounded-[10px]" @click="$emit('add')" />
         </div>
 
-        <v-data-table :headers="tableHeaders" :items="items" :item-value="itemValue" v-model:expanded="expandedRows"
-            :show-expand="expandable" :mobile="$vuetify.display.smAndDown" class="border rounded-[10px]"
-            data-shimmer-no-children>
+        <v-data-table-server :headers="tableHeaders" :items="items" :items-length="itemsLength"
+            v-model:sort-by="sortByModel" v-model:page="pageModel" v-model:items-per-page="itemsPerPageModel"
+            :item-value="itemValue" v-model:expanded="expandedRows" :show-expand="expandable" :loading="loading"
+            :mobile="$vuetify.display.smAndDown" class="border rounded-[10px]" data-shimmer-no-children>
 
             <template v-for="name in forwardedSlotNames" #[name]="slotProps" :key="name">
                 <slot :name="name" v-bind="slotProps" />
@@ -39,42 +91,6 @@
                     <div class="text-medium-emphasis py-4">{{ noDataText }}</div>
                 </slot>
             </template>
-        </v-data-table>
+        </v-data-table-server>
     </div>
 </template>
-
-<script setup>
-import { computed, ref, useSlots } from "vue";
-
-const props = defineProps({
-    items: { type: Array, default: () => [] },
-    headers: { type: Array, required: true },
-    itemValue: { type: String, default: "id" },
-    addable: { type: Boolean, default: true },
-    addLabel: { type: String, default: "New Item" },
-    editable: { type: Boolean, default: true },
-    removable: { type: Boolean, default: true },
-    expandable: { type: Boolean, default: true },
-    expandKey: { type: String, default: "description" },
-    noDataText: { type: String, default: "No items added yet." },
-    disabled: { type: Boolean, default: false },
-});
-
-const expandedRows = ref([]);
-const canEdit = computed(() => props.addable && props.editable);
-const canRemove = computed(() => props.addable && props.removable);
-const tableHeaders = computed(() => {
-    const hasAction = props.headers.some((h) => h.key === "action");
-    if ((canEdit.value || canRemove.value) && !hasAction) {
-        return [...props.headers, { title: "Action", key: "action", align: "end", sortable: false }];
-    }
-    return props.headers;
-});
-const slots = useSlots();
-const reservedSlotNames = ["item.action", "expanded-row", "no-data"];
-const forwardedSlotNames = computed(() =>
-    Object.keys(slots).filter((name) => !reservedSlotNames.includes(name))
-);
-
-defineEmits(["add", "edit", "remove"]);
-</script>

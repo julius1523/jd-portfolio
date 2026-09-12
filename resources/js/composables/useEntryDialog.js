@@ -52,6 +52,7 @@ export function useEntryDialog(
         fields: form.fields,
         errors: form.errors,
         loading: form.loading,
+        meta: form.meta,
         submit: form.submit,
         open,
         close,

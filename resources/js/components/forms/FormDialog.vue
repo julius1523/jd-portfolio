@@ -11,6 +11,7 @@ const props = defineProps({
     cancelText: { type: String, default: "Cancel" },
     editCancelText: { type: String, default: "Cancel edit" },
     loading: { type: Boolean, default: false },
+    disableSave: { type: Boolean, default: false },
     maxWidth: { type: [String, Number], default: 500 },
     maxHeight: { type: [String, Number], default: 630 },
 });
@@ -26,14 +27,14 @@ function onCancel() {
     <v-dialog :model-value="modelValue" @update:model-value="$emit('update:modelValue', $event)" scrollable
         :max-width="maxWidth" :max-height="maxHeight" :fullscreen="$vuetify.display.smAndDown">
         <v-card class="border shadow-lg" :class="$vuetify.display.mdAndUp ? 'rounded-[20px]' : undefined">
-            <v-toolbar density="compact" color="surface" class="border-b">
+            <v-toolbar density="comfortable" color="surface-light">
                 <div class="grid w-full grid-cols-[1fr_auto_1fr] items-center">
                     <div></div>
                     <span class="min-w-0 truncate text-center text-title-medium font-weight-bold">
                         {{ isEditing ? editTitle : addTitle }}
                     </span>
                     <div class="flex justify-end">
-                        <v-icon icon="i-mdi-close" size="22" class="me-4" @click="onCancel" />
+                        <v-icon icon="i-mdi-close" size="22" class="me-5" @click="onCancel" />
                     </div>
                 </div>
             </v-toolbar>
@@ -52,7 +53,7 @@ function onCancel() {
                 </div>
                 <div :class="{ 'w-100': $vuetify.display.smAndDown }">
                     <v-btn variant="flat" class="rounded-[10px]" color="primary" height="40" block :slim="false"
-                        :loading="loading" @click="$emit('save')">
+                        :loading="loading" :disabled="disableSave" @click="$emit('save')">
                         {{ isEditing ? editSaveText : saveText }}
                     </v-btn>
                 </div>

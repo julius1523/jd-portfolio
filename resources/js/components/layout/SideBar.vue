@@ -2,12 +2,10 @@
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "@/stores/auth";
 import { useLayoutStore } from "@/stores/layout";
-import { useDragToClose } from '@/composables/useDragToClose'
 import ProfileMenu from "../ui/ProfileMenu";
 
 const { isAuthenticated } = storeToRefs(useAuthStore());
 const layout = useLayoutStore();
-const { onDragStart, y, dragging } = useDragToClose(() => (layout.drawer = false))
 </script>
 
 <template>
@@ -15,8 +13,7 @@ const { onDragStart, y, dragging } = useDragToClose(() => (layout.drawer = false
         :rail="layout.rail" :location="$vuetify.display.smAndDown ? 'bottom' : undefined" floating
         :permanent="$vuetify.display.mdAndUp" width="250" :class="[
             $vuetify.display.smAndDown ? 'rounded-t-xl translate-y-[var(--ty)]' : '',
-            $vuetify.display.smAndDown && !dragging ? 'transition-transform duration-200 ease-out' : '',
-        ]" :style="$vuetify.display.smAndDown ? { '--ty': `${y}px` } : undefined" color="surface-light">
+        ]" color="surface-light">
         <template #prepend>
             <template v-if="$vuetify.display.mdAndUp">
                 <v-list variant="plain" density="compact" slim nav class="bg-transparent">
@@ -39,7 +36,7 @@ const { onDragStart, y, dragging } = useDragToClose(() => (layout.drawer = false
                 </v-list>
             </template>
             <template v-else>
-                <div class="d-flex justify-center my-3 touch-none cursor-grab" @pointerdown="onDragStart">
+                <div class="d-flex justify-center my-3 touch-none cursor-grab">
                     <v-icon-btn rounded="pill" color="surface-variant" size="4" width="35"></v-icon-btn>
                 </div>
             </template>

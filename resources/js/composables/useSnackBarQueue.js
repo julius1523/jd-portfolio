@@ -1,4 +1,5 @@
 import { ref } from "vue";
+
 const messages = ref([]);
 const stateConfig = {
     success: { icon: "i-mdi-check-circle-outline", color: "success" },
@@ -6,9 +7,9 @@ const stateConfig = {
     warning: { icon: "i-mdi-alert-outline", color: "warning" },
     info: { icon: "i-mdi-information-outline", color: "primary" },
 };
+
 function push(text, type = "info", extra = {}) {
     const { icon, color } = stateConfig[type] ?? stateConfig.info;
-
     messages.value.push({
         text,
         icon,
@@ -17,7 +18,8 @@ function push(text, type = "info", extra = {}) {
         ...extra,
     });
 }
-export function useSnackBarQueue() {
+
+export function useSnackbarQueue() {
     return {
         messages,
         success: (text, extra) => push(text, "success", extra),

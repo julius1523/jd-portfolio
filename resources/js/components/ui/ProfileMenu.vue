@@ -2,37 +2,35 @@
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import { useTheme } from "vuetify";
-import { useFormLoading } from "@/composables/useFormLoading";
-import { showConfirmDialog } from "@/composables/useConfirmDialog";
+import { confirm } from "@/composables/useConfirmDialog";
 import { useAuthStore } from "@/stores/auth";
 import { useLayoutStore } from "@/stores/layout";
 import { useThemeStore } from "@/stores/theme";
+
 defineProps({
     variant: { type: String, default: "icon" },
 });
+
 const layout = useLayoutStore();
 const auth = useAuthStore();
 const { user } = storeToRefs(auth);
 const theme = useTheme();
 const themeStore = useThemeStore();
-const { loading, wrap } = useFormLoading();
 const router = useRouter();
 const toggleTheme = (e) => {
     theme.setTransitionOrigin(e.target);
     themeStore.setDark(!themeStore.isDark);
 };
 const logout = () => {
-    showConfirmDialog({
+    confirm({
         title: "Log Out",
         message: "Are you sure you want to log out?",
         confirmText: "Log Out",
         cancelText: "Cancel",
         confirmColor: "error",
         onConfirm: () => {
-            wrap(async () => {
-                router.replace({ name: "login" });
-                await auth.logout();
-            });
+            router.replace({ name: "login" });
+            auth.logout();
         },
     });
 };
@@ -87,7 +85,7 @@ const logout = () => {
 
                 <v-list-item title="Log Out" rounded="lg" @click="logout">
                     <template #prepend>
-                        <v-icon-btn size="36" variant="tonal" icon="i-ri-logout-box-r-fill" :loading="loading" />
+                        <v-icon-btn size="36" variant="tonal" icon="i-ri-logout-box-r-fill" />
                     </template>
                 </v-list-item>
             </v-list>

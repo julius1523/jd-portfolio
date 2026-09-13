@@ -8,6 +8,9 @@ use App\Http\Controllers\Controller;
 use App\Models\AboutContent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use App\Support\ArraySort;
+use function array_slice;
+use function count;
 use function is_array;
 
 class AboutContentController extends Controller
@@ -18,7 +21,7 @@ class AboutContentController extends Controller
     ) {
     }
 
-    public function getAboutContent()
+    public function getAboutContent(Request $request)
     {
         $data = AboutContent::select([
             'profile_image',
@@ -39,12 +42,70 @@ class AboutContentController extends Controller
             return $fact;
         })->all();
 
+        $skillsSorted = ArraySort::byKey(
+            $skills,
+            $request->query('skillsSortBy'),
+            $request->query('skillsSortOrder', 'asc'),
+            ['category']
+        );
+
+        $skillsTotal = count($skillsSorted);
+        $skillsPerPage = (int) $request->query('skillsPerPage', 10);
+
+        if ($skillsPerPage === -1) {
+            $skillsPaged = $skillsSorted;
+            $skillsPage = 1;
+        } else {
+            $skillsPage = max((int) $request->query('skillsPage', 1), 1);
+            $skillsPerPage = max($skillsPerPage, 1);
+
+            $skillsPaged = array_slice(
+                $skillsSorted,
+                ($skillsPage - 1) * $skillsPerPage,
+                $skillsPerPage
+            );
+        }
+
+        $randomFactsSorted = ArraySort::byKey(
+            $randomFacts,
+            $request->query('randomFactsSortBy'),
+            $request->query('randomFactsSortOrder', 'asc'),
+            ['randomFact']
+        );
+
+        $randomFactsTotal = count($randomFactsSorted);
+        $randomFactsPerPage = (int) $request->query('randomFactsPerPage', 10);
+
+        if ($randomFactsPerPage === -1) {
+            $randomFactsPaged = $randomFactsSorted;
+            $randomFactsPage = 1;
+        } else {
+            $randomFactsPage = max((int) $request->query('randomFactsPage', 1), 1);
+            $randomFactsPerPage = max($randomFactsPerPage, 1);
+
+            $randomFactsPaged = array_slice(
+                $randomFactsSorted,
+                ($randomFactsPage - 1) * $randomFactsPerPage,
+                $randomFactsPerPage
+            );
+        }
+
         return response()->json([
             'profileImage' => $data?->profile_image,
             'heading' => $data?->heading,
             'description' => $data?->description,
-            'skills' => $skills,
-            'randomFacts' => $randomFacts,
+            'skills' => $skillsPaged,
+            'skillsMeta' => [
+                'total' => $skillsTotal,
+                'perPage' => $skillsPerPage,
+                'page' => $skillsPage,
+            ],
+            'randomFacts' => $randomFactsPaged,
+            'randomFactsMeta' => [
+                'total' => $randomFactsTotal,
+                'perPage' => $randomFactsPerPage,
+                'page' => $randomFactsPage,
+            ],
             'others' => [
                 'title' => $data?->others['title'] ?? null,
                 'description' => $data?->others['description'] ?? null,
@@ -81,7 +142,7 @@ class AboutContentController extends Controller
             'skills.*.icon' => ['nullable', 'string', 'max:150'],
             'randomFacts' => ['nullable', 'array'],
             'randomFacts.*.icon' => ['required', 'string', 'max:150'],
-            'randomFacts.*.text' => ['required', 'string'],
+            'randomFacts.*.randomFact' => ['required', 'string'],
             'others' => ['nullable', 'array'],
             'others.title' => ['nullable', 'string', 'max:255'],
             'others.description' => ['nullable', 'string'],
@@ -120,7 +181,7 @@ class AboutContentController extends Controller
             $randomFacts[] = [
                 'id' => $fact['id'] ?? $existing['id'] ?? (string) Str::uuid(),
                 'icon' => $fact['icon'] ?? null,
-                'text' => $fact['text'] ?? null,
+                'randomFact' => $fact['randomFact'] ?? null,
             ];
         }
 

@@ -11,7 +11,7 @@ const state = reactive({
     onCancel: null,
 });
 
-export function showConfirmDialog({
+export function confirm({
     title = "Confirm",
     message,
     confirmText = "Confirm",

@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from "vue";
+import { OverlayScrollbarsComponent } from "overlayscrollbars-vue";
 
 const props = defineProps({
     modelValue: { type: [Array, String], default: () => [] },
@@ -17,74 +18,89 @@ const props = defineProps({
     itemValue: { type: String, default: 'value' },
     reservedForCounter: { type: Number, default: 56 },
     chip: { type: Boolean, default: true },
-});
+})
+
 const emit = defineEmits(['update:modelValue']);
+
 const search = ref('');
 const selectRef = ref(null);
 const mirrorRef = ref(null);
 const textMirrorRef = ref(null);
 const visibleCount = ref(0);
-const safeList = computed(() =>
-    Array.isArray(props.modelValue) ? props.modelValue : [props.modelValue].filter(Boolean)
-);
+
+const safeList = computed(() => Array.isArray(props.modelValue) ? props.modelValue : [props.modelValue].filter(Boolean));
 const overflowCount = computed(() => safeList.value.length - visibleCount.value);
-const visibleText = computed(() =>
-    safeList.value.slice(0, visibleCount.value).map(resolveText).join(', ')
-);
+const visibleText = computed(() => safeList.value.slice(0, visibleCount.value).map(resolveText).join(', '));
 
 function resolveText(item) {
     if (typeof item === 'string') return item;
     return item?.[props.itemTitle] ?? '';
 };
 function removeItem(item) {
-    const next = safeList.value.filter((i) => resolveText(i) !== resolveText(item));
+    const next = safeList.value.filter((value) => resolveText(value) !== resolveText(item));
     emit('update:modelValue', next);
+};
+function getFieldElement() {
+    return selectRef.value?.$el?.querySelector('.v-field__field');
 };
 
 async function recalcVisibleCount() {
     await nextTick();
-    const fieldEl = selectRef.value?.$el?.querySelector('.v-field__field');
-    const list = safeList.value;
-    if (!fieldEl || list.length === 0) {
+    const list = safeList.value
+    const fieldEl = getFieldElement();
+    if (!fieldEl || !list.length) {
         visibleCount.value = list.length;
         return;
-    }
+    };
     const availableWidth = fieldEl.clientWidth - props.reservedForCounter;
     if (props.chip) {
         const mirrorEl = mirrorRef.value;
-        if (!mirrorEl) { visibleCount.value = list.length; return; }
-        const chipMirrors = mirrorEl.querySelectorAll('.chip-mirror__chip');
-        let used = 0, count = 0;
+        if (!mirrorEl) {
+            visibleCount.value = list.length;
+            return;
+        };
+        const chipMirrors = mirrorEl.children;
+        let used = 0;
+        let count = 0;
         for (const chipEl of chipMirrors) {
             const chipWidth = chipEl.offsetWidth + 8;
-            if (used + chipWidth > availableWidth && count > 0) break;
+            if (used + chipWidth > availableWidth && count > 0) {
+                break;
+            };
             used += chipWidth;
             count++;
         }
         visibleCount.value = count >= list.length ? list.length : Math.max(count, 1);
-    } else {
-        const mirrorEl = textMirrorRef.value;
-        if (!mirrorEl) { visibleCount.value = list.length; return; }
-        const textMirrors = mirrorEl.querySelectorAll('.text-mirror__item');
-        let used = 0, count = 0;
-        for (const spanEl of textMirrors) {
-            const itemWidth = spanEl.offsetWidth;
-            if (used + itemWidth > availableWidth && count > 0) break;
-            used += itemWidth;
-            count++;
-        }
-        visibleCount.value = count >= list.length ? list.length : Math.max(count, 1);
+        return;
+    }
+    const mirrorEl = textMirrorRef.value;
+    if (!mirrorEl) {
+        visibleCount.value = list.length;
+        return;
     };
+    const textMirrors = mirrorEl.children;
+    let used = 0;
+    let count = 0;
+    for (const spanEl of textMirrors) {
+        const itemWidth = spanEl.offsetWidth
+        if (used + itemWidth > availableWidth && count > 0) {
+            break;
+        };
+        used += itemWidth;
+        count++;
+    };
+
+    visibleCount.value = count >= list.length ? list.length : Math.max(count, 1);
 };
 
 let resizeObserver;
 
 onMounted(() => {
     recalcVisibleCount();
-    const fieldEl = selectRef.value?.$el?.querySelector('.v-field__field');
+    const fieldEl = getFieldElement();
     if (fieldEl && 'ResizeObserver' in window) {
-        resizeObserver = new ResizeObserver(() => recalcVisibleCount());
-        resizeObserver.observe(fieldEl);
+        resizeObserver = new ResizeObserver(recalcVisibleCount)
+        resizeObserver.observe(fieldEl)
     }
 });
 
@@ -92,24 +108,36 @@ onBeforeUnmount(() => {
     resizeObserver?.disconnect();
 });
 
-watch(() => [props.modelValue, props.chip], recalcVisibleCount, { deep: true });
+watch(
+    () => [props.modelValue, props.chip],
+    recalcVisibleCount,
+    { deep: true }
+);
 </script>
 
 <template>
-    <div class="position-relative [&_.v-field\_\_input]:flex-nowrap">
-        <v-select ref="selectRef" :model-value="modelValue" @update:model-value="$emit('update:modelValue', $event)"
-            no-auto-scroll v-model:search="search" :hide-no-data="false" :items="items" :variant="variant" :flat="flat"
-            :label="label" :rounded="rounded" :density="density" :hint="hint" :persistent-hint="persistentHint"
-            :multiple="multiple" :list-props="{ density: 'comfortable', nav: true, prependGap: 15, class: 'pt-1' }"
-            :error-messages="errorMessages" :item-title="itemTitle" :item-value="itemValue"
-            :menu-props="{ maxWidth: '100', width: 'auto', contentClass: 'rounded-lg' }" autocomplete="off">
+    <div class="relative [&_.v-field__input]:flex-nowrap">
+        <v-select ref="selectRef" v-model:search="search" :model-value="modelValue" :items="items" :variant="variant"
+            :flat="flat" :label="label" :rounded="rounded" :density="density" :hint="hint"
+            :persistent-hint="persistentHint" :multiple="multiple" :error-messages="errorMessages"
+            :item-title="itemTitle" :item-value="itemValue" :hide-no-data="false" :no-auto-scroll="true"
+            autocomplete="off" :list-props="{
+                density: 'comfortable',
+                nav: true,
+                prependGap: 15,
+                class: 'pt-1',
+            }" :menu-props="{
+                maxWidth: '100',
+                width: 'auto',
+                contentClass: 'rounded-[10px]',
+            }" @update:model-value="emit('update:modelValue', $event)">
             <template v-for="(_, slot) in $slots" #[slot]="scope">
                 <slot :name="slot" v-bind="scope" />
             </template>
 
-            <template v-slot:item="{ item, props: itemProps }">
+            <template #item="{ item, props: itemProps }">
                 <v-list-item v-bind="itemProps" :title="undefined">
-                    <template v-slot:prepend="{ isSelected }">
+                    <template #prepend="{ isSelected }">
                         <v-checkbox-btn color="primary" :model-value="isSelected" density="compact" :ripple="false"
                             @click.stop="itemProps.onClick" />
                     </template>
@@ -120,15 +148,17 @@ watch(() => [props.modelValue, props.chip], recalcVisibleCount, { deep: true });
                 </v-list-item>
             </template>
 
-            <template v-slot:selection="{ item, index }">
+            <template #selection="{ item, index }">
                 <template v-if="chip">
                     <v-chip v-if="index < visibleCount" size="small" closable @click:close="removeItem(item)">
                         {{ resolveText(item) }}
                     </v-chip>
+
                     <v-chip v-else-if="index === visibleCount" size="small" density="comfortable" variant="tonal">
                         +{{ safeList.length - visibleCount }}
                     </v-chip>
                 </template>
+
                 <template v-else-if="index === 0">
                     {{ visibleText }}
                     <span v-if="overflowCount > 0" class="text-medium-emphasis">
@@ -137,7 +167,7 @@ watch(() => [props.modelValue, props.chip], recalcVisibleCount, { deep: true });
                 </template>
             </template>
 
-            <template v-slot:no-data>
+            <template #no-data>
                 <v-list-item>
                     <v-list-item-subtitle class="text-center">
                         No data available
@@ -146,16 +176,18 @@ watch(() => [props.modelValue, props.chip], recalcVisibleCount, { deep: true });
             </template>
         </v-select>
 
-        <div ref="mirrorRef" class="absolute invisible h-0 overflow-hidden whitespace-nowrap pointer-events-none">
+        <div ref="mirrorRef" class="pointer-events-none absolute h-0 invisible overflow-hidden whitespace-nowrap"
+            aria-hidden="true">
             <span v-for="item in safeList" :key="resolveText(item)"
-                class="chip-mirror__chip inline-block px-3 mr-2 h-6 leading-6 text-[0.8125rem]">
+                class="mr-2 inline-block h-6 px-3 text-[0.8125rem] leading-6">
                 {{ resolveText(item) }}
             </span>
         </div>
 
-        <div ref="textMirrorRef" class="absolute invisible h-0 overflow-hidden whitespace-nowrap pointer-events-none">
-            <span v-for="(item, i) in safeList" :key="resolveText(item)" class="text-mirror__item">
-                {{ resolveText(item) }}<template v-if="i < safeList.length - 1">, </template>
+        <div ref="textMirrorRef" class="pointer-events-none absolute h-0 invisible overflow-hidden whitespace-nowrap"
+            aria-hidden="true">
+            <span v-for="(item, index) in safeList" :key="resolveText(item)">
+                {{ resolveText(item) }}<template v-if="index < safeList.length - 1">, </template>
             </span>
         </div>
     </div>

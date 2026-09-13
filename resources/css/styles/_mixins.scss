@@ -1,8 +1,0 @@
-@use "./variables" as vars;
-
-@mixin bouncy-transition {
-    transition:
-        transform vars.$transition-bouncy-duration
-            vars.$transition-bouncy-easing,
-        opacity vars.$transition-bouncy-duration vars.$transition-bouncy-easing;
-}

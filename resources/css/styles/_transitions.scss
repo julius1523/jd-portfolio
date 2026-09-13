@@ -1,65 +1,41 @@
 @use "./variables" as vars;
-@use "./mixins" as mixins;
 
-.fade-enter-active,
-.fade-leave-active {
-    transition: opacity vars.$transition-fade-duration ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-    opacity: 0;
-}
-
-.bouncy-slide-x-transition {
+.bouncy-slide-x-transition,
+.bouncy-slide-x-reverse-transition,
+.bouncy-slide-y-transition,
+.bouncy-slide-y-reverse-transition {
     &-enter-active,
     &-leave-active,
     &-move {
-        @include mixins.bouncy-transition;
+        transition:
+            transform vars.$transition-bouncy-duration
+                vars.$transition-bouncy-easing,
+            opacity vars.$transition-bouncy-duration
+                vars.$transition-bouncy-easing;
     }
-
+}
+.bouncy-slide-x-transition {
     &-enter-from,
     &-leave-to {
         opacity: 0;
         transform: translateX(-30%);
     }
 }
-
 .bouncy-slide-x-reverse-transition {
-    &-enter-active,
-    &-leave-active,
-    &-move {
-        @include mixins.bouncy-transition;
-    }
-
     &-enter-from,
     &-leave-to {
         opacity: 0;
         transform: translateX(30%);
     }
 }
-
 .bouncy-slide-y-transition {
-    &-enter-active,
-    &-leave-active,
-    &-move {
-        @include mixins.bouncy-transition;
-    }
-
     &-enter-from,
     &-leave-to {
         opacity: 0;
         transform: translateY(-30%);
     }
 }
-
 .bouncy-slide-y-reverse-transition {
-    &-enter-active,
-    &-leave-active,
-    &-move {
-        @include mixins.bouncy-transition;
-    }
-
     &-enter-from,
     &-leave-to {
         opacity: 0;

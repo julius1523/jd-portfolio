@@ -2,7 +2,7 @@
     <Shimmer :loading="pageLoading">
         <v-card flat class="pa-3 mt-2 rounded-lg">
             <v-form @submit.prevent="submit" :disabled="loading">
-                <v-row :gap="45">
+                <v-row :gap="55">
                     <v-col cols="12">
                         <v-row :gap="13">
                             <v-col cols="12" lg="6">
@@ -19,7 +19,7 @@
                         </v-row>
                     </v-col>
                     <v-col cols="12">
-                        <v-row no-gutters>
+                        <v-row :gap="10">
                             <v-col cols="12">
                                 <div class="mb-4">
                                     <span class="text-title-medium font-weight-bold">Text</span><br />
@@ -46,7 +46,7 @@
                         </v-row>
                     </v-col>
                     <v-col cols="12" lg="6">
-                        <v-row no-gutters>
+                        <v-row :gap="10">
                             <v-col cols="12">
                                 <div class="mb-4">
                                     <span class="text-title-medium font-weight-bold">Buttons</span><br />
@@ -94,7 +94,7 @@ import axios from "@/plugins/axios";
 import { ref, onMounted, watch, nextTick } from "vue";
 import * as yup from "yup";
 import { useValidatedForm } from "@/composables/useValidatedForm";
-import { useSnackBarQueue } from "@/composables/useSnackBarQueue";
+import { useSnackbarQueue } from "@/composables/useSnackbarQueue";
 import Select from "@/components/forms/Select";
 import FileUpload from "@/components/forms/FileUpload";
 import FormActions from "@/components/forms/FormActions";
@@ -115,7 +115,7 @@ const schema = yup.object({
     secondaryBtnText: yup.string().label("Secondary button text").required(),
     secondaryBtnFile: yup.mixed().label("Secondary button file").nullable(),
 });
-const { error } = useSnackBarQueue();
+const { error } = useSnackbarQueue();
 const pageLoading = ref(true);
 const subHeadingItems = ref(DEVELOPER_TITLES);
 const { fields, errors, loading, submit, cancelEdit, resetForm, meta, ready } = useValidatedForm(

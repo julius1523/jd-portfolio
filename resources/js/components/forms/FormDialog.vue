@@ -11,7 +11,7 @@ const props = defineProps({
     cancelText: { type: String, default: "Cancel" },
     editCancelText: { type: String, default: "Cancel edit" },
     loading: { type: Boolean, default: false },
-    disableSave: { type: Boolean, default: false },
+    disableSave: { type: Boolean, default: true },
     maxWidth: { type: [String, Number], default: 500 },
     maxHeight: { type: [String, Number], default: 630 },
 });
@@ -26,8 +26,8 @@ function onCancel() {
 <template>
     <v-dialog :model-value="modelValue" @update:model-value="$emit('update:modelValue', $event)" scrollable
         :max-width="maxWidth" :max-height="maxHeight" :fullscreen="$vuetify.display.smAndDown">
-        <v-card class="border shadow-lg" :class="$vuetify.display.mdAndUp ? 'rounded-[20px]' : undefined">
-            <v-toolbar density="comfortable" color="surface-light">
+        <v-card class="shadow-lg" :class="$vuetify.display.mdAndUp ? 'rounded-[20px]' : undefined">
+            <v-toolbar density="comfortable" color="transparent">
                 <div class="grid w-full grid-cols-[1fr_auto_1fr] items-center">
                     <div></div>
                     <span class="min-w-0 truncate text-center text-title-medium font-weight-bold">
@@ -45,8 +45,8 @@ function onCancel() {
                 <slot />
             </OverlayScrollbarsComponent>
 
-            <v-card-actions class="pa-4 d-flex flex-column flex-md-row border-t">
-                <div class="order-1 order-md-0" :class="{ 'w-100': $vuetify.display.smAndDown }">
+            <v-card-actions class="pa-[18px] border-t mt-auto">
+                <div :class="{ 'w-100': $vuetify.display.smAndDown }">
                     <v-btn variant="tonal" class="rounded-[10px]" height="40" block :slim="false" @click="onCancel">
                         {{ isEditing ? editCancelText : cancelText }}
                     </v-btn>

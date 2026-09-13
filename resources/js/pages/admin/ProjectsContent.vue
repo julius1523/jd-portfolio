@@ -2,9 +2,9 @@
     <Shimmer :loading="pageLoading">
         <v-card flat class="pa-3 mt-2 rounded-lg">
             <v-form @submit.prevent="submit" :disabled="loading">
-                <v-row :gap="45">
+                <v-row :gap="55">
                     <v-col cols="12">
-                        <v-row no-gutters>
+                        <v-row :gap="10">
                             <v-col cols="12" lg="6">
                                 <div class="mb-4">
                                     <span class="text-title-medium font-weight-bold">Profile</span><br />
@@ -19,7 +19,7 @@
                         </v-row>
                     </v-col>
                     <v-col cols="12">
-                        <v-row no-gutters>
+                        <v-row :gap="10">
                             <v-col cols="12">
                                 <div class="mb-4">
                                     <span class="text-title-medium font-weight-bold">Text</span><br />
@@ -41,7 +41,7 @@
                         </v-row>
                     </v-col>
                     <v-col cols="12">
-                        <v-row no-gutters>
+                        <v-row :gap="10">
                             <v-col cols="12">
                                 <div class="mb-4">
                                     <span class="text-title-medium font-weight-bold">Projects</span><br />
@@ -56,10 +56,10 @@
                                     v-model:sort-by="projectsOptions.sortBy" v-model:page="projectsOptions.page"
                                     v-model:items-per-page="projectsOptions.itemsPerPage" :items-length="projectsTotal"
                                     :loading="projectsLoading" no-data-text="No projects added yet." :disabled="loading"
-                                    @add="openProjectDialog" @edit="openProjectDialog" @remove="projectDialog.remove">
+                                    @add="openDialog()" @edit="openDialog($event)" @remove="removeItem($event)">
                                     <template #item.image="{ item }">
                                         <v-img v-if="projectImagePreview(item)" height="48" width="48" :aspect-ratio="1"
-                                            class="border rounded-[10px] [&_img]:object-fill"
+                                            rounded class="border [&_img]:object-fill"
                                             :class="{ 'ml-auto': $vuetify.display.smAndDown }"
                                             :src="projectImagePreview(item)" eager />
                                         <span v-else class="text-medium-emphasis">—</span>
@@ -88,85 +88,20 @@
         </v-card>
     </Shimmer>
 
-    <Dialog v-model="projectDialog.dialog.value" :is-editing="projectDialog.isEditing.value" add-title="Add Project"
-        edit-title="Edit Project" save-text="Add project" edit-save-text="Save changes" cancel-text="Cancel"
-        edit-cancel-text="Cancel edit" :loading="projectDialog.loading.value"
-        :disable-save="!projectDialog.meta.value.valid || (projectDialog.isEditing.value && !projectDialog.meta.value.dirty)"
-        @save="projectDialog.submit" @cancel="projectDialog.close">
-        <v-form @submit.prevent="projectDialog.submit">
-            <v-row no-gutters>
-                <v-col cols="12">
-                    <Select v-model="projectDialog.fields.category" :items="categoryOptions" label="Category"
-                        color="primary" variant="solo" flat density="comfortable" :multiple="false" :chip="false"
-                        :error-messages="projectDialog.errors.category" class="vfield-outline" />
-                </v-col>
-                <v-col cols="12">
-                    <v-text-field v-model="projectDialog.fields.name" label="Project Name" color="primary"
-                        variant="solo" flat density="comfortable" clearable :error-messages="projectDialog.errors.name"
-                        class="vfield-outline" autocomplete="off" />
-                </v-col>
-                <v-col cols="12">
-                    <v-textarea v-model="projectDialog.fields.description" label="Description" color="primary" auto-grow
-                        variant="solo" flat density="comfortable" clearable
-                        :error-messages="projectDialog.errors.description" class="vfield-outline" autocomplete="off" />
-                </v-col>
-                <v-col cols="12">
-                    <Select v-model="projectDialog.fields.materials" :items="activeCategoryItems" variant="solo"
-                        item-title="text" item-value="text" label="Materials"
-                        :error-messages="projectDialog.errors.materials" class="vfield-outline"
-                        data-shimmer-no-children>
-                        <template v-slot:menu-header>
-                            <v-tabs v-model="materialsTab" slider-color="primary" density="comfortable" grow
-                                class="border-b" @keydown.enter.stop>
-                                <v-tab v-for="(_, category) in PROJECT_MATERIALS" :key="category" :value="category">
-                                    {{ formatLabel(category) }}
-                                </v-tab>
-                            </v-tabs>
-                        </template>
-                    </Select>
-                </v-col>
-                <v-col cols="12">
-                    <FileUpload v-model="projectDialog.fields.image" file-type="image" :max-files="1" inset
-                        density="comfortable" :show-size="true" :error-messages="projectDialog.errors.image" />
-                </v-col>
-                <v-col cols="12">
-                    <div class="text-title-small text-medium-emphasis mb-2">Link</div>
-                    <v-btn-toggle v-model="projectDialog.fields.linkType" color="primary" variant="outlined"
-                        density="compact" mandatory divided class="rounded-[10px] mb-3">
-                        <v-btn value="upload" text="Upload" />
-                        <v-btn value="link" text="Link" />
-                    </v-btn-toggle>
-                    <FileUpload v-if="projectDialog.fields.linkType === 'upload'"
-                        v-model="projectDialog.fields.linkFile" :max-files="1" inset density="comfortable"
-                        :show-size="true" :error-messages="projectDialog.errors.linkFile" />
-                    <v-text-field v-else v-model="projectDialog.fields.linkUrl" label="Link URL" color="primary"
-                        variant="solo" flat density="comfortable" clearable
-                        :error-messages="projectDialog.errors.linkUrl" class="vfield-outline" autocomplete="off" />
-                </v-col>
-            </v-row>
-        </v-form>
-    </Dialog>
+    <ProjectsDialog ref="dialogRef" :list="fields.projects" />
 </template>
 
 <script setup>
 import axios from "@/plugins/axios";
-import { ref, reactive, computed, onMounted, watch } from "vue";
+import { ref, reactive, onMounted, watch } from "vue";
 import * as yup from "yup";
 import { useValidatedForm } from "@/composables/useValidatedForm";
-import { useEntryDialog } from "@/composables/useEntryDialog";
-import { useSnackBarQueue } from "@/composables/useSnackBarQueue";
+import { useSnackbarQueue } from "@/composables/useSnackbarQueue";
 import DataTable from "@/components/data/DataTable";
-import Select from "@/components/forms/Select";
 import FileUpload from "@/components/forms/FileUpload";
 import FormActions from "@/components/forms/FormActions";
-import Dialog from "@/components/forms/FormDialog";
-import { PROJECT_MATERIALS } from "@/src/constants/constants";
+import ProjectsDialog from "./ProjectsDialog";
 
-const categoryOptions = [
-    "Software Development",
-    "Technical Documentation",
-    "Presentations/Multimedia",
-];
 const projectHeaders = [
     { title: "Category", key: "category", align: "start" },
     { title: "Project", key: "name", align: "start" },
@@ -178,26 +113,9 @@ const schema = yup.object({
     description: yup.string().label("Description").required(),
     projects: yup.array().label("Projects").default([]),
 });
-const projectSchema = yup.object({
-    id: yup.mixed().nullable(),
-    category: yup.string().label("Category").oneOf(categoryOptions, "Select a valid category").required(),
-    name: yup.string().label("Project name").required(),
-    description: yup.string().label("Description").required(),
-    materials: yup.array().label("Materials").min(1, "At least one material is required"),
-    image: yup.mixed().label("Image").required("Image is required"),
-    linkType: yup.string().oneOf(["upload", "link"]).required(),
-    linkFile: yup.mixed().nullable().when("linkType", {
-        is: "upload",
-        then: (s) => s.required("File is required"),
-    }),
-    linkUrl: yup.string().nullable().when("linkType", {
-        is: "link",
-        then: (s) => s.url("Must be a valid URL").required("Link URL is required"),
-    }),
-});
-const { error } = useSnackBarQueue();
+const { error } = useSnackbarQueue();
 const pageLoading = ref(true);
-const materialsTab = ref(Object.keys(PROJECT_MATERIALS)[0]);
+const dialogRef = ref();
 const { fields, errors, loading, submit, cancelEdit, resetForm, resetField, meta, ready } = useValidatedForm(
     schema,
     async (values) => {
@@ -243,33 +161,21 @@ const { fields, errors, loading, submit, cancelEdit, resetForm, resetField, meta
     },
     { resetOnSuccess: false }
 );
-const projectDialog = useEntryDialog(projectSchema, () => fields.projects, {
-    category: categoryOptions[0],
-    name: "",
-    description: "",
-    materials: [],
-    image: null,
-    linkType: "upload",
-    linkFile: null,
-    linkUrl: "",
-});
-const activeCategoryItems = computed(() => PROJECT_MATERIALS[materialsTab.value] ?? []);
 const projectsOptions = reactive({ page: 1, itemsPerPage: 10, sortBy: [] });
 const projectsTotal = ref(0);
 const projectsLoading = ref(false);
 
-function formatLabel(key) {
-    return key.charAt(0).toUpperCase() + key.slice(1);
+function openDialog(item = null) {
+    dialogRef.value?.open(item);
+};
+function removeItem(item) {
+    dialogRef.value?.remove(item);
 };
 function projectImagePreview(item) {
     if (item.image instanceof File || item.image instanceof Blob) {
         return URL.createObjectURL(item.image);
     }
     return item.image.url ?? null;
-};
-function openProjectDialog(item = null) {
-    materialsTab.value = Object.keys(PROJECT_MATERIALS)[0];
-    projectDialog.open(item);
 };
 
 async function getProjectContent() {

@@ -1,7 +1,12 @@
 <script setup>
-import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from "vue";
-import { OverlayScrollbarsComponent } from "overlayscrollbars-vue";
+import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount, useSlots } from "vue";
+import { useTheme } from "vuetify";
+import { useOverlayScrollbars } from "overlayscrollbars-vue";
 
+const slots = useSlots();
+const theme = useTheme();
+const reservedSlotNames = ["item", "selection", "no-data"];
+const forwardedSlotNames = computed(() => Object.keys(slots).filter((name) => !reservedSlotNames.includes(name)));
 const props = defineProps({
     modelValue: { type: [Array, String], default: () => [] },
     items: { type: Array, default: () => [] },
@@ -19,14 +24,33 @@ const props = defineProps({
     reservedForCounter: { type: Number, default: 56 },
     chip: { type: Boolean, default: true },
 })
-
 const emit = defineEmits(['update:modelValue']);
-
 const search = ref('');
 const selectRef = ref(null);
 const mirrorRef = ref(null);
 const textMirrorRef = ref(null);
 const visibleCount = ref(0);
+const menuOpen = ref(false);
+const listClass = `os-select-list-${Math.random().toString(36).slice(2, 10)}`;
+
+const [initListScrollbars, getListOsInstance] = useOverlayScrollbars({
+    options: {
+        scrollbars: {
+            autoHide: "move",
+            theme: theme.current.value.dark ? "os-theme-light" : "os-theme-dark",
+        },
+    },
+});
+
+watch(menuOpen, (open) => {
+    if (!open) return;
+    nextTick(() => {
+        const listEl = document.querySelector(`.${listClass}`);
+        if (listEl && !getListOsInstance()) {
+            initListScrollbars(listEl);
+        }
+    });
+});
 
 const safeList = computed(() => Array.isArray(props.modelValue) ? props.modelValue : [props.modelValue].filter(Boolean));
 const overflowCount = computed(() => safeList.value.length - visibleCount.value);
@@ -117,22 +141,24 @@ watch(
 
 <template>
     <div class="relative [&_.v-field__input]:flex-nowrap">
-        <v-select ref="selectRef" v-model:search="search" :model-value="modelValue" :items="items" :variant="variant"
-            :flat="flat" :label="label" :rounded="rounded" :density="density" :hint="hint"
-            :persistent-hint="persistentHint" :multiple="multiple" :error-messages="errorMessages"
+        <v-select ref="selectRef" v-model:search="search" v-model:menu="menuOpen" :model-value="modelValue"
+            :items="items" :variant="variant" :flat="flat" :label="label" :rounded="rounded" :density="density"
+            :hint="hint" :persistent-hint="persistentHint" :multiple="multiple" :error-messages="errorMessages"
             :item-title="itemTitle" :item-value="itemValue" :hide-no-data="false" :no-auto-scroll="true"
             autocomplete="off" :list-props="{
                 density: 'comfortable',
                 nav: true,
                 prependGap: 15,
-                class: 'pt-1',
+                maxHeight: 300,
+                class: `pt-1 ${listClass}`,
             }" :menu-props="{
                 maxWidth: '100',
                 width: 'auto',
                 contentClass: 'rounded-[10px]',
             }" @update:model-value="emit('update:modelValue', $event)">
-            <template v-for="(_, slot) in $slots" #[slot]="scope">
-                <slot :name="slot" v-bind="scope" />
+
+            <template v-for="name in forwardedSlotNames" #[name]="scope" :key="name">
+                <slot :name="name" v-bind="scope" />
             </template>
 
             <template #item="{ item, props: itemProps }">

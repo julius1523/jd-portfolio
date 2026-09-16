@@ -89,6 +89,16 @@ export default [
         },
     },
     {
+        path: "/account-settings",
+        name: "account-settings",
+        component: page("admin/AccountSettings"),
+        meta: {
+            title: "System Settings",
+            middleware: "auth",
+            layout: "app",
+        },
+    },
+    {
         path: "/:pathMatch(.*)*",
         name: "not-found",
         component: page("errors/NotFound"),

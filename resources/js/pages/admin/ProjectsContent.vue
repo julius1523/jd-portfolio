@@ -56,7 +56,8 @@
                                     v-model:sort-by="projectsOptions.sortBy" v-model:page="projectsOptions.page"
                                     v-model:items-per-page="projectsOptions.itemsPerPage" :items-length="projectsTotal"
                                     :loading="projectsLoading" no-data-text="No projects added yet." :disabled="loading"
-                                    @add="openDialog()" @edit="openDialog($event)" @remove="removeItem($event)">
+                                    density="comfortable" @add="openDialog()" @edit="openDialog($event)"
+                                    @remove="removeItem($event)">
                                     <template #item.image="{ item }">
                                         <v-img v-if="projectImagePreview(item)" height="48" width="48" :aspect-ratio="1"
                                             rounded class="border [&_img]:object-fill"
@@ -65,7 +66,7 @@
                                         <span v-else class="text-medium-emphasis">—</span>
                                     </template>
                                     <template #item.name="{ item }">
-                                        <div class="d-flex flex-column ga-1 py-2">
+                                        <div class="d-flex flex-column ga-1 mb-1">
                                             <div>{{ item.name }}</div>
                                             <div class="d-flex flex-wrap ga-1"
                                                 :class="{ 'justify-end': $vuetify.display.smAndDown }">

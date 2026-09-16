@@ -56,7 +56,7 @@
                                     v-model:page="skillsOptions.page"
                                     v-model:items-per-page="skillsOptions.itemsPerPage" :items-length="skillsTotal"
                                     :loading="skillsLoading" no-data-text="No skills added yet." :disabled="loading"
-                                    @add="openSkillsDialog()" @edit="openSkillsDialog($event)"
+                                    density="comfortable" @add="openSkillsDialog()" @edit="openSkillsDialog($event)"
                                     @remove="removeSkillsItem($event)">
                                     <template #item.category="{ item }">
                                         {{ item.category }}
@@ -95,7 +95,7 @@
                                     :expandable="false" add-label="New Fact" v-model:sort-by="randomFacts.sortBy"
                                     v-model:page="randomFacts.page" v-model:items-per-page="randomFacts.itemsPerPage"
                                     :items-length="factsTotal" :loading="factsLoading"
-                                    no-data-text="No facts added yet." :disabled="loading"
+                                    no-data-text="No facts added yet." :disabled="loading" density="comfortable"
                                     @add="openRandomFactsDialog()" @edit="openRandomFactsDialog($event)"
                                     @remove="removeFactsItem($event)">
                                     <template #item.icon="{ item }">

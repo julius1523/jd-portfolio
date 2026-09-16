@@ -1,6 +1,7 @@
 <script setup>
 import { ref, nextTick } from "vue";
 import { useIconPicker } from "@/composables/useIconPicker";
+import { OverlayScrollbarsComponent } from "overlayscrollbars-vue";
 
 const props = defineProps({
     modelValue: { type: String, default: null },
@@ -37,8 +38,8 @@ function onSetChange(newSet) {
         if (scrollBox.value) scrollBox.value.scrollTop = 0;
     });
 };
-function onScroll(e) {
-    const el = e.target;
+function onScroll(instance) {
+    const el = instance.elements().viewport;
     const nearBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 80;
     if (nearBottom && !loading.value && icons.value.length < total.value) {
         loadMore();
@@ -62,7 +63,7 @@ function pick(icon) {
         </template>
 
         <v-card rounded="lg">
-            <div class="pa-3">
+            <div class="px-3 pt-3">
                 <v-tabs :model-value="activeSet" color="primary" density="compact" grow inset class="mb-3"
                     @update:model-value="onSetChange">
                     <v-tab value="mdi">MDI</v-tab>
@@ -73,21 +74,24 @@ function pick(icon) {
                     density="compact" rounded="lg" clearable hide-details autocomplete="off"
                     @update:model-value="onSearch">
                     <template #prepend-inner>
-                        <v-icon size="20" icon="i-mdi-magnify" />
+                        <v-icon size="20" icon="i-ri-search-line" />
                     </template>
                 </v-text-field>
             </div>
 
-            <v-card-text ref="scrollBox" class="h-[230px] overflow-y-auto pa-3" @scroll="onScroll">
+            <OverlayScrollbarsComponent ref="scrollBox" element="div" class="h-[230px] pa-3 overflow-y-auto"
+                :options="{ scrollbars: { autoHide: 'move', theme: $vuetify.theme.current.dark ? 'os-theme-light' : 'os-theme-dark', } }"
+                defer @os-scroll="onScroll">
                 <div v-if="!loading && icons.length === 0" class="text-center text-medium-emphasis py-6 text-body-2">
                     No icons found.
                 </div>
-
                 <v-row density="comfortable">
                     <v-col v-for="icon in icons" :key="icon.name" cols="2" class="text-center">
-                        <v-icon-btn variant="text" rounded="lg" class="border" v-tooltip.top="icon.name"
+                        <v-icon-btn variant="text" rounded="lg" v-tooltip.top="icon.name"
                             :color="icon.name === modelValue ? 'primary' : undefined" @click="pick(icon)">
-                            <span v-html="icon.svg" />
+                            <v-icon size="large">
+                                <span v-html="icon.svg" />
+                            </v-icon>
                         </v-icon-btn>
                     </v-col>
                 </v-row>
@@ -95,7 +99,7 @@ function pick(icon) {
                 <div v-if="loading" class="d-flex justify-center py-3">
                     <v-progress-circular indeterminate size="22" color="primary" />
                 </div>
-            </v-card-text>
+            </OverlayScrollbarsComponent>
         </v-card>
     </v-menu>
 </template>

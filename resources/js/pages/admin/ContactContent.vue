@@ -56,7 +56,8 @@
                                     v-model:page="socialsOptions.page"
                                     v-model:items-per-page="socialsOptions.itemsPerPage" :items-length="socialsTotal"
                                     :loading="socialsLoading" no-data-text="No socials added yet." :disabled="loading"
-                                    @add="openDialog()" @edit="openDialog($event)" @remove="removeItem($event)">
+                                    density="comfortable" @add="openDialog()" @edit="openDialog($event)"
+                                    @remove="removeItem($event)">
                                     <template #item.name="{ item }">
                                         <div class="d-flex ga-3 align-center"
                                             :class="{ 'justify-end': $vuetify.display.smAndDown }">

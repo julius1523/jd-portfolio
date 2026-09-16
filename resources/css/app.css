@@ -9,11 +9,6 @@ a {
     color: inherit;
 }
 
-.v-btn,
-.v-list-item {
-    -webkit-user-drag: none;
-}
-
 .v-overlay-container * {
     backface-visibility: hidden;
 }
@@ -22,13 +17,4 @@ a {
 .v-field__input,
 .v-field__input input {
     border-radius: inherit;
-}
-
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus {
-    border-radius: inherit;
-    -webkit-box-shadow: 0 0 0 1000px rgb(var(--v-theme-surface)) inset;
-    -webkit-text-fill-color: rgb(var(--v-theme-on-surface));
-    transition: background-color 9999s ease-in-out 0s;
 }

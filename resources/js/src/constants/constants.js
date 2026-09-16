@@ -9,7 +9,7 @@ export const DEVELOPER_TITLES = [
     "Application Developer",
     "System Developer",
     "PHP Developer",
-    "UI/UX-Focused Developer",
+    "UI/UX-Focused",
     "JavaScript Developer",
     "Database Developer",
     "API Developer",

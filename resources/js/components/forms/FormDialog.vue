@@ -25,9 +25,9 @@ function onCancel() {
 
 <template>
     <v-dialog :model-value="modelValue" @update:model-value="$emit('update:modelValue', $event)" scrollable
-        :max-width="maxWidth" :max-height="maxHeight" :fullscreen="$vuetify.display.smAndDown">
-        <v-card class="shadow-lg" :class="$vuetify.display.mdAndUp ? 'rounded-[20px]' : undefined">
-            <v-toolbar density="comfortable" color="transparent">
+        :max-width="maxWidth" :max-height="maxHeight" transition="dialog-top-transition">
+        <v-card class="border shadow-lg rounded-[20px]">
+            <v-toolbar density="comfortable" color="surface">
                 <div class="grid w-full grid-cols-[1fr_auto_1fr] items-center">
                     <div></div>
                     <span class="min-w-0 truncate text-center text-title-medium font-weight-bold">

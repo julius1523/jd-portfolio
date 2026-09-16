@@ -39,9 +39,9 @@
                             <v-icon icon="i-ri-stack-line" color="primary" class="mr-2" />
                             {{ item.category }}
                         </div>
-                        <div class="d-flex flex-row flex-wrap ga-2 ml-11">
-                            <v-chip v-for="skill in item.skill" :key="skill" rounded="lg" variant="flat"
-                                class="transition-colors duration-200 hover:bg-primary">
+                        <div class="d-flex flex-row flex-wrap ga-2 ml-12">
+                            <v-chip v-for="skill in item.skill" :key="skill" variant="flat"
+                                class="rounded-[10px] transition-colors duration-200 hover:bg-primary">
                                 {{ skill }}
                             </v-chip>
                         </div>
@@ -69,7 +69,7 @@
                             </div>
                             <div class="flex-grow-1 w-100 d-flex align-center justify-center">
                                 <div class="text-center text-balance line-clamp-3">
-                                    {{ item.text }}
+                                    {{ item.randomFact }}
                                 </div>
                             </div>
                         </v-card>

@@ -82,7 +82,7 @@ defineExpose({ open, remove });
                 </v-col>
                 <v-col cols="12">
                     <Select v-model="fields.skill" :items="availableSkills" label="Skills" variant="solo"
-                        :multiple="true" :chip="true" :error-messages="errors.skill" class="vfield-outline" />
+                        :multiple="true" :chip="false" :error-messages="errors.skill" class="vfield-outline" />
                 </v-col>
                 <v-col cols="12">
                     <v-text-field :model-value="fields.icon" label="Icon (optional)" color="primary" variant="solo" flat

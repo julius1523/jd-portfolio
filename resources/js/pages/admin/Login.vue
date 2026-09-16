@@ -8,14 +8,12 @@
                 </template>
                 <v-card-title class="text-center px-0">Hi, Admin!</v-card-title>
                 <v-card-subtitle class="text-center px-0">Log in to your account</v-card-subtitle>
-                <Alert rounded="2xl" />
+                <Alert class="rounded-[10px]" />
                 <v-form @submit.prevent="submit" class="mt-5">
                     <v-text-field v-model="fields.email" color="primary" variant="solo" flat density="comfortable"
-                        placeholder="Email" class="[&_.v-field]:rounded-2xl [&_.v-field]:border mb-1"
-                        :error-messages="errors.email" />
+                        placeholder="Email" class="vfield-outline mb-1" :error-messages="errors.email" />
                     <PasswordField v-model="fields.password" variant="solo" flat density="comfortable"
-                        placeholder="Password" class="[&_.v-field]:rounded-2xl [&_.v-field]:border"
-                        :error-messages="errors.password" />
+                        placeholder="Password" class="vfield-outline" :error-messages="errors.password" />
                     <v-checkbox v-model="fields.remember" color="primary" hide-details density="compact"
                         class="text-label-large">
                         <template #label>

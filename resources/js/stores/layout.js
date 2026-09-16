@@ -3,26 +3,34 @@ import { ref, watch } from "vue";
 import { useDisplay } from "vuetify";
 
 export const useLayoutStore = defineStore("layout", () => {
-    const { smAndDown } = useDisplay();
+    const { mdAndUp } = useDisplay();
 
-    const drawer = ref(!smAndDown.value);
-    const rail = ref(false);
+    const drawer = ref(mdAndUp.value);
+    const rail = ref(mdAndUp.value);
 
-    watch(smAndDown, (isSmAndDown) => {
-        drawer.value = !isSmAndDown;
-
-        if (isSmAndDown) {
+    watch(mdAndUp, (isMdAndUp) => {
+        if (isMdAndUp) {
+            drawer.value = true;
+        } else {
+            drawer.value = false;
             rail.value = false;
         }
     });
-
     const toggleDrawer = () => {
         drawer.value = !drawer.value;
     };
 
     const toggleRail = () => {
-        if (smAndDown.value) return;
+        if (!mdAndUp.value) return;
         rail.value = !rail.value;
+    };
+
+    const toggleNav = () => {
+        if (mdAndUp.value) {
+            rail.value = !rail.value;
+        } else {
+            drawer.value = !drawer.value;
+        }
     };
 
     return {
@@ -30,5 +38,6 @@ export const useLayoutStore = defineStore("layout", () => {
         toggleDrawer,
         rail,
         toggleRail,
+        toggleNav,
     };
 });

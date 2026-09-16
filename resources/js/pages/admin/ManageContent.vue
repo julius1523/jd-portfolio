@@ -3,7 +3,7 @@
         <h1 class="text-headline-small text-headline-md-medium mt-0">{{ route.meta.title }}</h1>
 
         <v-sheet class="mt-8" elevation="0">
-            <v-tabs v-model="tab" :grow="$vuetify.display.smAndDown" selected-class="!opacity-100" color="primary">
+            <v-tabs v-model="tab" :grow="$vuetify.display.smAndDown" selected-class="opacity-100" color="primary">
                 <v-tab variant="plain" :value="1" class="rounded-t-md" :ripple="false">Home</v-tab>
                 <v-tab variant="plain" :value="2" class="rounded-t-md" :ripple="false">About</v-tab>
                 <v-tab variant="plain" :value="3" class="rounded-t-md" :ripple="false">Projects</v-tab>
@@ -12,7 +12,7 @@
 
             <v-divider />
 
-            <v-tabs-window v-model="tab" crossfade>
+            <v-tabs-window v-model="tab">
                 <v-tabs-window-item :value="1">
                     <HomeContent />
                 </v-tabs-window-item>

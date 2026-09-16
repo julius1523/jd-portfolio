@@ -35,8 +35,8 @@
                             </v-col>
                             <v-col cols="12">
                                 <Select v-model="fields.subheading" :items="subHeadingItems" variant="solo"
-                                    label="Subheading" :error-messages="errors.title" class="vfield-outline"
-                                    data-shimmer-no-children />
+                                    label="Subheading" :chip="false" :error-messages="errors.title"
+                                    class="vfield-outline" data-shimmer-no-children />
                             </v-col>
                             <v-col cols="12">
                                 <v-textarea v-model="fields.description" color="primary" auto-grow variant="solo" flat

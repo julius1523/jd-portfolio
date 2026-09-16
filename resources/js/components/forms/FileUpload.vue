@@ -1,5 +1,9 @@
 <script setup>
-import { ref, computed, watch, onBeforeUnmount, useAttrs } from "vue";
+import { ref, computed, watch, onBeforeUnmount, useAttrs, useSlots } from "vue";
+
+const slots = useSlots();
+const reservedSlotNames = ["single", "item", "title"];
+const forwardedSlotNames = computed(() => Object.keys(slots).filter((name) => !reservedSlotNames.includes(name)));
 const props = defineProps({
     modelValue: { type: [File, Object, Array, String], default: null },
     fileType: { type: String, default: 'any' },
@@ -226,8 +230,8 @@ onBeforeUnmount(() => {
         :show-size="showSize" :hint="hint" :persistent-hint="persistent" :error="hasError"
         :error-messages="displayedErrorMessages" v-bind="filteredAttrs" @update:model-value="handleChange">
 
-        <template v-for="(_, slot) in $slots" #[slot]="scope">
-            <slot :name="slot" v-bind="scope" />
+        <template v-for="name in forwardedSlotNames" #[name]="scope" :key="name">
+            <slot :name="name" v-bind="scope" />
         </template>
 
         <template #single="{ file, props: itemProps }">

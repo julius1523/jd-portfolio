@@ -39,6 +39,8 @@ export default createVuetify({
         },
     },
     defaults: {
+        VBtn: { style: { webkitUserDrag: "none" } },
+        VListItem: { style: { webkitUserDrag: "none" } },
         VChip: { style: { userSelect: "none" } },
         VImg: { draggable: false },
         VAppBar: { style: { userSelect: "none" } },

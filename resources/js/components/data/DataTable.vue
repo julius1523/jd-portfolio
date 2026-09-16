@@ -1,6 +1,9 @@
 <script setup>
 import { computed, ref, useSlots } from "vue";
 
+const slots = useSlots();
+const reservedSlotNames = ["item.action", "expanded-row", "no-data"];
+const forwardedSlotNames = computed(() => Object.keys(slots).filter((name) => !reservedSlotNames.includes(name)));
 const props = defineProps({
     items: { type: Array, default: () => [] },
     headers: { type: Array, required: true },
@@ -18,6 +21,7 @@ const props = defineProps({
     expandKey: { type: String, default: "description" },
     noDataText: { type: String, default: "No items added yet." },
     disabled: { type: Boolean, default: false },
+    density: { type: String, default: "default" },
 });
 const emit = defineEmits(["add", "edit", "remove", "update:sortBy", "update:page", "update:itemsPerPage"]);
 const sortByModel = computed({
@@ -42,11 +46,6 @@ const tableHeaders = computed(() => {
     }
     return props.headers;
 });
-const slots = useSlots();
-const reservedSlotNames = ["item.action", "expanded-row", "no-data"];
-const forwardedSlotNames = computed(() =>
-    Object.keys(slots).filter((name) => !reservedSlotNames.includes(name))
-);
 </script>
 
 <template>
@@ -59,7 +58,8 @@ const forwardedSlotNames = computed(() =>
         <v-data-table-server :headers="tableHeaders" :items="items" :items-length="itemsLength"
             v-model:sort-by="sortByModel" v-model:page="pageModel" v-model:items-per-page="itemsPerPageModel"
             :item-value="itemValue" v-model:expanded="expandedRows" :show-expand="expandable" :loading="loading"
-            :mobile="$vuetify.display.smAndDown" class="border rounded-[10px]" data-shimmer-no-children>
+            :mobile="$vuetify.display.smAndDown" :density="density" class="border rounded-[10px]"
+            data-shimmer-no-children>
 
             <template v-for="name in forwardedSlotNames" #[name]="slotProps" :key="name">
                 <slot :name="name" v-bind="slotProps" />

@@ -28,7 +28,7 @@ const toggleTheme = (e) => {
 
 <template>
     <v-app-bar app density="comfortable" flat :order="$vuetify.display.smAndDown ? 1 : 0"
-        :class="{ 'topbar': !isAuthenticated }">
+        :class="{ 'topbar': !isAuthenticated, 'px-1': isAuthenticated }">
         <template v-slot:prepend v-if="!isAppLayout">
             <router-link :to="{ name: 'home' }">
                 <v-avatar variant="elevated" class="bg-gradient-to-br from-blue-500 to-blue-900 text-white">
@@ -37,7 +37,7 @@ const toggleTheme = (e) => {
             </router-link>
         </template>
         <template v-slot:prepend v-else>
-            <v-app-bar-nav-icon density="comfortable" size="40" class="ml-1" @click="layout.toggleNav()" />
+            <v-app-bar-nav-icon density="comfortable" size="40" @click="layout.toggleNav()" />
             <router-link :to="{ name: 'manage-content' }" class="text-decoration-none">
                 <v-app-bar-title text="Portfolio" class="ml-2 text-title-medium" />
             </router-link>

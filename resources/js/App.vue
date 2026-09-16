@@ -1,5 +1,5 @@
 <template>
-    <v-app v-if="route.name">
+    <v-app v-if="route.name" :key="layoutType">
         <appbar v-if="showAppBar" />
         <sidebar v-if="showSidebar" />
         <snackbar />

@@ -32,7 +32,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, nextTick } from "vue";
 import * as yup from "yup";
 import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
@@ -61,7 +61,10 @@ const { fields, errors, loading, submit, meta, ready } = useValidatedForm(schema
 
 useScrollReveal(loginSection, { selector: '.reveal-item', y: 20 });
 
-onMounted(() => {
+onMounted(async () => {
+    await nextTick();
+    useScrollReveal(loginSection, { selector: '.reveal-item', y: 20 });
+
     const { reason } = route.query;
     if (reason === 'session_expired') warning('Your session has expired. Please log in again.');
     else if (reason === 'unauthenticated') error('You are unauthenticated. Please log in again.');

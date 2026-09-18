@@ -1,11 +1,11 @@
 <template>
     <Shimmer :loading="pageLoading">
-        <v-card flat class="pa-3 mt-2 rounded-lg">
+        <v-card flat class="mt-4 rounded-lg">
             <v-form @submit.prevent="submit" :disabled="loading">
                 <v-row :gap="55">
                     <v-col cols="12">
                         <v-row :gap="13">
-                            <v-col cols="12" lg="6">
+                            <v-col cols="12">
                                 <div class="mb-4">
                                     <span class="text-title-medium font-weight-bold">Profile</span><br />
                                     <span class="text-title-small text-medium-emphasis">
@@ -45,7 +45,7 @@
                             </v-col>
                         </v-row>
                     </v-col>
-                    <v-col cols="12" lg="6">
+                    <v-col cols="12">
                         <v-row :gap="10">
                             <v-col cols="12">
                                 <div class="mb-4">

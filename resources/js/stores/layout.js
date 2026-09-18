@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { ref, watch } from "vue";
 import { useDisplay } from "vuetify";
+import router from "@/router";
 
 export const useLayoutStore = defineStore("layout", () => {
     const { mdAndUp } = useDisplay();
@@ -16,28 +17,22 @@ export const useLayoutStore = defineStore("layout", () => {
             rail.value = false;
         }
     });
-    const toggleDrawer = () => {
-        drawer.value = !drawer.value;
-    };
 
+    router.afterEach(() => {
+        if (!mdAndUp.value) {
+            drawer.value = false;
+        }
+    });
+
+    const toggleDrawer = () => (drawer.value = !drawer.value);
     const toggleRail = () => {
         if (!mdAndUp.value) return;
         rail.value = !rail.value;
     };
-
     const toggleNav = () => {
-        if (mdAndUp.value) {
-            rail.value = !rail.value;
-        } else {
-            drawer.value = !drawer.value;
-        }
+        if (mdAndUp.value) rail.value = !rail.value;
+        else drawer.value = !drawer.value;
     };
 
-    return {
-        drawer,
-        toggleDrawer,
-        rail,
-        toggleRail,
-        toggleNav,
-    };
+    return { drawer, toggleDrawer, rail, toggleRail, toggleNav };
 });

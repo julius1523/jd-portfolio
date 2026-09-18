@@ -16,9 +16,9 @@ const logout = () => {
         confirmText: "Log Out",
         cancelText: "Cancel",
         confirmColor: "error",
-        onConfirm: () => {
-            router.replace({ name: "login" });
+        onConfirm: async () => {
             auth.logout();
+            await router.replace({ name: "login" });
         },
     });
 };
@@ -30,34 +30,29 @@ const logout = () => {
         :location="isAuthenticated ? 'left' : 'right'">
         <v-list density="compact" nav :prepend-gap="$vuetify.display.mdAndUp ? 17 : 20" color="primary">
             <template v-if="isAuthenticated">
-                <v-list-item v-if="$vuetify.display.smAndDown" variant="plain" prepend-icon="i-ri-folder-4-line"
-                    class="rounded-[10px] opacity-100" :ripple="false" :to="{ name: 'home' }">
+                <v-list-item variant="plain" class="rounded-[10px] opacity-100" :ripple="false" :to="{ name: 'home' }">
                     <template #title>
                         <span class="text-title-medium">Portfolio</span>
                     </template>
-                    <template #append>
+                    <template v-if="$vuetify.display.smAndDown" #append>
                         <v-icon-btn color="surface-light" icon="i-mdi-close" size="small"
                             @click.stop.prevent="layout.toggleDrawer()" />
                     </template>
+                    <template v-else #append>
+                        <v-icon-btn icon="i-ri-side-bar-line" icon-size="24" class="rounded-[10px] me-[-9px]"
+                            :class="{ 'ms-[-24px]': layout.rail }" @click.stop.prevent="layout.toggleNav()"
+                            v-tooltip="{ text: layout.rail ? 'Open sidebar' : 'Close sidebar', location: 'end' }" />
+                    </template>
                 </v-list-item>
-                <v-list-item prepend-icon="i-mdi-pencil-outline" title="Manage Content" exact value="home-content"
-                    class="rounded-[10px]" :to="{ name: 'manage-content' }" v-tooltip="{
-                        text: 'Manage Content',
-                        location: 'end',
-                        disabled: !layout.rail
-                    }" />
+                <v-list-item prepend-icon="i-mdi-pencil-outline" title="Manage Content" value="home-content"
+                    class="rounded-[10px]" :to="{ name: 'manage-content' }"
+                    v-tooltip="{ text: 'Manage Content', location: 'end', disabled: !layout.rail }" />
                 <v-list-item prepend-icon="i-mdi-cog-outline" title="System Settings" exact value="system-settings"
-                    class="rounded-[10px]" :to="{ name: 'system-settings' }" v-tooltip="{
-                        text: 'System Settings',
-                        location: 'end',
-                        disabled: !layout.rail
-                    }" />
+                    class="rounded-[10px]" :to="{ name: 'system-settings' }"
+                    v-tooltip="{ text: 'System Settings', location: 'end', disabled: !layout.rail }" />
                 <v-list-item prepend-icon="i-mdi-account-cog-outline" title="Account Settings" exact
-                    value="account-settings" class="rounded-[10px]" :to="{ name: 'account-settings' }" v-tooltip="{
-                        text: 'Account Settings',
-                        location: 'end',
-                        disabled: !layout.rail
-                    }" />
+                    value="account-settings" class="rounded-[10px]" :to="{ name: 'account-settings' }"
+                    v-tooltip="{ text: 'Account Settings', location: 'end', disabled: !layout.rail }" />
             </template>
             <template v-else>
                 <v-list-item title="Home" exact value="home" class="rounded-[10px]" :to="{ name: 'home' }" />
@@ -70,8 +65,8 @@ const logout = () => {
         <template v-if="isAuthenticated" #append>
             <v-list :activatable="false" density="compact" nav :prepend-gap="$vuetify.display.mdAndUp ? 17 : 20"
                 color="primary">
-                <v-list-item prepend-icon="i-ri-logout-box-line" title="Log out" class="rounded-[10px]"
-                    @click="logout" />
+                <v-list-item prepend-icon="i-ri-logout-box-line" title="Log out" class="rounded-[10px]" @click="logout"
+                    v-tooltip="{ text: 'Log out', location: 'end', disabled: !layout.rail }" />
             </v-list>
         </template>
     </v-navigation-drawer>

@@ -27,8 +27,7 @@ const toggleTheme = (e) => {
 </script>
 
 <template>
-    <v-app-bar app density="comfortable" flat :order="$vuetify.display.smAndDown ? 1 : 0"
-        :class="{ 'topbar': !isAuthenticated, 'px-1': isAuthenticated }">
+    <v-app-bar app flat :order="1" :class="{ 'topbar': !isAuthenticated, 'px-1': isAuthenticated }">
         <template v-slot:prepend v-if="!isAppLayout">
             <router-link :to="{ name: 'home' }">
                 <v-avatar variant="elevated" class="bg-gradient-to-br from-blue-500 to-blue-900 text-white">
@@ -37,14 +36,14 @@ const toggleTheme = (e) => {
             </router-link>
         </template>
         <template v-slot:prepend v-else>
-            <v-app-bar-nav-icon density="comfortable" size="40" @click="layout.toggleNav()" />
+            <v-app-bar-nav-icon v-if="$vuetify.display.smAndDown" density="comfortable" @click="layout.toggleNav()" />
             <router-link :to="{ name: 'manage-content' }" class="text-decoration-none">
-                <v-app-bar-title text="Portfolio" class="ml-2 text-title-medium" />
+                <v-app-bar-title :text="route.meta.title" class="ml-2 text-title-medium" />
             </router-link>
         </template>
 
         <template v-slot:append v-if="!isAppLayout">
-            <div class="d-flex ga-2 align-center">
+            <div class="d-flex ga-1 align-center">
                 <v-toolbar v-if="$vuetify.display.mdAndUp" color="surface" height="38" location="top end" floating
                     rounded="pill">
                     <div class="d-flex ga-1">
@@ -64,7 +63,7 @@ const toggleTheme = (e) => {
             </div>
         </template>
         <template v-slot:append v-else>
-            <v-icon-btn :icon="themeStore.isDark ? 'i-ri-moon-line' : 'i-ri-sun-line'" size="36" icon-size="20"
+            <v-icon-btn :icon="themeStore.isDark ? 'i-ri-moon-line' : 'i-ri-sun-line'" size="32" icon-size="18"
                 v-tooltip="{ text: themeStore.isDark ? 'Light Mode' : 'Dark Mode', location: 'bottom' }"
                 @click="toggleTheme" />
         </template>

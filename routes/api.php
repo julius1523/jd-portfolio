@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\HomeContentController;
 use App\Http\Controllers\Admin\AboutContentController;
 use App\Http\Controllers\Admin\ProjectContentController;
 use App\Http\Controllers\Admin\ContactContentController;
+use App\Http\Controllers\Admin\SystemSettingsController;
 
 
 Route::post('/contact', [ContactController::class, 'store']);
@@ -30,6 +31,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/updateProjectContent', [ProjectContentController::class, 'updateProjectContent']);
     Route::get('/getContactContent', [ContactContentController::class, 'getContactContent']);
     Route::post('/updateContactContent', [ContactContentController::class, 'updateContactContent']);
+
+    Route::get('/getSystemSettings', [SystemSettingsController::class, 'getSystemSettings']);
+    Route::post('/updateSystemSettings', [SystemSettingsController::class, 'updateSystemSettings']);
 });
 
 Route::get('/public/home', [HomeContentController::class, 'getHomeContent']);

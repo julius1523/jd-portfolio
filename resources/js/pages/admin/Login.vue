@@ -20,7 +20,7 @@
                             <span class="text-label-large text-medium-emphasis">Remember me</span>
                         </template>
                     </v-checkbox>
-                    <v-btn type="submit" color="primary" variant="flat" height="50" size="large" block text="Log In"
+                    <v-btn type="submit" color="primary" variant="flat" height="50" size="large" block text="Log in"
                         class="rounded-2xl my-3" :disabled="!ready || !meta.valid" />
                     <v-btn variant="plain" height="50" size="large" prepend-icon="i-mdi-arrow-left" block
                         text="Go back to home" :ripple="false" class="rounded-2xl"
@@ -63,7 +63,6 @@ useScrollReveal(loginSection, { selector: '.reveal-item', y: 20 });
 
 onMounted(async () => {
     await nextTick();
-    useScrollReveal(loginSection, { selector: '.reveal-item', y: 20 });
 
     const { reason } = route.query;
     if (reason === 'session_expired') warning('Your session has expired. Please log in again.');

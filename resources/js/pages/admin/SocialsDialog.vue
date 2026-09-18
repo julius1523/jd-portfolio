@@ -30,7 +30,7 @@ const fields = reactive(
     ),
 );
 const submit = handleSubmit((values) => {
-    const row = { ...values, id: values.id ?? crypto.randomUUID() };
+    const row = { ...values, id: values.id ?? Date.now() };
     if (isEditing.value) {
         props.list.splice(editingIndex.value, 1, row);
     } else {

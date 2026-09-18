@@ -181,3 +181,9 @@ export const SOCIAL_ICONS = [
     { name: "Website", value: "i-ri-global-line" },
     { name: "Email", value: "i-ri-mail-line" },
 ];
+
+export const COLORS = [
+    { name: "Blue", value: "primary" },
+    { name: "Green", value: "success" },
+    { name: "Red", value: "error" },
+];

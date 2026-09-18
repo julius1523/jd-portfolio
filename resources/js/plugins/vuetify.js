@@ -53,7 +53,6 @@ export default createVuetify({
         },
         VFileUploadDropzone: { class: "rounded-[10px]" },
         VMenu: { offset: "5px" },
-        VContainer: { maxWidth: 1400 },
         VTabs: { activeClass: "opacity-100" },
     },
 });

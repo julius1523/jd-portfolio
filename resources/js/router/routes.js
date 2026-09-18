@@ -93,7 +93,7 @@ export default [
         name: "account-settings",
         component: page("admin/AccountSettings"),
         meta: {
-            title: "System Settings",
+            title: "Account Settings",
             middleware: "auth",
             layout: "app",
         },

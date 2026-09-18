@@ -18,6 +18,7 @@ const props = defineProps({
     flat: { type: Boolean, default: true },
     rounded: { type: [String, Boolean], default: 'lg' },
     density: { type: String, default: 'comfortable' },
+    singleLine: { type: Boolean, default: false, },
     errorMessages: { type: [String, Array], default: () => [] },
     itemTitle: { type: String, default: 'title' },
     itemValue: { type: String, default: 'value' },
@@ -143,9 +144,9 @@ watch(
     <div class="relative [&_.v-field__input]:flex-nowrap">
         <v-select ref="selectRef" v-model:search="search" v-model:menu="menuOpen" :model-value="modelValue"
             :items="items" :variant="variant" :flat="flat" :label="label" :rounded="rounded" :density="density"
-            :hint="hint" :persistent-hint="persistentHint" :multiple="multiple" :error-messages="errorMessages"
-            :item-title="itemTitle" :item-value="itemValue" :hide-no-data="false" :no-auto-scroll="true"
-            autocomplete="off" :list-props="{
+            :single-line="singleLine" :hint="hint" :persistent-hint="persistentHint" :multiple="multiple"
+            :error-messages="errorMessages" :item-title="itemTitle" :item-value="itemValue" :hide-no-data="false"
+            :no-auto-scroll="true" autocomplete="off" :list-props="{
                 density: 'comfortable',
                 nav: true,
                 prependGap: 15,
@@ -161,31 +162,34 @@ watch(
                 <slot :name="name" v-bind="scope" />
             </template>
 
-            <template #item="{ item, props: itemProps }">
-                <v-list-item v-bind="itemProps" :title="undefined">
+            <template #item="scope">
+                <slot v-if="slots.item" name="item" v-bind="scope" />
+                <v-list-item v-else v-bind="scope.props" :title="undefined">
                     <template #prepend="{ isSelected }">
                         <v-checkbox-btn color="primary" :model-value="isSelected" density="compact" :ripple="false"
-                            @click.stop="itemProps.onClick" />
+                            @click.stop="scope.props.onClick" />
                     </template>
 
                     <v-list-item-title class="text-label-medium">
-                        {{ resolveText(item) }}
+                        {{ resolveText(scope.item) }}
                     </v-list-item-title>
                 </v-list-item>
             </template>
 
-            <template #selection="{ item, index }">
-                <template v-if="chip">
-                    <v-chip v-if="index < visibleCount" size="small" closable @click:close="removeItem(item)">
-                        {{ resolveText(item) }}
+            <template #selection="scope">
+                <slot v-if="slots.selection" name="selection" v-bind="scope" />
+                <template v-else-if="chip">
+                    <v-chip v-if="scope.index < visibleCount" size="small" closable
+                        @click:close="removeItem(scope.item)">
+                        {{ resolveText(scope.item) }}
                     </v-chip>
 
-                    <v-chip v-else-if="index === visibleCount" size="small" density="comfortable" variant="tonal">
+                    <v-chip v-else-if="scope.index === visibleCount" size="small" density="comfortable" variant="tonal">
                         +{{ safeList.length - visibleCount }}
                     </v-chip>
                 </template>
 
-                <template v-else-if="index === 0">
+                <template v-else-if="scope.index === 0">
                     {{ visibleText }}
                     <span v-if="overflowCount > 0" class="text-medium-emphasis">
                         &nbsp;+{{ overflowCount }}
@@ -194,7 +198,8 @@ watch(
             </template>
 
             <template #no-data>
-                <v-list-item>
+                <slot v-if="slots['no-data']" name="no-data" />
+                <v-list-item v-else>
                     <v-list-item-subtitle class="text-center">
                         No data available
                     </v-list-item-subtitle>

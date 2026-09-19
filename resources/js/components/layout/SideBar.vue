@@ -1,14 +1,15 @@
 <script setup>
-import { useRouter } from "vue-router";
-import { storeToRefs } from "pinia";
+import { computed } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import { useLayoutStore } from "@/stores/layout";
 import { confirm } from "@/composables/useConfirmDialog";
 
-const { isAuthenticated } = storeToRefs(useAuthStore());
 const layout = useLayoutStore();
 const auth = useAuthStore();
 const router = useRouter();
+const route = useRoute();
+const layoutType = computed(() => route.meta.layout ?? "public");
 const logout = () => {
     confirm({
         title: "Log Out",
@@ -27,9 +28,9 @@ const logout = () => {
 <template>
     <v-navigation-drawer :key="$vuetify.display.smAndDown ? 'mobile' : 'desktop'" v-model="layout.drawer"
         :rail="layout.rail" floating :permanent="$vuetify.display.mdAndUp"
-        :location="isAuthenticated ? 'left' : 'right'">
+        :location="layoutType === 'app' ? 'left' : 'right'">
         <v-list density="compact" nav :prepend-gap="$vuetify.display.mdAndUp ? 17 : 20" color="primary">
-            <template v-if="isAuthenticated">
+            <template v-if="layoutType === 'app'">
                 <v-list-item variant="plain" class="rounded-[10px] opacity-100" :ripple="false" :to="{ name: 'home' }">
                     <template #title>
                         <span class="text-title-medium">Portfolio</span>
@@ -62,7 +63,7 @@ const logout = () => {
                 <v-list-item title="Contact" exact value="contact" class="rounded-[10px]" :to="{ name: 'contact' }" />
             </template>
         </v-list>
-        <template v-if="isAuthenticated" #append>
+        <template v-if="layoutType === 'app'" #append>
             <v-list :activatable="false" density="compact" nav :prepend-gap="$vuetify.display.mdAndUp ? 17 : 20"
                 color="primary">
                 <v-list-item prepend-icon="i-ri-logout-box-line" title="Log out" class="rounded-[10px]" @click="logout"

@@ -1,6 +1,6 @@
 <template>
     <Shimmer :loading="pageLoading">
-        <v-card flat class="mt-4 rounded-lg">
+        <v-card flat class="pa-1 mt-8 rounded-lg">
             <v-form @submit.prevent="submit" :disabled="loading">
                 <v-row :gap="55">
                     <v-col cols="12">
@@ -34,9 +34,9 @@
                                     autocomplete="off" class="vfield-outline" data-shimmer-no-children />
                             </v-col>
                             <v-col cols="12">
-                                <Select v-model="fields.subheading" :items="subHeadingItems" variant="solo"
-                                    label="Subheading" :chip="false" :error-messages="errors.title"
-                                    class="vfield-outline" data-shimmer-no-children />
+                                <Select v-model="fields.subheading" :items="subHeadingItems" label="Subheading"
+                                    color="primary" variant="solo" flat density="comfortable" :chip="false"
+                                    :error-messages="errors.title" class="vfield-outline" data-shimmer-no-children />
                             </v-col>
                             <v-col cols="12">
                                 <v-textarea v-model="fields.description" color="primary" auto-grow variant="solo" flat

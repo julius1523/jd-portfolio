@@ -7,12 +7,12 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\IconController;
 use App\Http\Controllers\Admin\HomeContentController;
 use App\Http\Controllers\Admin\AboutContentController;
-use App\Http\Controllers\Admin\ProjectContentController;
+use App\Http\Controllers\Admin\ProjectsContentController;
 use App\Http\Controllers\Admin\ContactContentController;
 use App\Http\Controllers\Admin\SystemSettingsController;
 
 
-Route::post('/contact', [ContactController::class, 'store']);
+Route::post('/contact', [ContactController::class, 'send']);
 
 // Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -27,16 +27,17 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/updateHomeContent', [HomeContentController::class, 'updateHomeContent']);
     Route::get('/getAboutContent', [AboutContentController::class, 'getAboutContent']);
     Route::post('/updateAboutContent', [AboutContentController::class, 'updateAboutContent']);
-    Route::get('/getProjectContent', [ProjectContentController::class, 'getProjectContent']);
-    Route::post('/updateProjectContent', [ProjectContentController::class, 'updateProjectContent']);
+    Route::get('/getProjectContent', [ProjectsContentController::class, 'getProjectContent']);
+    Route::post('/updateProjectContent', [ProjectsContentController::class, 'updateProjectContent']);
     Route::get('/getContactContent', [ContactContentController::class, 'getContactContent']);
     Route::post('/updateContactContent', [ContactContentController::class, 'updateContactContent']);
 
-    Route::get('/getSystemSettings', [SystemSettingsController::class, 'getSystemSettings']);
     Route::post('/updateSystemSettings', [SystemSettingsController::class, 'updateSystemSettings']);
 });
 
 Route::get('/public/home', [HomeContentController::class, 'getHomeContent']);
 Route::get('/public/about', [AboutContentController::class, 'getAboutContent']);
-Route::get('/public/projects', [ProjectContentController::class, 'getProjectContent']);
+Route::get('/public/projects', [ProjectsContentController::class, 'getProjectContent']);
 Route::get('/public/contact', [ContactContentController::class, 'getContactContent']);
+
+Route::get('/getSystemSettings', [SystemSettingsController::class, 'getSystemSettings']);

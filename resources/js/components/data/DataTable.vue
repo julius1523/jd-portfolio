@@ -57,8 +57,8 @@ const tableHeaders = computed(() => {
 
         <v-data-table-server :headers="tableHeaders" :items="items" :items-length="itemsLength"
             v-model:sort-by="sortByModel" v-model:page="pageModel" v-model:items-per-page="itemsPerPageModel"
-            :item-value="itemValue" v-model:expanded="expandedRows" :show-expand="expandable" :loading="loading"
-            :mobile="$vuetify.display.smAndDown" :density="density" class="border rounded-[10px]"
+            :item-value="itemValue" v-model:expanded="expandedRows" :show-expand="expandable" expand-strategy="single"
+            :loading="loading" :mobile="$vuetify.display.smAndDown" :density="density" class="border rounded-[10px]"
             data-shimmer-no-children>
 
             <template v-for="name in forwardedSlotNames" #[name]="slotProps" :key="name">
@@ -76,14 +76,12 @@ const tableHeaders = computed(() => {
                 </slot>
             </template>
 
-            <template v-if="expandable" #expanded-row="{ columns, item }">
-                <slot name="expanded-row" :columns="columns" :item="item">
-                    <tr>
-                        <td :colspan="columns.length" class="py-3 font-italic text-medium-emphasis">
-                            "{{ item[expandKey] }}"
-                        </td>
-                    </tr>
-                </slot>
+            <template v-if="expandable" v-slot:expanded="{ item }">
+                <tr>
+                    <td class="pa-3 font-italic text-medium-emphasis">
+                        "{{ item[expandKey] }}"
+                    </td>
+                </tr>
             </template>
 
             <template #no-data>

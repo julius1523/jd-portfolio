@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\Admin\UpdateAboutContentRequest;
 use App\Services\IconResolverService;
 use App\Services\FileUploadService;
 use App\Http\Controllers\Controller;
@@ -11,7 +12,6 @@ use Illuminate\Support\Str;
 use App\Support\ArraySort;
 use function array_slice;
 use function count;
-use function is_array;
 
 class AboutContentController extends Controller
 {
@@ -114,40 +114,12 @@ class AboutContentController extends Controller
         ]);
     }
 
-    public function updateAboutContent(Request $request)
+    public function updateAboutContent(UpdateAboutContentRequest $request)
     {
-        $payload = json_decode($request->input('payload', '{}'), true);
+        $validated = $request->validated();
 
-        if (!is_array($payload)) {
-            return response()->json(['message' => 'Invalid payload.'], 422);
-        }
-
-        $skillsInput = $payload['skills'] ?? [];
-        $randomFactsInput = $payload['randomFacts'] ?? [];
-
-        $merged = [
-            ...$payload,
-            'profile_image' => $request->file('profile_image'),
-            'others_image' => $request->file('others_image'),
-        ];
-
-        $validated = validator($merged, [
-            'profile_image' => ['nullable', 'image', 'mimes:jpeg,png,gif,webp', 'max:10240'],
-            'heading' => ['nullable', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'skills' => ['nullable', 'array'],
-            'skills.*.category' => ['required', 'string', 'max:150'],
-            'skills.*.skill' => ['required', 'array', 'min:1'],
-            'skills.*.skill.*' => ['required', 'string', 'max:150'],
-            'skills.*.icon' => ['nullable', 'string', 'max:150'],
-            'randomFacts' => ['nullable', 'array'],
-            'randomFacts.*.icon' => ['required', 'string', 'max:150'],
-            'randomFacts.*.randomFact' => ['required', 'string'],
-            'others' => ['nullable', 'array'],
-            'others.title' => ['nullable', 'string', 'max:255'],
-            'others.description' => ['nullable', 'string'],
-            'others_image' => ['nullable', 'image', 'mimes:jpeg,png,gif,webp', 'max:10240'],
-        ])->validate();
+        $skillsInput = $request->input('skills', []);
+        $randomFactsInput = $request->input('randomFacts', []);
 
         $data = AboutContent::firstOrCreate([]);
 

@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\Admin\UpdateProjectsContentRequest;
 use App\Services\FileUploadService;
 use App\Http\Controllers\Controller;
 use App\Models\ProjectContent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
 use App\Support\ArraySort;
 use function array_slice;
 use function count;
-use function is_array;
 
-class ProjectContentController extends Controller
+class ProjectsContentController extends Controller
 {
     public function __construct(
         private FileUploadService $fileUploadService
@@ -56,51 +55,11 @@ class ProjectContentController extends Controller
         ]);
     }
 
-    public function updateProjectContent(Request $request)
+    public function updateProjectContent(UpdateProjectsContentRequest $request)
     {
-        $payload = json_decode($request->input('payload', '{}'), true);
+        $validated = $request->validated();
 
-        if (!is_array($payload)) {
-            return response()->json(['message' => 'Invalid payload.'], 422);
-        }
-
-        $projectsInput = $payload['projects'] ?? [];
-
-        $merged = [
-            ...$payload,
-            'profileImage' => $request->file('profileImage'),
-            'projectImages' => $request->file('projectImages') ?? [],
-            'projectLinkFiles' => $request->file('projectLinkFiles') ?? [],
-        ];
-
-        $validated = validator($merged, [
-            'profileImage' => ['nullable', 'image', 'mimes:jpeg,png,gif,webp', 'max:10240'],
-            'heading' => ['nullable', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-
-            'projects' => ['nullable', 'array'],
-            'projects.*.category' => [
-                'required',
-                'string',
-                Rule::in([
-                    'Software Development',
-                    'Technical Documentation',
-                    'Presentations/Multimedia',
-                ])
-            ],
-            'projects.*.name' => ['required', 'string', 'max:255'],
-            'projects.*.description' => ['required', 'string'],
-            'projects.*.materials' => ['required', 'array', 'min:1'],
-            'projects.*.materials.*' => ['string', 'max:100'],
-
-            'projects.*.linkType' => ['required', 'in:upload,link'],
-            'projects.*.linkUrl' => ['nullable', 'url', 'required_if:projects.*.linkType,link'],
-
-            'projectImages' => ['nullable', 'array'],
-            'projectImages.*' => ['nullable', 'image', 'mimes:jpeg,png,gif,webp', 'max:10240'],
-            'projectLinkFiles' => ['nullable', 'array'],
-            'projectLinkFiles.*' => ['nullable', 'file', 'mimes:pdf,doc,docx,ppt,pptx,zip', 'max:20480'],
-        ])->validate();
+        $projectsInput = $request->input('projects', []);
 
         $data = ProjectContent::firstOrCreate([]);
 

@@ -19,6 +19,7 @@
     <div id="app"></div>
 
     <script>
+        window.__APP_NAME__ = "{{ config('app.name') }}";
         window.__AUTH_USER__ = {{ Js::from(
     auth()->user() ? [
         'id' => auth()->user()->id,

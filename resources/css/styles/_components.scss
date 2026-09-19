@@ -1,8 +1,0 @@
-@use "./variables" as vars;
-
-.v-tooltip {
-    > .v-overlay__content {
-        font-size: vars.$tooltip-font-size;
-        border-radius: vars.$tooltip-radius;
-    }
-}

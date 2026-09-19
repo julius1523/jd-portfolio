@@ -4,7 +4,7 @@ import * as yup from "yup";
 export const skillsSchema = yup.object({
     id: yup.mixed().nullable(),
     category: yup.string().label("Category").required(),
-    skill: yup.array().of(yup.string()).label("Skills").min(1, "At least one skill is required"),
+    skill: yup.array().of(yup.string()).label("Skills").default([]).min(1, "At least one skill is required"),
     icon: yup.string().label("Icon").nullable().default(null),
     iconSvg: yup.string().nullable().default(null),
 });
@@ -77,12 +77,13 @@ defineExpose({ open, remove });
             <v-row :gap="10">
                 <v-col cols="12">
                     <Select v-model="fields.category" :items="skillCategoryOptions" label="Skill Category"
-                        variant="solo" flat :multiple="false" :chip="false" :error-messages="errors.category"
-                        class="vfield-outline" />
+                        color="primary" variant="solo" flat density="comfortable" :multiple="false" :chip="false"
+                        :error-messages="errors.category" class="vfield-outline" />
                 </v-col>
                 <v-col cols="12">
-                    <Select v-model="fields.skill" :items="availableSkills" label="Skills" variant="solo"
-                        :multiple="true" :chip="false" :error-messages="errors.skill" class="vfield-outline" />
+                    <Select v-model="fields.skill" :items="availableSkills" label="Skills" color="primary"
+                        variant="solo" flat density="comfortable" :multiple="true" :chip="false"
+                        :error-messages="errors.skill" class="vfield-outline" />
                 </v-col>
                 <v-col cols="12">
                     <v-text-field :model-value="fields.icon" label="Icon (optional)" color="primary" variant="solo" flat

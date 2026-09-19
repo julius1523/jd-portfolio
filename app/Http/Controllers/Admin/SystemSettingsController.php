@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UpdateSystemSettingsRequest;
+use App\Http\Requests\Admin\UpdateSystemSettingsRequest;
 use App\Models\SystemSettings;
 use App\Services\FileUploadService;
 use Illuminate\Support\Facades\Cache;

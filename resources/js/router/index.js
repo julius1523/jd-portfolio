@@ -6,6 +6,7 @@ import {
 import routes from "./routes";
 import { resolveAuthRedirect } from "@/middleware/auth";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useSystemSettingsStore } from "@/stores/systemSettings";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -42,7 +43,13 @@ router.beforeEach(async (to) => {
 router.afterEach((to, from, failure) => {
     if (isNavigationFailure(failure)) return;
     requestAnimationFrame(() => ScrollTrigger.refresh());
-    document.title = to.meta?.title ?? "Portfolio";
+
+    const settingsStore = useSystemSettingsStore();
+    const systemName =
+        settingsStore.systemName ?? window.__APP_NAME__ ?? "Portfolio";
+    const pageTitle = to.meta?.title;
+
+    document.title = pageTitle ? `${pageTitle} | ${systemName}` : systemName;
 });
 
 export default router;

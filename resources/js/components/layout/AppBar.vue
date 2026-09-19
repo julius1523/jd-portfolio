@@ -27,10 +27,11 @@ const toggleTheme = (e) => {
 </script>
 
 <template>
-    <v-app-bar app flat :order="1" :class="{ 'topbar': !isAuthenticated, 'px-1': isAuthenticated }">
+    <v-app-bar app flat :order="1" :class="{ 'topbar': !isAuthenticated, 'px-2': isAuthenticated }">
         <template v-slot:prepend v-if="!isAppLayout">
             <router-link :to="{ name: 'home' }">
-                <v-avatar variant="elevated" class="bg-gradient-to-br from-blue-500 to-blue-900 text-white">
+                <v-avatar variant="elevated"
+                    class="bg-gradient-to-br from-[rgb(var(--v-theme-primary))] to-[rgb(var(--v-theme-primary))]/60 text-white">
                     JD
                 </v-avatar>
             </router-link>

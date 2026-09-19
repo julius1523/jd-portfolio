@@ -12,13 +12,13 @@ const categoryOptions = ["Software Development", "Technical Documentation", "Pre
 const dialog = ref(false);
 const editingIndex = ref(-1);
 const isEditing = computed(() => editingIndex.value > -1);
-const materialsTab = ref(null);
-const activeCategoryItems = computed(() => {
-    const category = PROJECT_MATERIALS.find(
-        (item) => item.title === materialsTab.value
-    );
-    return category?.skills ?? [];
-});
+const materialItems = computed(() =>
+    PROJECT_MATERIALS.flatMap((category, index) => [
+        ...(index > 0 ? [{ type: "divider" }] : []),
+        { type: "subheader", text: category.title },
+        ...category.skills.map((skill) => ({ text: skill })),
+    ])
+);
 const schema = yup.object({
     id: yup.mixed().nullable(),
     category: yup.string().label("Category").oneOf(categoryOptions, "Select a valid category").required(),
@@ -55,11 +55,11 @@ const submit = handleSubmit((values) => {
 
 async function open(item = null) {
     editingIndex.value = item ? props.list.findIndex((row) => row.id === item.id) : -1;
-    materialsTab.value = 0;
     resetForm({ values: item ? { ...item } : { ...initialValues } });
-    await validate();
+    await validate({ mode: "silent" });
     dialog.value = true;
 };
+
 function close() {
     dialog.value = false;
 };
@@ -93,19 +93,9 @@ defineExpose({ open, remove });
                         class="vfield-outline" autocomplete="off" />
                 </v-col>
                 <v-col cols="12">
-                    <Select v-model="fields.materials" :items="activeCategoryItems" item-title="text" item-value="text"
-                        variant="solo" label="Materials" :chip="false" :error-messages="errors.materials"
-                        class="vfield-outline">
-                        <template v-slot:menu-header>
-                            <v-tabs v-model="materialsTab" slider-color="primary" density="comfortable" grow
-                                class="border-b" @keydown.enter.stop>
-                                <v-tab v-for="category in PROJECT_MATERIALS" :key="category.title"
-                                    :value="category.title">
-                                    {{ category.title }}
-                                </v-tab>
-                            </v-tabs>
-                        </template>
-                    </Select>
+                    <Select v-model="fields.materials" :items="materialItems" item-title="text" item-value="text"
+                        label="Materials" color="primary" variant="solo" density="comfortable" flat :chip="false"
+                        :error-messages="errors.materials" class="vfield-outline" />
                 </v-col>
                 <v-col cols="12">
                     <FileUpload v-model="fields.image" file-type="image" :max-files="1" inset density="comfortable"
@@ -113,10 +103,10 @@ defineExpose({ open, remove });
                 </v-col>
                 <v-col cols="12">
                     <div class="text-title-small text-medium-emphasis mb-2">Link</div>
-                    <v-btn-toggle v-model="fields.linkType" color="primary" variant="outlined" density="compact"
-                        mandatory divided class="rounded-[10px] mb-3">
-                        <v-btn value="upload" text="Upload" />
-                        <v-btn value="link" text="Link" />
+                    <v-btn-toggle v-model="fields.linkType" color="primary" variant="tonal" density="compact" mandatory
+                        divided class="rounded-[10px] mb-3">
+                        <v-btn prepend-icon="i-mdi-cloud-upload-outline" value="upload" text="Upload" />
+                        <v-btn prepend-icon="i-mdi-link-variant" value="link" text="Link" />
                     </v-btn-toggle>
                     <FileUpload v-if="fields.linkType === 'upload'" v-model="fields.linkFile" :max-files="1" inset
                         density="comfortable" :show-size="true" :error-messages="errors.linkFile" />

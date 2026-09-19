@@ -1,6 +1,6 @@
 <template>
     <Shimmer :loading="pageLoading">
-        <v-card flat class="mt-4 rounded-lg">
+        <v-card flat class="pa-1 mt-8 rounded-lg">
             <v-form @submit.prevent="submit" :disabled="loading">
                 <v-row :gap="55">
                     <v-col cols="12">

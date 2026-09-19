@@ -1,7 +1,7 @@
 <template>
     <v-container max-width="1050">
         <Shimmer :loading="pageLoading">
-            <v-card flat class="rounded-lg">
+            <v-card flat class="pa-1 rounded-lg">
                 <v-form @submit.prevent="submit" :disabled="loading">
                     <v-row :gap="55">
                         <v-col cols="12">
@@ -36,9 +36,9 @@
                                             Update the system color
                                         </span>
                                     </div>
-                                    <Select v-model="fields.systemColor" :items="COLORS" variant="solo"
-                                        label="System Color" :multiple="false" :single-line="true" :chip="false"
-                                        :error-messages="errors.systemColor" class="vfield-outline"
+                                    <Select v-model="fields.systemColor" :items="COLORS" label="System Color"
+                                        variant="solo" flat density="comfortable" :multiple="false" :single-line="true"
+                                        :chip="false" :error-messages="errors.systemColor" class="vfield-outline"
                                         data-shimmer-no-children>
                                         <template #item="{ item, props: itemProps }">
                                             <v-list-item v-bind="itemProps" :title="undefined">
@@ -75,6 +75,7 @@
 import axios from "@/plugins/axios";
 import { ref, onMounted } from "vue";
 import * as yup from "yup";
+import { useSystemSettingsStore } from "@/stores/systemSettings";
 import { useValidatedForm } from "@/composables/useValidatedForm";
 import { useSnackbarQueue } from "@/composables/useSnackbarQueue";
 import Select from "@/components/forms/Select";
@@ -87,6 +88,7 @@ const schema = yup.object({
     systemName: yup.string().label("System Name").required(),
     systemColor: yup.string().label("System Color").required(),
 });
+const settingsStore = useSystemSettingsStore();
 const { error } = useSnackbarQueue();
 const pageLoading = ref(true);
 const { fields, errors, loading, submit, cancelEdit, resetForm, meta, ready } = useValidatedForm(
@@ -113,6 +115,7 @@ const { fields, errors, loading, submit, cancelEdit, resetForm, meta, ready } = 
 
         const response = await axios.post("/api/updateSystemSettings", formData);
         await getSystemSettings();
+        await settingsStore.fetch();
         return { message: response.data.message };
     },
     { resetOnSuccess: false }
@@ -128,7 +131,7 @@ async function getSystemSettings() {
     } finally {
         pageLoading.value = false;
     }
-}
+};
 
 onMounted(() => {
     getSystemSettings();

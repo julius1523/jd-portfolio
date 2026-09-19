@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\Admin\UpdateContactContentRequest;
 use App\Services\IconResolverService;
 use App\Services\FileUploadService;
 use App\Http\Controllers\Controller;
@@ -11,7 +12,6 @@ use Illuminate\Support\Str;
 use App\Support\ArraySort;
 use function array_slice;
 use function count;
-use function is_array;
 
 class ContactContentController extends Controller
 {
@@ -72,30 +72,11 @@ class ContactContentController extends Controller
         ]);
     }
 
-    public function updateContactContent(Request $request)
+    public function updateContactContent(UpdateContactContentRequest $request)
     {
-        $payload = json_decode($request->input('payload', '{}'), true);
+        $validated = $request->validated();
 
-        if (!is_array($payload)) {
-            return response()->json(['message' => 'Invalid payload.'], 422);
-        }
-
-        $socialsInput = $payload['socials'] ?? [];
-
-        $merged = [
-            ...$payload,
-            'profileImage' => $request->file('profileImage'),
-        ];
-
-        $validated = validator($merged, [
-            'profileImage' => ['nullable', 'image', 'mimes:jpeg,png,gif,webp', 'max:10240'],
-            'heading' => ['nullable', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'socials' => ['nullable', 'array'],
-            'socials.*.name' => ['required', 'string', 'max:255'],
-            'socials.*.linkUrl' => ['required', 'url'],
-            'socials.*.icon' => ['required', 'string', 'max:100'],
-        ])->validate();
+        $socialsInput = $request->input('socials', []);
 
         $data = ContactContent::firstOrCreate([]);
 

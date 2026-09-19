@@ -183,7 +183,7 @@ export const SOCIAL_ICONS = [
 ];
 
 export const COLORS = [
-    { name: "Blue", value: "primary" },
-    { name: "Green", value: "success" },
-    { name: "Red", value: "error" },
+    { name: "Blue", value: "#1976D2" },
+    { name: "Green", value: "#2E7D32" },
+    { name: "Red", value: "#C62828" },
 ];

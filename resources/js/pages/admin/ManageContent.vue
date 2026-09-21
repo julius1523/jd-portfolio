@@ -1,13 +1,12 @@
 <template>
     <v-container max-width="1050">
-        <v-tabs v-model="tab" :grow="$vuetify.display.smAndDown" color="primary" selected-class="opacity-100">
-            <v-tab variant="plain" :value="1" :ripple="false">Home</v-tab>
-            <v-tab variant="plain" :value="2" :ripple="false">About</v-tab>
-            <v-tab variant="plain" :value="3" :ripple="false">Projects</v-tab>
-            <v-tab variant="plain" :value="4" :ripple="false">Contact</v-tab>
+        <v-tabs v-model="tab" :grow="$vuetify.display.smAndDown" color="primary" density="compact"
+            selected-class="opacity-100">
+            <v-tab variant="plain" :value="1" :slim="true" :ripple="false">Home</v-tab>
+            <v-tab variant="plain" :value="2" :slim="true" :ripple="false">About</v-tab>
+            <v-tab variant="plain" :value="3" :slim="true" :ripple="false">Projects</v-tab>
+            <v-tab variant="plain" :value="4" :slim="true" :ripple="false">Contact</v-tab>
         </v-tabs>
-
-        <v-divider />
 
         <v-tabs-window v-model="tab" crossfade>
             <v-tabs-window-item :value="1">

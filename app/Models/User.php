@@ -4,17 +4,16 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
-use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
-#[Fillable(['name', 'email', 'password'])]
-#[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
+    protected $guarded = ['id'];
+
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, HasAPiTokens;
 
@@ -23,6 +22,11 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
+    protected function name(): Attribute
+    {
+        return Attribute::get(fn() => trim("{$this->first_name} {$this->last_name}"));
+    }
+
     protected function casts(): array
     {
         return [

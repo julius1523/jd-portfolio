@@ -1,7 +1,7 @@
 <template>
     <section id="login" ref="loginSection">
         <v-container>
-            <v-card flat class="pa-6 mx-auto mt-10 shadow-lg reveal-item" max-width="400" rounded="xl"
+            <v-card flat class="pa-6 mx-auto mt-10 shadow-md border reveal-item" max-width="400" rounded="xl"
                 :loading="loading" :disabled="loading">
                 <template v-if="loading" #loader>
                     <v-progress-linear indeterminate color="primary" />
@@ -11,18 +11,18 @@
                 <Alert class="rounded-[10px]" />
                 <v-form @submit.prevent="submit" class="mt-5">
                     <v-text-field v-model="fields.email" color="primary" variant="solo" flat density="comfortable"
-                        placeholder="Email" class="vfield-outline mb-1" :error-messages="errors.email" />
-                    <PasswordField v-model="fields.password" variant="solo" flat density="comfortable"
-                        placeholder="Password" class="vfield-outline" :error-messages="errors.password" />
+                        label="Email" :single-line="true" class="vfield-outline mb-1" :error-messages="errors.email" />
+                    <PasswordField v-model="fields.password" variant="solo" flat density="comfortable" label="Password"
+                        :single-line=true class="vfield-outline" :error-messages="errors.password" />
                     <v-checkbox v-model="fields.remember" color="primary" hide-details density="compact"
                         class="text-label-large">
                         <template #label>
                             <span class="text-label-large text-medium-emphasis">Remember me</span>
                         </template>
                     </v-checkbox>
-                    <v-btn type="submit" color="primary" variant="flat" height="50" size="large" block text="Log in"
-                        class="rounded-2xl my-3" :disabled="!ready || !meta.valid" />
-                    <v-btn variant="plain" height="50" size="large" prepend-icon="i-mdi-arrow-left" block
+                    <v-btn type="submit" color="primary" variant="flat" height="50" size="large" rounded="pill" block
+                        text="Log in" class="my-3" :disabled="!ready || !meta.valid" />
+                    <v-btn variant="plain" height="50" size="large" prepend-icon="i-mdi-arrow-left" rounded="pill" block
                         text="Go back to home" :ripple="false" class="rounded-2xl"
                         @click="$router.replace({ name: 'home' })" />
                 </v-form>

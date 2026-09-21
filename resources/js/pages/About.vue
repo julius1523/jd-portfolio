@@ -26,7 +26,7 @@
         </v-card>
     </section>
     <section id="skills" ref="skillsSection">
-        <v-card flat tile color="surface-light">
+        <v-card flat tile>
             <v-container class="d-flex flex-column align-center ga-5 my-5 my-md-13">
                 <div class="reveal-item">
                     <div class="text-center text-headline-small text-md-headline-medium font-weight-medium">
@@ -35,11 +35,11 @@
                 </div>
                 <div class="d-flex flex-column ga-6 ga-md-9 reveal-item">
                     <div v-for="item in data.skills" :key="item.category" class="d-flex flex-column ga-2">
-                        <div class="text-title-large">
+                        <div>
                             <v-icon icon="i-ri-stack-line" color="primary" class="mr-2" />
                             {{ item.category }}
                         </div>
-                        <div class="d-flex flex-row flex-wrap ga-2 ml-12">
+                        <div class="d-flex flex-row flex-wrap ga-2 ml-9">
                             <v-chip v-for="skill in item.skill" :key="skill" variant="flat"
                                 class="rounded-[10px] transition-colors duration-200 hover:bg-primary">
                                 {{ skill }}
@@ -79,7 +79,7 @@
         </v-card>
     </section>
     <section id="design-system" ref="designSection">
-        <v-card flat tile color="surface-light">
+        <v-card flat tile>
             <v-container class="d-flex flex-column align-center ga-5 my-5 my-md-13">
                 <div class="reveal-item">
                     <div class="text-center text-headline-small text-md-headline-medium font-weight-medium">

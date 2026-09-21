@@ -7,7 +7,7 @@ export const useLayoutStore = defineStore("layout", () => {
     const { mdAndUp } = useDisplay();
 
     const drawer = ref(mdAndUp.value);
-    const rail = ref(mdAndUp.value);
+    const rail = ref(false);
 
     watch(mdAndUp, (isMdAndUp) => {
         if (isMdAndUp) {

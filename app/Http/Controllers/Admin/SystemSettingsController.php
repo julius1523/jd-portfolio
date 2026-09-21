@@ -23,8 +23,8 @@ class SystemSettingsController extends Controller
 
             return [
                 'systemLogo' => $logoSetting?->value['url'] ?? null,
-                'systemName' => SystemSettings::get('system_name'),
-                'systemColor' => SystemSettings::get('system_color'),
+                'systemName' => SystemSettings::get('system_name') ?? "Portfolio",
+                'systemColor' => SystemSettings::get('system_color') ?? "#1976D2",
             ];
         });
 

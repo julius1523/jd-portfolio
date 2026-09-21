@@ -37,7 +37,7 @@
     </section>
 
     <section id="contact-body" ref="contactBodySection">
-        <v-card flat tile color="surface-light">
+        <v-card flat tile>
             <v-container class="d-flex flex-column ga-5 my-5 my-md-13" :max-width="420">
                 <div class="reveal-item">
                     <div class="text-center text-headline-small text-md-headline-medium font-weight-medium">Send Email
@@ -47,20 +47,20 @@
                     <v-row gap="5" class="mt-3 reveal-item">
                         <v-col cols="12">
                             <v-text-field v-model="fields.name" color="primary" variant="solo" flat label="Name"
-                                class="[&_.v-field]:rounded-2xl [&_.v-field]:border" :error-messages="errors.name" />
+                                density="comfortable" class="vfield-outline" :error-messages="errors.name" />
                         </v-col>
                         <v-col cols="12">
                             <v-text-field v-model="fields.email" color="primary" variant="solo" flat label="Email"
-                                class="[&_.v-field]:rounded-2xl [&_.v-field]:border" :error-messages="errors.email" />
+                                density="comfortable" class="vfield-outline" :error-messages="errors.email" />
                         </v-col>
                         <v-col cols="12">
                             <v-textarea v-model="fields.message" color="primary" auto-grow variant="solo" flat
-                                label="Message" class="[&_.v-field]:rounded-2xl [&_.v-field]:border"
+                                label="Message" density="comfortable" class="vfield-outline"
                                 :error-messages="errors.message" autocomplete="off" />
                         </v-col>
                         <v-col cols="12">
-                            <v-btn type="submit" color="primary" variant="flat" size="large" height="56" block
-                                text="Send Email" class="rounded-2xl" :loading="loading"
+                            <v-btn type="submit" color="primary" rounded="pill" variant="flat" size="large" height="56"
+                                block text="Send Email" :loading="loading"
                                 :disabled="!ready || !meta.valid || loading" />
                         </v-col>
                     </v-row>

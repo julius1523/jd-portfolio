@@ -26,9 +26,10 @@
         </v-card>
     </section>
     <section id="projects-body" ref="projectsBodySection">
-        <v-card flat tile color="surface-light">
+        <v-card flat tile>
             <v-container class="my-5 my-md-13 px-7">
-                <div v-for="group in groupedProjects" :key="group.category" class="d-flex flex-column ga-2 mb-12">
+                <div v-for="group in groupedProjects" :key="group.category"
+                    class="d-flex flex-column ga-2 mb-12 h-[560px]">
                     <div class="reveal-item">
                         <div class="text-headline-small text-md-headline-medium font-weight-medium">
                             {{ group.category }}
@@ -37,7 +38,7 @@
                     <SnapCarousel :items="group.items">
                         <template #default="{ item, index }">
                             <v-card width="330" height="440" rounded="xl" flat
-                                class="border d-flex flex-column scale-down-hover" @click="openProject(item)">
+                                class="border d-flex flex-column scale-up-hover" @click="openProject(item)">
                                 <div class="h-50">
                                     <v-img :src="item.image?.url" width="fit-content" position="top"
                                         :alt="`${group.category} Preview ${index}`" aspect-ratio="16/9"

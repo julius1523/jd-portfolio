@@ -99,11 +99,16 @@ export default defineConfig({
         "clamped-img--square":
             "h-auto aspect-square max-w-[min(var(--img-max-w,100%),35vw)]",
         "translate-y-hover":
-            "transition-transform duration-700 ease-out hover:-translate-y-2 will-change-transform",
+            "transition-transform duration-700 ease-out will-change-transform " +
+            "[@media(hover:hover)]:hover:-translate-y-2",
         "scale-up-hover":
-            "transition-transform duration-500 ease-in-out hover:scale-105 will-change-transform",
+            "transition-transform duration-500 ease-in-out will-change-transform " +
+            "[@media(hover:hover)]:hover:scale-102",
         "scale-down-hover":
-            "transition-transform duration-500 ease-in-out hover:scale-98 will-change-transform",
+            "transition-transform duration-500 ease-in-out will-change-transform " +
+            "[@media(hover:hover)]:hover:scale-98",
+        "glassy-effect":
+            "bg-[rgba(var(--v-theme-surface),0.55)] backdrop-blur-2xl",
     },
     variants: [
         (matcher) => {

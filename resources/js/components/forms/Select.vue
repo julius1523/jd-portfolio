@@ -116,11 +116,12 @@ watch(
         <v-select ref="selectRef" v-model:search="search" :model-value="modelValue" :items="items" :variant="variant"
             :flat="flat" :label="label" :rounded="rounded" :density="density" :single-line="singleLine" :hint="hint"
             :persistent-hint="persistentHint" :multiple="multiple" :error-messages="errorMessages"
-            :item-title="itemTitle" :item-value="itemValue" :hide-no-data="false" :no-auto-scroll="true"
-            autocomplete="off" :list-props="{
+            :item-title="itemTitle" :item-value="itemValue" :hide-no-data="false" :no-auto-scroll="true" color="primary"
+            class="vfield-outline" autocomplete="off" :list-props="{
                 density: 'comfortable',
                 prependGap: 15,
             }" :menu-props="{
+                scrollStrategy: 'close',
                 maxWidth: '100',
                 width: 'auto',
                 contentClass: 'rounded-[10px]',

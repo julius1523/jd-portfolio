@@ -26,8 +26,8 @@ function onCancel() {
 <template>
     <v-dialog :model-value="modelValue" @update:model-value="$emit('update:modelValue', $event)" scrollable
         :max-width="maxWidth" :max-height="maxHeight" transition="dialog-top-transition">
-        <v-card class="border shadow-lg rounded-[16px]">
-            <v-toolbar density="comfortable" color="surface">
+        <v-card rounded="xl" class="shadow-lg">
+            <v-toolbar density="comfortable" color="surface" class="border-b">
                 <div class="grid w-full grid-cols-[1fr_auto_1fr] items-center">
                     <div></div>
                     <span class="min-w-0 truncate text-center text-title-medium">
@@ -46,16 +46,14 @@ function onCancel() {
                 <slot />
             </OverlayScrollbarsComponent>
 
-            <v-divider class="mx-5" />
-
-            <v-card-actions class="px-[18px] py-[15px] mt-auto">
-                <div :class="{ 'w-100': $vuetify.display.smAndDown }">
-                    <v-btn variant="tonal" class="rounded-[10px]" height="40" block :slim="false" @click="onCancel">
+            <v-card-actions class="pa-[15px] mt-auto border-t flex-column flex-sm-row">
+                <div class="order-1 order-sm-0" :class="{ 'w-100': $vuetify.display.smAndDown }">
+                    <v-btn variant="tonal" height="40" block :slim="false" rounded="pill" @click="onCancel">
                         {{ isEditing ? editCancelText : cancelText }}
                     </v-btn>
                 </div>
                 <div :class="{ 'w-100': $vuetify.display.smAndDown }">
-                    <v-btn variant="flat" class="rounded-[10px]" color="primary" height="40" block :slim="false"
+                    <v-btn variant="flat" color="primary" height="40" block :slim="false" rounded="pill"
                         :loading="loading" :disabled="disableSave" @click="$emit('save')">
                         {{ isEditing ? editSaveText : saveText }}
                     </v-btn>

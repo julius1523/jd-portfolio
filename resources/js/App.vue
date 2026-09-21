@@ -4,13 +4,13 @@
         <sidebar v-if="showSidebar" />
         <snackbar />
         <confirm />
-        <v-main :class="{ 'bg-surface-light': layoutType === 'login' }">
-            <router-view v-slot="{ Component, route }">
-                <transition name="fade" mode="out-in">
-                    <div :key="route.name">
+        <v-main>
+            <router-view v-slot="{ Component, route: viewRoute }">
+                <Transition name="fade" mode="out-in" appear @enter="onEnter">
+                    <div :key="viewRoute.name" class="route-view">
                         <component :is="Component" />
                     </div>
-                </transition>
+                </Transition>
             </router-view>
         </v-main>
         <footr v-if="showFooter" />
@@ -18,14 +18,15 @@
 </template>
 
 <script setup>
-import { watch, computed, defineAsyncComponent } from "vue";
+import { watch, computed, defineAsyncComponent, watchEffect, nextTick } from "vue";
 import { useTheme, useDisplay } from "vuetify";
-import { storeToRefs } from "pinia";
 import { useRoute } from "vue-router";
-import { useAuthStore } from "@/stores/auth";
 import { useThemeStore } from "@/stores/theme";
 import { provideShimmerConfig } from "@shimmer-from-structure/vue";
+import { useLayoutType } from "@/composables/useLayoutType";
 import { useSystemColor } from "@/composables/useSystemColor";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { scrollGate } from "@/router/scrollGate";
 import appbar from "@/components/layout/AppBar";
 import sidebar from "@/components/layout/SideBar";
 import footr from "@/components/layout/Footer";
@@ -36,31 +37,40 @@ const confirm = defineAsyncComponent(() => import("@/components/ui/ConfirmDialog
 useSystemColor();
 
 provideShimmerConfig({
-    shimmerColor: 'rgba(156, 163, 175, 0.4)',
-    backgroundColor: 'rgba(156, 163, 175, 0.15)',
+    shimmerColor: "rgba(156, 163, 175, 0.4)",
+    backgroundColor: "rgba(156, 163, 175, 0.15)",
     duration: 1.5,
     fallbackBorderRadius: 8,
 });
 
-const { isAuthenticated } = storeToRefs(useAuthStore());
 const route = useRoute();
 const theme = useTheme();
 const themeStore = useThemeStore();
 const { smAndDown } = useDisplay();
-const layoutType = computed(() => {
-    if (route.name === "not-found") {
-        return isAuthenticated ? "app" : "public";
-    }
-    return route.meta.layout ?? "public";
-});
+const layoutType = useLayoutType();
 const showAppBar = computed(() => layoutType.value !== "login");
-const showSidebar = computed(() =>
-    layoutType.value !== "login" && (layoutType.value === "app" || smAndDown.value)
+const showSidebar = computed(
+    () =>
+        layoutType.value !== "login" &&
+        (layoutType.value === "app" || smAndDown.value)
 );
 const showFooter = computed(() => layoutType.value === "public");
+
+const onEnter = () => {
+    nextTick(() => {
+        ScrollTrigger.refresh();
+        scrollGate.open();
+    });
+};
 
 watch(
     () => themeStore.isDark,
     (isDark) => theme.change(isDark ? "dark" : "light")
 );
+
+watchEffect(() => {
+    const bg = theme.current.value.colors.background;
+    document.documentElement.style.backgroundColor = bg;
+    document.body.style.backgroundColor = bg;
+});
 </script>

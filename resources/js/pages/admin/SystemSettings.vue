@@ -5,7 +5,7 @@
                 <v-form @submit.prevent="submit" :disabled="loading">
                     <v-row :gap="55">
                         <v-col cols="12">
-                            <v-row :gap="13">
+                            <v-row :gap="10">
                                 <v-col cols="12">
                                     <div class="mb-4">
                                         <span class="text-title-medium font-weight-bold">System Logo</span><br />
@@ -17,6 +17,10 @@
                                         :disabled="loading" :show-size="true" density="comfortable"
                                         :error-messages="errors.systemLogo" data-shimmer-no-children />
                                 </v-col>
+                            </v-row>
+                        </v-col>
+                        <v-col cols="12">
+                            <v-row :gap="10">
                                 <v-col cols="12">
                                     <div class="mb-4">
                                         <span class="text-title-medium font-weight-bold">System Name</span><br />
@@ -29,6 +33,10 @@
                                         :error-messages="errors.systemName" autocomplete="off" class="vfield-outline"
                                         data-shimmer-no-children />
                                 </v-col>
+                            </v-row>
+                        </v-col>
+                        <v-col cols="12">
+                            <v-row :gap="10">
                                 <v-col cols="12">
                                     <div class="mb-4">
                                         <span class="text-title-medium font-weight-bold">System Color</span><br />
@@ -36,33 +44,21 @@
                                             Update the system color
                                         </span>
                                     </div>
-                                    <Select v-model="fields.systemColor" :items="COLORS" label="System Color"
-                                        variant="solo" flat density="comfortable" :multiple="false" :single-line="true"
-                                        :chip="false" :error-messages="errors.systemColor" class="vfield-outline"
+                                    <v-text-field v-model="fields.systemColor" color="primary" variant="solo" flat
+                                        :error-messages="errors.systemColor" autocomplete="off" class="vfield-outline"
                                         data-shimmer-no-children>
-                                        <template #item="{ item, props: itemProps }">
-                                            <v-list-item v-bind="itemProps" :title="undefined">
-                                                <template #prepend>
-                                                    <v-avatar :color="item?.value" size="18" class="mr-2" />
-                                                </template>
-
-                                                <template #title>
-                                                    <span class="text-label-medium">{{ item?.name }}</span>
-                                                </template>
-                                            </v-list-item>
+                                        <template #prepend-inner>
+                                            <v-icon icon="i-mdi-circle" :color="fields.systemColor" size="20" />
                                         </template>
-
-                                        <template #selection="{ item }">
-                                            <v-avatar :color="item?.value" size="16" class="mr-2" />
-                                            {{ item?.name }}
+                                        <template #append-inner>
+                                            <ColorPicker v-model="fields.systemColor" />
                                         </template>
-                                    </Select>
-                                </v-col>
-                                <v-col cols="12">
-                                    <FormActions :dirty="meta.dirty" :ready="ready" :loading="loading"
-                                        @cancel="cancelEdit" />
+                                    </v-text-field>
                                 </v-col>
                             </v-row>
+                        </v-col>
+                        <v-col cols="12">
+                            <FormActions :dirty="meta.dirty" :ready="ready" :loading="loading" @cancel="cancelEdit" />
                         </v-col>
                     </v-row>
                 </v-form>
@@ -78,10 +74,10 @@ import * as yup from "yup";
 import { useSystemSettingsStore } from "@/stores/systemSettings";
 import { useValidatedForm } from "@/composables/useValidatedForm";
 import { useSnackbarQueue } from "@/composables/useSnackbarQueue";
-import Select from "@/components/forms/Select";
+import ColorPicker from "@/components/forms/ColorPicker";
 import FileUpload from "@/components/forms/FileUpload";
 import FormActions from "@/components/forms/FormActions";
-import { COLORS } from "@/src/constants/constants";
+
 
 const schema = yup.object({
     systemLogo: yup.mixed().label("System Logo").nullable(),
@@ -102,12 +98,11 @@ const { fields, errors, loading, submit, cancelEdit, resetForm, meta, ready } = 
 
         if (systemLogoFile) {
             formData.append("systemLogo", systemLogoFile);
-        } else if (!values.profileImage) {
+        } else if (!values.systemLogo) {
             formData.append("remove_systemLogo", "1");
         }
 
         const payload = {
-            systemLogo: values.systemLogo,
             systemName: values.systemName,
             systemColor: values.systemColor,
         };

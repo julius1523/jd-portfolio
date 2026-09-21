@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Exceptions\HttpResponseException;
 use function is_array;
 
 class UpdateContactContentRequest extends FormRequest
@@ -18,9 +17,7 @@ class UpdateContactContentRequest extends FormRequest
         $payload = json_decode($this->input('payload', '{}'), true);
 
         if (!is_array($payload)) {
-            throw new HttpResponseException(
-                response()->json(['message' => 'Invalid payload.'], 422)
-            );
+            $payload = [];
         }
 
         $this->merge($payload);

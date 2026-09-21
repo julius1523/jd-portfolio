@@ -23,3 +23,7 @@ a {
         border-radius: 7px;
     }
 }
+
+.v-navigation-drawer--top:not(.v-navigation-drawer--active) {
+    visibility: hidden;
+}

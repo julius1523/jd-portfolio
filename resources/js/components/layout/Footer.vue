@@ -3,7 +3,7 @@ const currentYear = new Date().getFullYear();
 </script>
 
 <template>
-    <v-footer app absolute height="72" class="pa-0">
+    <v-footer app absolute class="pa-0">
         <v-container class="d-flex justify-center justify-md-space-between text-title-small">
             <div class="text-medium-emphasis">
                 © {{ currentYear }} Julius Dolana

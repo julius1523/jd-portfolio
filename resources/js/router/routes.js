@@ -22,7 +22,7 @@ export default [
             title: "Home",
             middleware: "guest",
             layout: "public",
-            store: useHomeStore,
+            store: () => useHomeStore(),
         },
     },
     {
@@ -33,7 +33,7 @@ export default [
             title: "About",
             middleware: "guest",
             layout: "public",
-            store: useAboutStore,
+            store: () => useAboutStore(),
         },
     },
     {
@@ -44,7 +44,7 @@ export default [
             title: "Projects",
             middleware: "guest",
             layout: "public",
-            store: useProjectsStore,
+            store: () => useProjectsStore(),
         },
     },
     {
@@ -55,7 +55,7 @@ export default [
             title: "Contact",
             middleware: "guest",
             layout: "public",
-            store: useContactStore,
+            store: () => useContactStore(),
         },
     },
     {

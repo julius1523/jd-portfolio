@@ -74,8 +74,8 @@ defineExpose({ open, remove });
                 </v-col>
                 <v-col cols="12">
                     <Select v-model="fields.icon" :items="SOCIAL_ICONS" item-title="name" item-value="value"
-                        label="Icon" color="primary" variant="solo" flat density="comfortable" :multiple="false"
-                        :chip="false" :error-messages="errors.icon" class="vfield-outline">
+                        label="Icon" variant="solo" flat density="comfortable" :multiple="false" :chip="false"
+                        :error-messages="errors.icon">
                         <template #item="{ item, props: itemProps }">
                             <v-list-item v-bind="itemProps" :prepend-icon="item?.value" color="primary"
                                 :title="undefined">

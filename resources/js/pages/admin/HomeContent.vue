@@ -35,8 +35,8 @@
                             </v-col>
                             <v-col cols="12">
                                 <Select v-model="fields.subheading" :items="subHeadingItems" label="Subheading"
-                                    color="primary" variant="solo" flat density="comfortable" :chip="false"
-                                    :error-messages="errors.title" class="vfield-outline" data-shimmer-no-children />
+                                    variant="solo" flat density="comfortable" :chip="false"
+                                    :error-messages="errors.subheading" data-shimmer-no-children />
                             </v-col>
                             <v-col cols="12">
                                 <v-textarea v-model="fields.description" color="primary" auto-grow variant="solo" flat
@@ -103,12 +103,7 @@ import { DEVELOPER_TITLES } from "@/src/constants/constants";
 const schema = yup.object({
     profileImage: yup.mixed().label("Profile Image").nullable(),
     heading: yup.string().label("Heading").required(),
-    subheading: yup
-        .array()
-        .of(yup.string().required())
-        .min(1, "At least one tag is required")
-        .max(4, "Maximum of 4 tags")
-        .label("Subheading"),
+    subheading: yup.array().of(yup.string()).label("Subheading").min(1, "At least one tag is required").max(4, "Maximum of 4 tags").default([]),
     description: yup.string().label("Description").required(),
     primaryBtnText: yup.string().label("Primary button text").required(),
     primaryBtnLink: yup.string().label("Primary button link").required(),

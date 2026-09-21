@@ -58,7 +58,7 @@ function pick(icon) {
         <template #activator="{ props: activatorProps }">
             <slot name="activator" :props="activatorProps" :selected="modelValue">
                 <v-icon-btn v-bind="activatorProps" variant="tonal" rounded="circle" icon="i-mdi-emoticon"
-                    color="warning" size="30" />
+                    color="primary" size="30" />
             </slot>
         </template>
 

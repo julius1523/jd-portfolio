@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from "vue";
+
 const carousel = ref(null);
 const canScrollLeft = ref(false);
 const canScrollRight = ref(true);
@@ -38,7 +39,9 @@ const scroll = (direction) => {
         behavior: 'smooth',
     });
 };
+
 let resizeObserver;
+
 onMounted(() => {
     requestAnimationFrame(updateButtons);
     const el = carousel.value;
@@ -48,6 +51,7 @@ onMounted(() => {
     });
     resizeObserver.observe(el);
 });
+
 onBeforeUnmount(() => {
     const el = carousel.value;
     el?.removeEventListener('scroll', updateButtons);

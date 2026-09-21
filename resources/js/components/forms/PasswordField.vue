@@ -5,7 +5,6 @@ const model = defineModel({
     type: String,
     default: '',
 });
-
 const props = defineProps({
     label: {
         type: String,
@@ -20,9 +19,7 @@ const props = defineProps({
         default: () => [],
     },
 });
-
 const show = ref(false);
-
 const usePlaceholder = computed(() => !!props.placeholder);
 const resolvedLabel = computed(() => (usePlaceholder.value ? undefined : props.label));
 const resolvedPlaceholder = computed(() => (usePlaceholder.value ? props.placeholder : undefined));

@@ -15,7 +15,11 @@ const isEditing = computed(() => editingIndex.value > -1);
 const materialItems = computed(() =>
     PROJECT_MATERIALS.flatMap((category, index) => [
         ...(index > 0 ? [{ type: "divider" }] : []),
-        { type: "subheader", text: category.title },
+        {
+            type: "subheader",
+            text: category.title,
+            props: { class: ["px-[22px]", { "mt-2": index > 0 }] },
+        },
         ...category.skills.map((skill) => ({ text: skill })),
     ])
 );
@@ -78,14 +82,13 @@ defineExpose({ open, remove });
         <v-form @submit.prevent="submit">
             <v-row :gap="10">
                 <v-col cols="12">
-                    <Select v-model="fields.category" :items="categoryOptions" label="Category" color="primary"
-                        variant="solo" flat density="comfortable" :error-messages="errors.category" :multiple="false"
-                        :chip="false" class="vfield-outline" />
+                    <Select v-model="fields.category" :items="categoryOptions" label="Category" variant="solo" flat
+                        density="comfortable" :error-messages="errors.category" :multiple="false" :chip="false" />
                 </v-col>
                 <v-col cols="12">
                     <v-text-field v-model="fields.name" label="Project Name" color="primary" variant="solo" flat
                         density="comfortable" clearable :error-messages="errors.name" class="vfield-outline"
-                        autocomplete="off" name="project-title" />
+                        autocomplete="off" />
                 </v-col>
                 <v-col cols="12">
                     <v-textarea v-model="fields.description" label="Description" color="primary" auto-grow
@@ -94,8 +97,8 @@ defineExpose({ open, remove });
                 </v-col>
                 <v-col cols="12">
                     <Select v-model="fields.materials" :items="materialItems" item-title="text" item-value="text"
-                        label="Materials" color="primary" variant="solo" density="comfortable" flat :chip="false"
-                        :error-messages="errors.materials" class="vfield-outline" />
+                        label="Materials" variant="solo" density="comfortable" flat :chip="false"
+                        :error-messages="errors.materials" />
                 </v-col>
                 <v-col cols="12">
                     <FileUpload v-model="fields.image" file-type="image" :max-files="1" inset density="comfortable"
@@ -103,10 +106,10 @@ defineExpose({ open, remove });
                 </v-col>
                 <v-col cols="12">
                     <div class="text-title-small text-medium-emphasis mb-2">Link</div>
-                    <v-btn-toggle v-model="fields.linkType" color="primary" variant="tonal" density="compact" mandatory
-                        divided class="rounded-[10px] mb-3">
-                        <v-btn prepend-icon="i-mdi-cloud-upload-outline" value="upload" text="Upload" />
-                        <v-btn prepend-icon="i-mdi-link-variant" value="link" text="Link" />
+                    <v-btn-toggle v-model="fields.linkType" variant="tonal" density="compact" mandatory divided
+                        class="rounded-[10px] mb-3">
+                        <v-btn size="small" prepend-icon="i-mdi-cloud-upload-outline" value="upload" text="Upload" />
+                        <v-btn size="small" prepend-icon="i-mdi-link-variant" value="link" text="Link" />
                     </v-btn-toggle>
                     <FileUpload v-if="fields.linkType === 'upload'" v-model="fields.linkFile" :max-files="1" inset
                         density="comfortable" :show-size="true" :error-messages="errors.linkFile" />

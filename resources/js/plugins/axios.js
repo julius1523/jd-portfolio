@@ -1,7 +1,7 @@
 import Axios from "axios";
 import router from "@/router";
 import { useAuthStore } from "@/stores/auth";
-import { useSnackbarQueue } from "@/composables/useSnackbarQueue";
+import { useSnackBarQueue } from "@/composables/useSnackbarQueue";
 
 const axios = Axios.create({
     baseURL: import.meta.env.VITE_API_URL,

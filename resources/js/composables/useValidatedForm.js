@@ -1,7 +1,7 @@
 // useValidatedForm.js
 import { reactive, ref, computed, onMounted, nextTick } from "vue";
 import { useForm } from "vee-validate";
-import { useSnackbarQueue } from "@/composables/useSnackbarQueue";
+import { useSnackBarQueue } from "@/composables/useSnackbarQueue";
 
 export function useValidatedForm(schema, onSubmit, options = {}) {
     const { resetOnSuccess = true, cancelMessage = "No changes made." } =

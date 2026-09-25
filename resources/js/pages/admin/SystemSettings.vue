@@ -89,7 +89,7 @@ import { ref, onMounted } from "vue";
 import * as yup from "yup";
 import { useSystemSettingsStore } from "@/stores/systemSettings";
 import { useValidatedForm } from "@/composables/useValidatedForm";
-import { useSnackbarQueue } from "@/composables/useSnackbarQueue";
+import { useSnackBarQueue } from "@/composables/useSnackbarQueue";
 import ColorPicker from "@/components/forms/ColorPicker";
 import FileUpload from "@/components/forms/FileUpload";
 import FormActions from "@/components/forms/FormActions";

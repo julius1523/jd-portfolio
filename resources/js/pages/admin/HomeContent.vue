@@ -94,7 +94,7 @@ import axios from "@/plugins/axios";
 import { ref, onMounted, watch, nextTick } from "vue";
 import * as yup from "yup";
 import { useValidatedForm } from "@/composables/useValidatedForm";
-import { useSnackbarQueue } from "@/composables/useSnackbarQueue";
+import { useSnackBarQueue } from "@/composables/useSnackbarQueue";
 import Select from "@/components/forms/Select";
 import FileUpload from "@/components/forms/FileUpload";
 import FormActions from "@/components/forms/FormActions";

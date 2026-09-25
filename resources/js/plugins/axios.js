@@ -1,7 +1,7 @@
 import Axios from "axios";
 import router from "@/router";
 import { useAuthStore } from "@/stores/auth";
-import { useSnackBarQueue } from "@/composables/useSnackbarQueue";
+import { useSnackBarQueue } from "@/composables/useSnackBarQueue";
 
 const axios = Axios.create({
     baseURL: import.meta.env.VITE_API_URL,
@@ -43,7 +43,7 @@ axios.interceptors.response.use(
 
     (error) => {
         if (!error.response) {
-            const { error: showError } = useSnackbarQueue();
+            const { error: showError } = useSnackBarQueue();
             showError("Network error. Please check your connection.");
             return Promise.reject(error);
         }

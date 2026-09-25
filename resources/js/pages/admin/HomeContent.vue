@@ -94,7 +94,7 @@ import axios from "@/plugins/axios";
 import { ref, onMounted, watch, nextTick } from "vue";
 import * as yup from "yup";
 import { useValidatedForm } from "@/composables/useValidatedForm";
-import { useSnackBarQueue } from "@/composables/useSnackbarQueue";
+import { useSnackBarQueue } from "@/composables/useSnackBarQueue";
 import Select from "@/components/forms/Select";
 import FileUpload from "@/components/forms/FileUpload";
 import FormActions from "@/components/forms/FormActions";
@@ -110,7 +110,7 @@ const schema = yup.object({
     secondaryBtnText: yup.string().label("Secondary button text").required(),
     secondaryBtnFile: yup.mixed().label("Secondary button file").nullable(),
 });
-const { error } = useSnackbarQueue();
+const { error } = useSnackBarQueue();
 const pageLoading = ref(true);
 const subHeadingItems = ref(DEVELOPER_TITLES);
 const { fields, errors, loading, submit, cancelEdit, resetForm, meta, ready } = useValidatedForm(

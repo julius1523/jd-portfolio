@@ -19,7 +19,7 @@ function push(text, type = "info", extra = {}) {
     });
 }
 
-export function useSnackbarQueue() {
+export function useSnackBarQueue() {
     return {
         messages,
         success: (text, extra) => push(text, "success", extra),

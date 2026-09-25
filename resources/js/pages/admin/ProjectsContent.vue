@@ -97,7 +97,7 @@ import axios from "@/plugins/axios";
 import { ref, reactive, onMounted, watch } from "vue";
 import * as yup from "yup";
 import { useValidatedForm } from "@/composables/useValidatedForm";
-import { useSnackBarQueue } from "@/composables/useSnackbarQueue";
+import { useSnackBarQueue } from "@/composables/useSnackBarQueue";
 import DataTable from "@/components/data/DataTable";
 import FileUpload from "@/components/forms/FileUpload";
 import FormActions from "@/components/forms/FormActions";
@@ -114,7 +114,7 @@ const schema = yup.object({
     description: yup.string().label("Description").required(),
     projects: yup.array().label("Projects").default([]),
 });
-const { error } = useSnackbarQueue();
+const { error } = useSnackBarQueue();
 const pageLoading = ref(true);
 const dialogRef = ref();
 const { fields, errors, loading, submit, cancelEdit, resetForm, resetField, meta, ready } = useValidatedForm(

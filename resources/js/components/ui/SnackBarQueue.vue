@@ -1,6 +1,6 @@
 <script setup>
-import { useSnackBarQueue } from "@/composables/useSnackbarQueue";
-const { messages } = useSnackbarQueue();
+import { useSnackBarQueue } from "@/composables/useSnackBarQueue";
+const { messages } = useSnackBarQueue();
 </script>
 
 <template>

@@ -154,7 +154,7 @@ import axios from "@/plugins/axios";
 import { ref, reactive, onMounted, watch } from "vue";
 import * as yup from "yup";
 import { useValidatedForm } from "@/composables/useValidatedForm";
-import { useSnackBarQueue } from "@/composables/useSnackbarQueue";
+import { useSnackBarQueue } from "@/composables/useSnackBarQueue";
 import DataTable from "@/components/data/DataTable";
 import FileUpload from "@/components/forms/FileUpload";
 import FormActions from "@/components/forms/FormActions";
@@ -182,7 +182,7 @@ const schema = yup.object({
         image: yup.mixed().label("Image").nullable(),
     }).label("Others"),
 });
-const { error } = useSnackbarQueue();
+const { error } = useSnackBarQueue();
 const pageLoading = ref(true);
 const dialogSkillsRef = ref();
 const dialogRandomFactsRef = ref();

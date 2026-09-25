@@ -84,7 +84,7 @@ import { ref, onMounted } from "vue";
 import * as yup from "yup";
 import { useSystemSettingsStore } from "@/stores/systemSettings";
 import { useValidatedForm } from "@/composables/useValidatedForm";
-import { useSnackBarQueue } from "@/composables/useSnackbarQueue";
+import { useSnackBarQueue } from "@/composables/useSnackBarQueue";
 import PasswordField from "@/components/forms/PasswordField";
 import FileUpload from "@/components/forms/FileUpload";
 import FormActions from "@/components/forms/FormActions";
@@ -98,7 +98,7 @@ const schema = yup.object({
     passwordConfirmation: yup.string().label("Confirm Password").nullable().when("password", { is: (password) => !!password, then: (schema) => schema.required("Please confirm your password").oneOf([yup.ref("password")], "Passwords do not match") }),
 });
 const settingsStore = useSystemSettingsStore();
-const { error } = useSnackbarQueue();
+const { error } = useSnackBarQueue();
 const pageLoading = ref(true);
 const { fields, errors, loading, submit, cancelEdit, resetForm, meta, ready } = useValidatedForm(
     schema,

@@ -5,23 +5,20 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-FROM richarvey/nginx-php-fpm:3.1.6
+FROM webdevops/php-nginx:8.3-alpine
 
-# Copy app files
+WORKDIR /var/www/html
 COPY . .
-
-# Bring in the compiled frontend from the first stage
 COPY --from=frontend /app/public/build ./public/build
 
-# Image config
-ENV WEBROOT=/var/www/html/public
-ENV PHP_ERRORS_STDERR=1
-ENV RUN_SCRIPTS=1
-ENV REAL_IP_HEADER=1
+# Install PHP dependencies
+RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# Laravel config
+# webdevops image config
+ENV WEB_DOCUMENT_ROOT=/var/www/html/public
 ENV APP_ENV=production
 ENV APP_DEBUG=false
-ENV LOG_CHANNEL=stderr
 
-CMD ["/start.sh"]
+RUN chmod -R 775 storage bootstrap/cache
+
+EXPOSE 80

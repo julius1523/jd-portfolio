@@ -11,14 +11,14 @@ WORKDIR /var/www/html
 COPY . .
 COPY --from=frontend /app/public/build ./public/build
 
-# Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# webdevops image config
 ENV WEB_DOCUMENT_ROOT=/var/www/html/public
 ENV APP_ENV=production
 ENV APP_DEBUG=false
 
-RUN chmod -R 775 storage bootstrap/cache
+# Fix ownership AND permissions for the 'application' user (UID/GID 1000)
+RUN chown -R 1000:1000 /var/www/html \
+    && chmod -R 775 storage bootstrap/cache
 
 EXPOSE 80

@@ -6,13 +6,12 @@ COPY . .
 RUN npm run build
 
 FROM richarvey/nginx-php-fpm:3.1.6
-COPY . .
-COPY --from=frontend /app/public/build ./public/build
-
-FROM richarvey/nginx-php-fpm:3.1.6
 
 # Copy app files
 COPY . .
+
+# Bring in the compiled frontend from the first stage
+COPY --from=frontend /app/public/build ./public/build
 
 # Image config
 ENV WEBROOT=/var/www/html/public

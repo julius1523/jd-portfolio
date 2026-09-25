@@ -16,7 +16,7 @@
 </head>
 
 <body>
-    <div id="app"></div>
+    <div id="app" />
 
     <script>
         window.__APP_NAME__ = "{{ config('app.name') }}";

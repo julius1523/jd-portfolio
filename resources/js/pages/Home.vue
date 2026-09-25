@@ -45,6 +45,7 @@ import { useTyped } from "@/composables/useTyped";
 import { storeToRefs } from "pinia";
 import { useHomeStore } from "@/stores/resources";
 import { useScrollReveal } from "@/composables/useScrollReveal";
+
 const homeStore = useHomeStore();
 const { data, loaded } = storeToRefs(homeStore);
 const subheading = ref([]);
@@ -56,6 +57,7 @@ const { el } = useTyped(subheading, {
 });
 const homeSection = ref(null);
 const homeReveal = useScrollReveal(homeSection, { selector: ".reveal-item", stagger: 0.15, y: 40 });
+
 watch(
     loaded,
     async (isLoaded) => {

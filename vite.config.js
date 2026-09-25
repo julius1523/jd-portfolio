@@ -9,6 +9,8 @@ import UnoCSS from "unocss/vite";
 export default defineConfig({
     plugins: [
         Unfonts({
+            inlineFontFace: true,
+            injectTo: "head-prepend",
             fontsource: {
                 families: [
                     {
@@ -17,6 +19,9 @@ export default defineConfig({
                         styles: ["normal", "italic"],
                     },
                 ],
+                fallback: {
+                    category: "sans-serif",
+                },
             },
         }),
         laravel({

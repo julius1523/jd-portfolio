@@ -28,6 +28,7 @@ class UpdateSystemSettingsRequest extends FormRequest
         return [
             'systemLogo' => ['nullable', 'image', 'mimes:jpeg,png,gif,webp', 'max:10240'],
             'systemName' => ['required', 'string', 'max:255'],
+            'systemOwner' => ['required', 'string', 'max:255'],
             'systemColor' => ['required', 'string', 'max:7'],
         ];
     }

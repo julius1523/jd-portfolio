@@ -14,6 +14,12 @@
             </router-view>
         </v-main>
         <footr v-if="showFooter" />
+
+        <v-fab :active="visible" icon elevation="1" border app :layout="true" appear
+            transition="slide-y-reverse-transition" :size="$vuetify.display.mdAndUp ? undefined : 'small'"
+            @click="scrollToTop">
+            <v-icon icon="i-mdi-arrow-up" color="primary"></v-icon>
+        </v-fab>
     </v-app>
 </template>
 
@@ -25,6 +31,7 @@ import { useThemeStore } from "@/stores/theme";
 import { provideShimmerConfig } from "@shimmer-from-structure/vue";
 import { useLayoutType } from "@/composables/useLayoutType";
 import { useSystemColor } from "@/composables/useSystemColor";
+import { useScrollToTop } from "@/composables/useScrollToTop";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { scrollGate } from "@/router/scrollGate";
 import appbar from "@/components/layout/AppBar";
@@ -48,6 +55,7 @@ const theme = useTheme();
 const themeStore = useThemeStore();
 const { smAndDown } = useDisplay();
 const layoutType = useLayoutType();
+const { visible, scrollToTop } = useScrollToTop(300);
 const showAppBar = computed(() => layoutType.value !== "login");
 const showSidebar = computed(
     () =>

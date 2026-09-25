@@ -21,7 +21,7 @@
                         </template>
                     </v-checkbox>
                     <v-btn type="submit" color="primary" variant="flat" height="50" size="large" rounded="pill" block
-                        text="Log in" class="my-3" :disabled="!ready || !meta.valid" />
+                        text="Log in" class="my-3" :disabled="!ready || !valid" />
                     <v-btn variant="plain" height="50" size="large" prepend-icon="i-mdi-arrow-left" rounded="pill" block
                         text="Go back to home" :ripple="false" class="rounded-2xl"
                         @click="$router.replace({ name: 'home' })" />
@@ -52,7 +52,7 @@ const schema = yup.object({
     password: yup.string().label('Password').required(),
     remember: yup.boolean()
 });
-const { fields, errors, loading, submit, meta, ready } = useValidatedForm(schema, async (values) => {
+const { fields, errors, loading, submit, ready, valid } = useValidatedForm(schema, async (values) => {
     await auth.login(values);
     router.replace({ name: 'manage-content' });
 },

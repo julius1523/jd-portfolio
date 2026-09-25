@@ -39,6 +39,22 @@
                             <v-row :gap="10">
                                 <v-col cols="12">
                                     <div class="mb-4">
+                                        <span class="text-title-medium font-weight-bold">Owner Name</span><br />
+                                        <span class="text-title-small text-medium-emphasis">
+                                            Update the owner name
+                                        </span>
+                                    </div>
+                                    <v-text-field v-model="fields.systemOwner" color="primary" variant="solo" flat
+                                        label="Owner" density="comfortable" :single-line="true" clearable
+                                        :error-messages="errors.systemOwner" autocomplete="off" class="vfield-outline"
+                                        data-shimmer-no-children />
+                                </v-col>
+                            </v-row>
+                        </v-col>
+                        <v-col cols="12">
+                            <v-row :gap="10">
+                                <v-col cols="12">
+                                    <div class="mb-4">
                                         <span class="text-title-medium font-weight-bold">System Color</span><br />
                                         <span class="text-title-small text-medium-emphasis">
                                             Update the system color
@@ -82,6 +98,7 @@ import FormActions from "@/components/forms/FormActions";
 const schema = yup.object({
     systemLogo: yup.mixed().label("System Logo").nullable(),
     systemName: yup.string().label("System Name").required(),
+    systemOwner: yup.string().label("Owner Name").required(),
     systemColor: yup.string().label("System Color").required(),
 });
 const settingsStore = useSystemSettingsStore();
@@ -104,6 +121,7 @@ const { fields, errors, loading, submit, cancelEdit, resetForm, meta, ready } = 
 
         const payload = {
             systemName: values.systemName,
+            systemOwner: values.systemOwner,
             systemColor: values.systemColor,
         };
         formData.append("payload", JSON.stringify(payload));

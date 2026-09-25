@@ -24,6 +24,7 @@ class SystemSettingsController extends Controller
             return [
                 'systemLogo' => $logoSetting?->value['url'] ?? null,
                 'systemName' => SystemSettings::get('system_name') ?? "Portfolio",
+                'systemOwner' => SystemSettings::get('system_owner') ?? null,
                 'systemColor' => SystemSettings::get('system_color') ?? "#1976D2",
             ];
         });
@@ -36,6 +37,7 @@ class SystemSettingsController extends Controller
         $data = $request->validated();
 
         SystemSettings::set('system_name', $data['systemName']);
+        SystemSettings::set('system_owner', $data['systemOwner']);
         SystemSettings::set('system_color', $data['systemColor']);
 
         $logoSetting = SystemSettings::firstOrNew(['key' => 'system_logo']);

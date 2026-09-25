@@ -4,6 +4,7 @@ import { useTheme } from "vuetify";
 import { useRoute } from "vue-router";
 import { useLayoutStore } from "@/stores/layout";
 import { useThemeStore } from "@/stores/theme";
+import { useSystemSettingsStore } from "@/stores/systemSettings";
 import { useLayoutType } from "@/composables/useLayoutType";
 
 const theme = useTheme();
@@ -11,11 +12,22 @@ const route = useRoute();
 const layout = useLayoutStore();
 const themeStore = useThemeStore();
 const layoutType = useLayoutType();
+const systemSettings = useSystemSettingsStore();
 const isAppLayout = computed(() => layoutType.value === "app");
 const toggleTheme = (e) => {
     theme.setTransitionOrigin(e.target);
     themeStore.setDark(!themeStore.isDark);
 };
+const ownerInitials = computed(() => {
+    if (!systemSettings.systemOwner) return "";
+    return systemSettings.systemOwner
+        .trim()
+        .split(/\s+/)
+        .map((word) => word[0])
+        .join("")
+        .slice(0, 2)
+        .toUpperCase();
+});
 const scrolled = ref(false);
 
 function onScroll() {
@@ -30,7 +42,7 @@ function onScroll() {
             <router-link :to="{ name: 'home' }">
                 <v-avatar variant="elevated"
                     class="bg-gradient-to-br from-[rgb(var(--v-theme-primary))] to-[rgb(var(--v-theme-primary))]/85 text-white">
-                    JD
+                    {{ ownerInitials }}
                 </v-avatar>
             </router-link>
         </template>

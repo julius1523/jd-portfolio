@@ -100,13 +100,16 @@ export default defineConfig({
             "h-auto aspect-square max-w-[min(var(--img-max-w,100%),35vw)]",
         "translate-y-hover":
             "transition-transform duration-700 ease-out will-change-transform " +
-            "[@media(hover:hover)]:hover:-translate-y-2",
+            "[@media(hover:hover)_and_(pointer:fine)]:hover:-translate-y-2",
         "scale-up-hover":
             "transition-transform duration-500 ease-in-out will-change-transform " +
-            "[@media(hover:hover)]:hover:scale-102",
+            "[@media(hover:hover)_and_(pointer:fine)]:hover:scale-102",
         "scale-down-hover":
             "transition-transform duration-500 ease-in-out will-change-transform " +
-            "[@media(hover:hover)]:hover:scale-98",
+            "[@media(hover:hover)_and_(pointer:fine)]:hover:scale-98",
+        "color-hover":
+            "transition-colors duration-500 " +
+            "[@media(hover:hover)_and_(pointer:fine)]:hover:bg-primary",
         "glassy-effect":
             "bg-[rgba(var(--v-theme-surface),0.55)] backdrop-blur-2xl",
     },

@@ -4,8 +4,9 @@ import vuetify from "@/plugins/vuetify";
 
 export const useSystemSettingsStore = defineStore("systemSettings", {
     state: () => ({
-        systemName: null,
         systemLogo: null,
+        systemName: null,
+        systemOwner: null,
         systemColor: null,
         loaded: false,
     }),
@@ -14,8 +15,9 @@ export const useSystemSettingsStore = defineStore("systemSettings", {
         async fetch() {
             try {
                 const { data } = await axios.get("/api/getSystemSettings");
-                this.systemName = data.systemName;
                 this.systemLogo = data.systemLogo;
+                this.systemName = data.systemName;
+                this.systemOwner = data.systemOwner;
                 this.systemColor = data.systemColor;
                 this.applyTheme();
             } catch (err) {

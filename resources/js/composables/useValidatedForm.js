@@ -1,4 +1,5 @@
-import { reactive, ref, onMounted, nextTick } from "vue";
+// useValidatedForm.js
+import { reactive, ref, computed, onMounted, nextTick } from "vue";
 import { useForm } from "vee-validate";
 import { useSnackbarQueue } from "@/composables/useSnackbarQueue";
 
@@ -27,6 +28,9 @@ export function useValidatedForm(schema, onSubmit, options = {}) {
             }),
         ),
     );
+
+    // Pure schema validity, independent of server-side setFieldError calls
+    const valid = computed(() => schema.isValidSync(fields));
 
     const ready = ref(false);
     onMounted(() => {
@@ -76,5 +80,6 @@ export function useValidatedForm(schema, onSubmit, options = {}) {
         cancelEdit,
         meta,
         ready,
+        valid,
     };
 }

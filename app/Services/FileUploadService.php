@@ -56,7 +56,7 @@ class FileUploadService
             $model->{$column} = [
                 'file_name' => (string) $filename,
                 'orig_name' => $file->getClientOriginalName(),
-                'file_size' => Storage::disk('s3')->size($filePath),
+                'file_size' => Storage::disk('public')->size($filePath),
                 'mime_type' => $file->getMimeType(),
                 'url' => Storage::url($filePath),
             ];
@@ -90,7 +90,7 @@ class FileUploadService
         $file->storeAs($path, $filename, 'public');
 
         if ($mime === self::PDF_MIME) {
-            $this->compressPdf(Storage::disk('s3')->path("$path/$filename"));
+            $this->compressPdf(Storage::disk('public')->path("$path/$filename"));
         }
     }
 
@@ -101,7 +101,7 @@ class FileUploadService
                 ->scaleDown(width: $this->imageMaxWidth)
                 ->encodeUsingMediaType($file->getMimeType(), quality: $this->imageQuality);
 
-            Storage::disk('s3')->put("$path/$filename", (string) $encoded);
+            Storage::disk('public')->put("$path/$filename", (string) $encoded);
 
             return true;
         } catch (\Throwable $e) {
@@ -173,7 +173,7 @@ class FileUploadService
     private function deleteOldFile(?array $file, string $path): void
     {
         if (!empty($file['file_name'])) {
-            Storage::disk('s3')->delete("$path/{$file['file_name']}");
+            Storage::disk('public')->delete("$path/{$file['file_name']}");
         }
     }
 }

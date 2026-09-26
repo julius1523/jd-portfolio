@@ -8,6 +8,7 @@ Route::get('/media/{path}', function (string $path) {
         abort(404);
     }
 
+    $file = Storage::disk('public')->get($path);
     $mimeType = match (strtolower(pathinfo($path, PATHINFO_EXTENSION))) {
         'jpg', 'jpeg' => 'image/jpeg',
         'png' => 'image/png',
@@ -18,15 +19,8 @@ Route::get('/media/{path}', function (string $path) {
         default => 'application/octet-stream',
     };
 
-    return response()->stream(function () use ($path) {
-        $stream = Storage::disk('public')->readStream($path);
-        fpassthru($stream);
-        fclose($stream);
-    }, 200, [
-        'Content-Type' => $mimeType,
-    ]);
+    return response($file, 200)->header('Content-Type', $mimeType);
 })->where('path', '.*');
-
 
 Route::middleware('prevent_back')
     ->get('/{any}', fn() => response()->view('app'))

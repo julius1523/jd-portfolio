@@ -12,6 +12,8 @@ use App\Http\Controllers\Admin\ContactContentController;
 use App\Http\Controllers\Admin\SystemSettingsController;
 use App\Http\Controllers\Admin\AccountSettingsController;
 
+Route::get('/health-check', fn() => response()->json(['status' => 'ok']));
+
 Route::post('/contact', [ContactController::class, 'send']);
 
 // Route::post('/register', [AuthController::class, 'register']);

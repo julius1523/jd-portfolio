@@ -13,11 +13,13 @@ COPY --from=frontend /app/public/build ./public/build
 
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
+COPY docker/entrypoint.d/25-config-cache.sh /opt/docker/provision/entrypoint.d/25-config-cache.sh
+RUN chmod +x /opt/docker/provision/entrypoint.d/25-config-cache.sh
+
 ENV WEB_DOCUMENT_ROOT=/var/www/html/public
 ENV APP_ENV=production
 ENV APP_DEBUG=false
 
-# Fix ownership AND permissions for the 'application' user (UID/GID 1000)
 RUN chown -R 1000:1000 /var/www/html \
     && chmod -R 775 storage bootstrap/cache
 

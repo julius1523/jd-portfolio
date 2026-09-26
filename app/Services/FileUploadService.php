@@ -58,8 +58,7 @@ class FileUploadService
                 'orig_name' => $file->getClientOriginalName(),
                 'file_size' => Storage::disk('public')->size($filePath),
                 'mime_type' => $file->getMimeType(),
-                'url' => url("/media/$filePath"),
-                // 'url' => Storage::url($filePath),
+                'url' => Storage::url($filePath),
             ];
 
             $this->deleteOldFile($oldFile, $path);

@@ -11,8 +11,12 @@ use App\Http\Controllers\Admin\ProjectsContentController;
 use App\Http\Controllers\Admin\ContactContentController;
 use App\Http\Controllers\Admin\SystemSettingsController;
 use App\Http\Controllers\Admin\AccountSettingsController;
+use Illuminate\Support\Facades\DB;
 
-Route::get('/health-check', fn() => response()->json(['status' => 'ok']));
+Route::get('/health-check', function () {
+    DB::select('SELECT 1');
+    return response()->json(['status' => 'ok']);
+});
 
 Route::post('/contact', [ContactController::class, 'send']);
 

@@ -29,16 +29,6 @@ export const useSystemSettingsStore = defineStore("systemSettings", {
             }
         },
 
-        preloadLogo() {
-            const url = this.systemLogo?.url;
-            if (!url) return Promise.resolve();
-            return new Promise((resolve) => {
-                const img = new Image();
-                img.onload = img.onerror = resolve;
-                img.src = url;
-            });
-        },
-
         applyTheme() {
             if (!this.systemColor) return;
             vuetify.theme.themes.value[

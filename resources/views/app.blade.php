@@ -7,6 +7,8 @@
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <title>{{ config('app.name') }}</title>
 
+    <link rel="preconnect" href="https://cdn-assets.juliusdolana13.workers.dev" />
+
     <style>
         @layer vuetify-core, vuetify-components, vuetify-overrides, vuetify-utilities, uno, vuetify-final;
     </style>

@@ -1,11 +1,12 @@
 <template>
-    <v-container max-width="1050">
-        <v-tabs v-model="tab" :grow="$vuetify.display.smAndDown" color="primary" density="compact"
-            selected-class="opacity-100">
-            <v-tab variant="plain" :value="1" :slim="true" :ripple="false">Home</v-tab>
-            <v-tab variant="plain" :value="2" :slim="true" :ripple="false">About</v-tab>
-            <v-tab variant="plain" :value="3" :slim="true" :ripple="false">Projects</v-tab>
-            <v-tab variant="plain" :value="4" :slim="true" :ripple="false">Contact</v-tab>
+    <v-container>
+        <v-tabs v-model="tab" inset :inset-padding="4" :inset-radius="6" density="compact" bg-color="surface-light"
+            selected-class="shadow-sm text-high-emphasis font-weight-bold border" slider-color="surface"
+            slider-transition="fade" class="shadow-none">
+            <v-tab :value="1" :ripple="false" class="text-medium-emphasis">Home</v-tab>
+            <v-tab :value="2" :ripple="false" class="text-medium-emphasis">About</v-tab>
+            <v-tab :value="3" :ripple="false" class="text-medium-emphasis">Projects</v-tab>
+            <v-tab :value="4" :ripple="false" class="text-medium-emphasis">Contact</v-tab>
         </v-tabs>
 
         <v-tabs-window v-model="tab" crossfade>

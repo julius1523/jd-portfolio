@@ -5,6 +5,8 @@ defineOptions({ inheritAttrs: false });
 
 const props = defineProps({
     modelValue: { type: String, default: null },
+    anchor: { type: [Object, String, Array], default: null },
+    location: { type: String, default: "bottom" },
 });
 const emit = defineEmits(["update:modelValue", "change"]);
 
@@ -17,11 +19,11 @@ function onUpdate(color) {
 </script>
 
 <template>
-    <v-menu v-model="menuOpen" :close-on-content-click="false" :offset="[8, 0]">
+    <v-menu v-model="menuOpen" :close-on-content-click="false" :target="anchor ?? undefined" :location="location"
+        content-class="shadow-sm border rounded-[10px]" width="300" min-width="300" max-width="300" :offset="[8, 2]">
         <template #activator="{ props: activatorProps }">
             <slot name="activator" :props="activatorProps" :selected="modelValue">
-                <v-icon-btn v-bind="activatorProps" variant="flat" rounded="circle" icon="i-mdi-palette"
-                    :color="modelValue || 'primary'" size="30" />
+                <v-icon v-bind="activatorProps" icon="i-mdi-palette" color="surface-variant opacity-65" />
             </slot>
         </template>
 

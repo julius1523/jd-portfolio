@@ -26,16 +26,16 @@ function onCancel() {
 <template>
     <v-dialog :model-value="modelValue" @update:model-value="$emit('update:modelValue', $event)" scrollable
         :max-width="maxWidth" :max-height="maxHeight">
-        <v-card rounded="xl" class="shadow-lg">
-            <v-toolbar density="comfortable" color="surface" class="border-b">
+        <v-card class="rounded-[18px] shadow-sm">
+            <v-toolbar density="compact" color="surface" class="border-b">
                 <div class="grid w-full grid-cols-[1fr_auto_1fr] items-center">
                     <div></div>
                     <span class="min-w-0 truncate text-center text-title-medium">
                         {{ isEditing ? editTitle : addTitle }}
                     </span>
                     <div class="flex justify-end">
-                        <v-icon-btn icon="i-mdi-close" rounded="lg" size="28" icon-size="20" class="me-5"
-                            @click="onCancel" v-tooltip="{ text: 'Close' }" />
+                        <v-icon icon="i-mdi-close" size="small" class="me-[18px]" @click="onCancel"
+                            v-tooltip="{ text: 'Close' }" />
                     </div>
                 </div>
             </v-toolbar>
@@ -48,7 +48,8 @@ function onCancel() {
 
             <v-card-actions class="pa-[15px] mt-auto border-t flex-column flex-sm-row">
                 <div class="order-1 order-sm-0" :class="{ 'w-100': $vuetify.display.smAndDown }">
-                    <v-btn variant="tonal" height="40" block :slim="false" rounded="pill" @click="onCancel">
+                    <v-btn variant="flat" color="surface-light" height="40" block :slim="false" rounded="pill"
+                        class="border" @click="onCancel">
                         {{ isEditing ? editCancelText : cancelText }}
                     </v-btn>
                 </div>

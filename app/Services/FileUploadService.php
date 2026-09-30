@@ -22,10 +22,6 @@ class FileUploadService
 
     private const string PDF_MIME = 'application/pdf';
 
-    /**
-     * @param int $imageMaxWidth
-     * @param int $imageQuality
-     */
     public function __construct(
         private readonly int $imageMaxWidth = 1920,
         private readonly int $imageQuality = 75,

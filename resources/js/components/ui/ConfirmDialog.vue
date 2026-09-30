@@ -29,13 +29,13 @@ watch(
 
 <template>
     <v-dialog v-model="state.visible" max-width="400" persistent>
-        <v-card class="pa-3 shadow-lg rounded-[20px] border">
+        <v-card class="pa-3 shadow-sm rounded-[18px] border">
             <div class="pt-2 px-3 text-title-medium font-weight-bold">{{ state.title }}</div>
             <div class="pb-3 px-3 text-title-medium text-medium-emphasis">{{ state.message }}</div>
             <v-card-actions class="flex-column flex-sm-row">
                 <div class="order-1 order-sm-0" :class="{ 'w-100': $vuetify.display.smAndDown }">
-                    <v-btn variant="tonal" :text="state.cancelText" height="40" block :slim="false" rounded="pill"
-                        @click="cancel" />
+                    <v-btn variant="flat" color="surface-light" :text="state.cancelText" height="40" block :slim="false"
+                        rounded="pill" class="border" @click="cancel" />
                 </div>
                 <div :class="{ 'w-100': $vuetify.display.smAndDown }">
                     <v-btn variant="flat" :color="state.confirmColor" :text="state.confirmText" height="40" block

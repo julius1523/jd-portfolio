@@ -61,21 +61,24 @@ defineExpose({ open, remove });
         save-text="Add social" edit-save-text="Save changes" cancel-text="Cancel" edit-cancel-text="Cancel Edit"
         :disable-save="!meta.valid || (isEditing && !meta.dirty)" @save="submit" @cancel="close">
         <v-form @submit.prevent="submit">
-            <v-row :gap="10">
+            <v-row :gap="15">
                 <v-col cols="12">
-                    <v-text-field v-model="fields.name" label="Social Name" color="primary" variant="solo" flat
-                        density="comfortable" clearable :error-messages="errors.name" autocomplete="off"
+                    <div class="text-sm font-medium text-medium-emphasis mb-1">Social Name</div>
+                    <v-text-field v-model="fields.name" label="Enter social name" color="primary" variant="solo" flat
+                        single-line density="compact" clearable :error-messages="errors.name" autocomplete="off"
                         class="vfield-outline" />
                 </v-col>
                 <v-col cols="12">
-                    <v-text-field v-model="fields.linkUrl" label="Link URL" color="primary" variant="solo" flat
-                        density="comfortable" clearable :error-messages="errors.linkUrl" autocomplete="off"
+                    <div class="text-sm font-medium text-medium-emphasis mb-1">Social Link</div>
+                    <v-text-field v-model="fields.linkUrl" label="Enter social link" color="primary" variant="solo" flat
+                        single-line density="compact" clearable :error-messages="errors.linkUrl" autocomplete="off"
                         class="vfield-outline" />
                 </v-col>
                 <v-col cols="12">
+                    <div class="text-sm font-medium text-medium-emphasis mb-1">Social Icon</div>
                     <Select v-model="fields.icon" :items="SOCIAL_ICONS" item-title="name" item-value="value"
-                        label="Icon" variant="solo" flat density="comfortable" :multiple="false" :chip="false"
-                        :error-messages="errors.icon">
+                        label="Select social icon" variant="solo" flat single-line density="compact" :multiple="false"
+                        :chip="false" :error-messages="errors.icon">
                         <template #item="{ item, props: itemProps }">
                             <v-list-item v-bind="itemProps" :prepend-icon="item?.value" color="primary"
                                 :title="undefined">

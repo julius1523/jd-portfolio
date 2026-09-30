@@ -80,41 +80,47 @@ defineExpose({ open, remove });
         save-text="Add project" edit-save-text="Save changes" cancel-text="Cancel" edit-cancel-text="Cancel edit"
         :disable-save="!meta.valid || (isEditing && !meta.dirty)" @save="submit" @cancel="close">
         <v-form @submit.prevent="submit">
-            <v-row :gap="10">
+            <v-row :gap="15">
                 <v-col cols="12">
-                    <Select v-model="fields.category" :items="categoryOptions" label="Category" variant="solo" flat
-                        density="comfortable" :error-messages="errors.category" :multiple="false" :chip="false" />
+                    <div class="text-sm font-medium text-medium-emphasis mb-1">Project Category</div>
+                    <Select v-model="fields.category" :items="categoryOptions" label="Select project category"
+                        variant="solo" flat single-line density="compact" :error-messages="errors.category"
+                        :multiple="false" :chip="false" />
                 </v-col>
                 <v-col cols="12">
-                    <v-text-field v-model="fields.name" label="Project Name" color="primary" variant="solo" flat
-                        density="comfortable" clearable :error-messages="errors.name" class="vfield-outline"
+                    <div class="text-sm font-medium text-medium-emphasis mb-1">Project Name</div>
+                    <v-text-field v-model="fields.name" label="Enter project name" color="primary" variant="solo" flat
+                        single-line density="compact" clearable :error-messages="errors.name" class="vfield-outline"
                         autocomplete="off" />
                 </v-col>
                 <v-col cols="12">
-                    <v-textarea v-model="fields.description" label="Description" color="primary" auto-grow
-                        variant="solo" flat density="comfortable" :error-messages="errors.description"
+                    <div class="text-sm font-medium text-medium-emphasis mb-1">Project Description</div>
+                    <v-textarea v-model="fields.description" label="Enter project description" color="primary" auto-grow
+                        variant="solo" flat single-line density="compact" :error-messages="errors.description"
                         class="vfield-outline" autocomplete="off" />
                 </v-col>
                 <v-col cols="12">
+                    <div class="text-sm font-medium text-medium-emphasis mb-1">Project Materials</div>
                     <Select v-model="fields.materials" :items="materialItems" item-title="text" item-value="text"
-                        label="Materials" variant="solo" density="comfortable" flat :chip="false"
+                        label="Select project materials" variant="solo" density="compact" flat single-line :chip="false"
                         :error-messages="errors.materials" />
                 </v-col>
                 <v-col cols="12">
+                    <div class="text-sm font-medium text-medium-emphasis mb-1">Project Image</div>
                     <FileUpload v-model="fields.image" file-type="image" :max-files="1" inset density="comfortable"
                         :show-size="true" :error-messages="errors.image" />
                 </v-col>
                 <v-col cols="12">
-                    <div class="text-title-small text-medium-emphasis mb-2">Link</div>
-                    <v-btn-toggle v-model="fields.linkType" variant="tonal" density="compact" mandatory divided
-                        class="rounded-[10px] mb-3">
+                    <div class="text-sm font-medium text-medium-emphasis mb-1">Project File/Link</div>
+                    <v-btn-toggle v-model="fields.linkType" variant="flat" color="surface-light" density="compact"
+                        mandatory divided class="rounded-[8px] border mb-3">
                         <v-btn size="small" prepend-icon="i-mdi-cloud-upload-outline" value="upload" text="Upload" />
                         <v-btn size="small" prepend-icon="i-mdi-link-variant" value="link" text="Link" />
                     </v-btn-toggle>
                     <FileUpload v-if="fields.linkType === 'upload'" v-model="fields.linkFile" :max-files="1" inset
                         density="comfortable" :show-size="true" :error-messages="errors.linkFile" />
                     <v-text-field v-else v-model="fields.linkUrl" label="Link URL" color="primary" variant="solo" flat
-                        density="comfortable" clearable :error-messages="errors.linkUrl" class="vfield-outline"
+                        single-line density="compact" clearable :error-messages="errors.linkUrl" class="vfield-outline"
                         autocomplete="off" />
                 </v-col>
             </v-row>

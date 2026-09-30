@@ -27,4 +27,15 @@ class SystemSettings extends Model
             ['value' => $value, 'type' => $type, 'group' => $group]
         );
     }
+
+    public function getCasts(): array
+    {
+        $casts = parent::getCasts();
+
+        if (($this->attributes['key'] ?? null) === 'system_logo') {
+            $casts['value'] = 'array';
+        }
+
+        return $casts;
+    }
 }

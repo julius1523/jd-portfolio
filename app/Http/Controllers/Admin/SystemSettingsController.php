@@ -19,10 +19,9 @@ class SystemSettingsController extends Controller
     {
         $settings = Cache::remember('system_settings', now()->addHours(6), function () {
             $logoSetting = SystemSettings::where('key', 'system_logo')->first();
-            $logoSetting?->mergeCasts(['value' => 'array']);
 
             return [
-                'systemLogo' => $logoSetting?->value['url'] ?? null,
+                'systemLogo' => $logoSetting?->value,
                 'systemName' => SystemSettings::get('system_name') ?? "Portfolio",
                 'systemOwner' => SystemSettings::get('system_owner') ?? null,
                 'systemColor' => SystemSettings::get('system_color') ?? "#1976D2",
@@ -41,7 +40,6 @@ class SystemSettingsController extends Controller
         SystemSettings::set('system_color', $data['systemColor']);
 
         $logoSetting = SystemSettings::firstOrNew(['key' => 'system_logo']);
-        $logoSetting->mergeCasts(['value' => 'array']);
         $logoSetting->type = 'image';
         $logoSetting->group = $logoSetting->group ?? 'general';
 

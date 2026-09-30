@@ -1,14 +1,14 @@
 <template>
     <section id="login" ref="loginSection">
         <v-container>
-            <v-card flat class="pa-6 mx-auto mt-10 shadow-md border reveal-item" max-width="400" rounded="xl"
+            <v-card flat class="pa-6 mx-auto mt-10 shadow-sm border reveal-item" max-width="400" rounded="xl"
                 :loading="loading" :disabled="loading">
                 <template v-if="loading" #loader>
                     <v-progress-linear indeterminate color="primary" />
                 </template>
                 <v-card-title class="text-center px-0">Hi, Admin!</v-card-title>
                 <v-card-subtitle class="text-center px-0">Log in to your account</v-card-subtitle>
-                <Alert class="rounded-[10px]" />
+                <Alert class="rounded-[8px]" />
                 <v-form @submit.prevent="submit" class="mt-5">
                     <v-text-field v-model="fields.email" color="primary" variant="solo" flat density="comfortable"
                         label="Email" :single-line="true" class="vfield-outline mb-1" :error-messages="errors.email" />

@@ -1,78 +1,101 @@
 <template>
     <Shimmer :loading="pageLoading">
-        <v-card flat class="pa-1 mt-8 rounded-lg">
+        <v-card flat class="pa-1 mt-8 rounded-[10px]">
             <v-form @submit.prevent="submit" :disabled="loading">
-                <v-row :gap="55">
-                    <v-col cols="12">
-                        <v-row :gap="10">
-                            <v-col cols="12">
-                                <div class="mb-4">
-                                    <span class="text-title-medium font-weight-bold">Profile</span><br />
-                                    <span class="text-title-small text-medium-emphasis">
-                                        Update your profile to display to home page
-                                    </span>
+                <div class="d-flex flex-column ga-16">
+                    <div>
+                        <div class="d-inline-flex flex-column ga-1 mb-4">
+                            <div class="text-title-medium font-semibold">Profile Image</div>
+                            <div class="text-title-small opacity-60">
+                                Update your profile image to display to your contact page
+                            </div>
+                        </div>
+                        <v-card class="p-5 shadow-sm border rounded-[12px]">
+                            <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                                <div class="sm:shrink-0 text-label-large font-medium">
+                                    Image
                                 </div>
-                                <FileUpload v-model="fields.profileImage" file-type="image" :max-files="1" inset
-                                    :disabled="loading" :show-size="true" density="comfortable"
-                                    :error-messages="errors.profileImage" data-shimmer-no-children />
-                            </v-col>
-                        </v-row>
-                    </v-col>
-                    <v-col cols="12">
-                        <v-row :gap="10">
-                            <v-col cols="12">
-                                <div class="mb-4">
-                                    <span class="text-title-medium font-weight-bold">Text</span><br />
-                                    <span class="text-title-small text-medium-emphasis">
-                                        Update what users can see and read from your site
-                                    </span>
+                                <div class="w-full sm:flex-1 sm:max-w-md sm:ml-auto min-w-0">
+                                    <div class="d-flex justify-center justify-sm-end">
+                                        <AvatarUpload v-model="fields.profileImage" :disabled="loading" :max-size="1"
+                                            :size="160" />
+                                    </div>
                                 </div>
-                            </v-col>
-                            <v-col cols="12">
-                                <v-text-field v-model="fields.heading" color="primary" variant="solo" flat
-                                    label="Heading" density="comfortable" clearable :error-messages="errors.heading"
-                                    autocomplete="off" class="vfield-outline" data-shimmer-no-children />
-                            </v-col>
-                            <v-col cols="12">
-                                <v-textarea v-model="fields.description" color="primary" auto-grow variant="solo" flat
-                                    label="Description" density="comfortable" :error-messages="errors.description"
-                                    autocomplete="off" class="vfield-outline" data-shimmer-no-children />
-                            </v-col>
-                        </v-row>
-                    </v-col>
-                    <v-col cols="12">
-                        <v-row :gap="10">
-                            <v-col cols="12">
-                                <div class="mb-4">
-                                    <span class="text-title-medium font-weight-bold">Socials</span><br />
-                                    <span class="text-title-small text-medium-emphasis">
-                                        Update the socials to showcase
-                                    </span>
+                            </div>
+                        </v-card>
+                    </div>
+
+                    <div>
+                        <div class="d-inline-flex flex-column ga-1 mb-4">
+                            <div class="text-title-medium font-semibold">
+                                Text
+                            </div>
+                            <div class="text-title-small opacity-60">
+                                Update what the users can see and read from your site
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-column ga-4">
+                            <v-card class="p-5 shadow-sm border rounded-[12px]">
+                                <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                                    <div class="sm:shrink-0 text-label-large font-medium">
+                                        Heading
+                                    </div>
+                                    <div class="w-full sm:flex-1 sm:max-w-md sm:ml-auto min-w-0">
+                                        <v-text-field v-model="fields.heading" color="primary" variant="solo" flat
+                                            single-line density="compact" clearable :error-messages="errors.heading"
+                                            autocomplete="off" class="vfield-outline" hide-details="auto"
+                                            data-shimmer-no-children />
+                                    </div>
                                 </div>
-                            </v-col>
-                            <v-col cols="12">
-                                <DataTable :items="fields.socials" :headers="socialHeaders" :addable="true"
-                                    :expandable="false" add-label="New Social" v-model:sort-by="socialsOptions.sortBy"
-                                    v-model:page="socialsOptions.page"
-                                    v-model:items-per-page="socialsOptions.itemsPerPage" :items-length="socialsTotal"
-                                    :loading="socialsLoading" no-data-text="No socials added yet." :disabled="loading"
-                                    density="comfortable" @add="openDialog()" @edit="openDialog($event)"
-                                    @remove="removeItem($event)">
-                                    <template #item.name="{ item }">
-                                        <div class="d-flex ga-3 align-center"
-                                            :class="{ 'justify-end': $vuetify.display.smAndDown }">
-                                            <v-icon :class="item.icon" color="primary" />
-                                            <span>{{ item.name }}</span>
-                                        </div>
-                                    </template>
-                                </DataTable>
-                            </v-col>
-                        </v-row>
-                    </v-col>
-                    <v-col cols="12">
-                        <FormActions :dirty="meta.dirty" :ready="ready" :loading="loading" @cancel="cancelEdit" />
-                    </v-col>
-                </v-row>
+                            </v-card>
+
+                            <v-card class="p-5 shadow-sm border rounded-[12px]">
+                                <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                                    <div class="sm:shrink-0 text-label-large font-medium">
+                                        Description
+                                    </div>
+                                    <div class="w-full sm:flex-1 sm:max-w-md sm:ml-auto min-w-0">
+                                        <v-textarea v-model="fields.description" rows="3" color="primary" auto-grow
+                                            variant="solo" flat single-line label="Description" density="compact"
+                                            :error-messages="errors.description" autocomplete="off"
+                                            class="vfield-outline" hide-details="auto" data-shimmer-no-children />
+                                    </div>
+                                </div>
+                            </v-card>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="d-inline-flex flex-column ga-1 mb-4">
+                            <div class="text-title-medium font-semibold">Socials</div>
+                            <div class="text-title-small opacity-60">
+                                Update your social accounts to link
+                            </div>
+                        </div>
+                        <DataTable :items="fields.socials" :headers="socialHeaders" :addable="true" :expandable="false"
+                            add-label="New Social" v-model:sort-by="socialsOptions.sortBy"
+                            v-model:page="socialsOptions.page" v-model:items-per-page="socialsOptions.itemsPerPage"
+                            :items-length="socialsTotal" :loading="socialsLoading" no-data-text="No socials added yet."
+                            :disabled="loading" density="comfortable" @add="openDialog()" @edit="openDialog($event)"
+                            @remove="removeItem($event)">
+                            <template #item.name="{ item }">
+                                <div class="d-flex ga-3 align-center"
+                                    :class="{ 'justify-end': $vuetify.display.smAndDown }">
+                                    <v-icon :class="item.icon" color="primary" />
+                                    <span>{{ item.name }}</span>
+                                </div>
+                            </template>
+                            <template #item.linkUrl="{ item }">
+                                <div class="break-all">
+                                    {{ item.linkUrl }}
+                                </div>
+                            </template>
+                        </DataTable>
+                    </div>
+                </div>
+
+                <FormActions :dirty="meta.dirty" :ready="ready" :loading="loading" @cancel="cancelEdit" />
             </v-form>
         </v-card>
     </Shimmer>
@@ -87,9 +110,9 @@ import * as yup from "yup";
 import { useValidatedForm } from "@/composables/useValidatedForm";
 import { useSnackBarQueue } from "@/composables/useSnackBarQueue";
 import DataTable from "@/components/data/DataTable";
-import FileUpload from "@/components/forms/FileUpload";
+import AvatarUpload from "@/components/forms/AvatarUpload";
 import FormActions from "@/components/forms/FormActions";
-import SocialsDialog from "./SocialsDialog";
+import SocialsDialog from "./dialogs/SocialsDialog";
 
 const socialHeaders = [
     { title: "Social Name", key: "name", align: "start" },

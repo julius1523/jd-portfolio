@@ -1,4 +1,6 @@
 <script setup>
+import { useSystemSettingsStore } from "@/stores/systemSettings";
+const systemSettings = useSystemSettingsStore();
 const currentYear = new Date().getFullYear();
 </script>
 
@@ -6,7 +8,7 @@ const currentYear = new Date().getFullYear();
     <v-footer app absolute class="pa-0">
         <v-container class="d-flex justify-center justify-md-space-between text-title-small">
             <div class="text-medium-emphasis">
-                © {{ currentYear }} Julius Dolana
+                © {{ currentYear }} {{ systemSettings.systemOwner }}
             </div>
 
             <div v-if="$vuetify.display.mdAndUp" class="d-flex ga-6">

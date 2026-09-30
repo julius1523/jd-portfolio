@@ -17,6 +17,7 @@ const props = defineProps({
     density: { type: String, default: 'default' },
     singleLine: { type: Boolean, default: false },
     errorMessages: { type: [String, Array], default: () => [] },
+    hideDetails: { type: [String, Boolean], default: false },
     itemTitle: { type: String, default: 'title' },
     itemValue: { type: String, default: 'value' },
     reservedForCounter: { type: Number, default: 56 },
@@ -26,11 +27,11 @@ const emit = defineEmits(['update:modelValue']);
 
 const search = ref('');
 const selectRef = ref(null);
+const menuWidth = ref(undefined);
 const mirrorRef = ref(null);
 const textMirrorRef = ref(null);
-const visibleCount = ref(0);
+const visibleCount = ref(Array.isArray(props.modelValue) ? props.modelValue.length : (props.modelValue ? 1 : 0));
 let resizeObserver = null;
-
 const safeList = computed(() => Array.isArray(props.modelValue) ? props.modelValue : [props.modelValue].filter(Boolean));
 const overflowCount = computed(() => safeList.value.length - visibleCount.value);
 const visibleText = computed(() => safeList.value.slice(0, visibleCount.value).map(resolveText).join(', '));
@@ -38,14 +39,21 @@ const visibleText = computed(() => safeList.value.slice(0, visibleCount.value).m
 function resolveText(item) {
     if (typeof item === 'string') return item;
     return item?.[props.itemTitle] ?? '';
-}
+};
 function removeItem(item) {
     const next = safeList.value.filter((value) => resolveText(value) !== resolveText(item));
     emit('update:modelValue', next);
-}
+};
 function getFieldElement() {
     return selectRef.value?.$el?.querySelector('.v-field__field');
-}
+};
+function updateMenuWidth() {
+    const fieldEl = selectRef.value?.$el?.querySelector('.v-field');
+    if (fieldEl) menuWidth.value = fieldEl.getBoundingClientRect().width + 3;
+};
+function onMenuToggle(open) {
+    if (open) updateMenuWidth();
+};
 
 async function recalcVisibleCount() {
     await nextTick();
@@ -89,13 +97,16 @@ async function recalcVisibleCount() {
         count++;
     }
     visibleCount.value = count >= list.length ? list.length : Math.max(count, 1);
-}
+};
 
 onMounted(() => {
     recalcVisibleCount();
     const fieldEl = getFieldElement();
     if (fieldEl && 'ResizeObserver' in window) {
-        resizeObserver = new ResizeObserver(recalcVisibleCount);
+        resizeObserver = new ResizeObserver(() => {
+            updateMenuWidth();
+            recalcVisibleCount();
+        });
         resizeObserver.observe(fieldEl);
     }
 });
@@ -112,20 +123,21 @@ watch(
 </script>
 
 <template>
-    <div class="relative [&_.v-field__input]:flex-nowrap">
+    <div class="relative [&_.v-field__input]:flex-nowrap [&_.v-field__input]:min-w-0 [&_.v-select__selection]:min-w-0">
         <v-select ref="selectRef" v-model:search="search" :model-value="modelValue" :items="items" :variant="variant"
             :flat="flat" :label="label" :rounded="rounded" :density="density" :single-line="singleLine" :hint="hint"
             :persistent-hint="persistentHint" :multiple="multiple" :error-messages="errorMessages"
-            :item-title="itemTitle" :item-value="itemValue" :hide-no-data="false" :no-auto-scroll="true" color="primary"
-            class="vfield-outline" autocomplete="off" :list-props="{
+            :hide-details="hideDetails" :item-title="itemTitle" :item-value="itemValue" :hide-no-data="false"
+            :no-auto-scroll="true" color="primary" class="vfield-outline" autocomplete="off" :list-props="{
                 density: 'comfortable',
                 prependGap: 15,
             }" :menu-props="{
+                location: 'bottom center',
                 scrollStrategy: 'close',
-                maxWidth: '100',
-                width: 'auto',
-                contentClass: 'rounded-[10px]',
-            }" @update:model-value="emit('update:modelValue', $event)">
+                contentClass: 'shadow-sm border rounded-[10px]',
+                width: menuWidth,
+                minWidth: menuWidth,
+            }" @update:menu="onMenuToggle" @update:model-value="emit('update:modelValue', $event)">
 
             <template v-for="name in forwardedSlotNames" #[name]="scope" :key="name">
                 <slot :name="name" v-bind="scope" />

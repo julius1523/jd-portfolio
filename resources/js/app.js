@@ -25,6 +25,14 @@ historyGuard(router);
 
 const settingsStore = useSystemSettingsStore();
 
-Promise.all([router.isReady(), settingsStore.fetch()]).then(() => {
+Promise.all([
+    router.isReady(),
+    settingsStore.fetch(),
+    Promise.all([
+        document.fonts.load("400 1em Roboto"),
+        document.fonts.load("500 1em Roboto"),
+        document.fonts.load("700 1em Roboto"),
+    ]).catch(() => {}),
+]).then(() => {
     app.mount("#app");
 });

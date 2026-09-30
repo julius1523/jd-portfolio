@@ -39,6 +39,9 @@ export default createVuetify({
         },
     },
     defaults: {
+        global: {
+            ripple: false,
+        },
         VBtn: { style: { webkitUserDrag: "none" } },
         VListItem: { style: { webkitUserDrag: "none" } },
         VChip: { style: { userSelect: "none" } },
@@ -51,8 +54,11 @@ export default createVuetify({
             fileIcon: "i-mdi-file-document",
             density: "compact",
         },
-        VFileUploadDropzone: { class: "rounded-[10px]" },
-        VMenu: { offset: "5px" },
+        VFileUploadDropzone: { rounded: "lg" },
+        VMenu: {
+            offset: 6,
+            scrollStrategy: "close",
+        },
         VTabs: { activeClass: "opacity-100" },
     },
 });

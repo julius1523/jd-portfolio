@@ -4,10 +4,10 @@ import { presetVuetify } from "unocss-preset-vuetify";
 
 const breakpoints = {
     sm: "600px",
-    md: "960px",
-    lg: "1280px",
-    xl: "1920px",
-    xxl: "2560px",
+    md: "840px",
+    lg: "1145px",
+    xl: "1545px",
+    xxl: "2138px",
 };
 const borderColor = "rgba(var(--v-border-color), var(--v-border-opacity))";
 const borderSides = {
@@ -72,7 +72,7 @@ export default defineConfig({
             getCSS: () => `
                 .vfield-outline .v-field.v-field--variant-solo {
                 border: 1px solid rgba(var(--v-border-color), 0.25);
-                border-radius: 10px;
+                border-radius: 8px;
                 transition: border-color 150ms ease-out, box-shadow 150ms ease-out;
                 }
                 .vfield-outline.v-input--focused .v-field.v-field--variant-solo {
@@ -121,7 +121,7 @@ export default defineConfig({
             }
             const [, utility, breakpoint, value] = match;
             return {
-                matcher: `${utility}-${value}-${breakpoint}`,
+                matcher: `${utility}-${value}`,
                 parent: `@media (min-width: ${breakpoints[breakpoint]})`,
             };
         },

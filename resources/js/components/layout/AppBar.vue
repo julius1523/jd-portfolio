@@ -37,10 +37,12 @@ function onScroll() {
 
 <template>
     <v-app-bar v-scroll="onScroll" app flat :order="1" density="comfortable"
-        :class="[layoutType === 'app' ? 'px-2' : 'topbar', { 'shadow-sm': scrolled }]">
+        :class="[layoutType === 'app' ? 'px-2 border-b' : 'bg-transparent topbar']">
         <template v-slot:prepend v-if="!isAppLayout">
             <router-link :to="{ name: 'home' }">
-                <v-avatar variant="elevated"
+                <v-avatar v-if="systemSettings.systemLogo?.url" variant="elevated" size="38"
+                    :image="systemSettings.systemLogo?.url" />
+                <v-avatar v-else variant="elevated" size="38"
                     class="bg-gradient-to-br from-[rgb(var(--v-theme-primary))] to-[rgb(var(--v-theme-primary))]/85 text-white">
                     {{ ownerInitials }}
                 </v-avatar>
@@ -48,16 +50,16 @@ function onScroll() {
         </template>
         <template v-slot:prepend v-else>
             <v-icon-btn v-if="$vuetify.display.smAndDown" icon="i-ri-menu-fill" size="38" icon-size="18"
-                class="bg-transparent" @click="layout.toggleNav()" />
-            <router-link :to="{ name: 'manage-content' }" class="text-decoration-none">
-                <v-app-bar-title :text="route.meta.title" class="ml-2 text-title-medium" />
+                class="bg-transparent border" @click="layout.toggleNav()" />
+            <router-link :to="{ name: 'manage-content' }" class="text-decoration-none ml-2">
+                <v-app-bar-title :text="route.meta.title" class="text-title-medium font-weight-regular" />
             </router-link>
         </template>
 
         <template v-slot:append v-if="!isAppLayout">
             <div class="d-flex ga-1 align-center">
-                <v-toolbar v-if="$vuetify.display.mdAndUp" color="transparent" height="38" location="top end" floating
-                    rounded="pill">
+                <v-toolbar v-if="$vuetify.display.mdAndUp" color="surface" height="38" location="top end" floating
+                    rounded="pill" border>
                     <div class="d-flex ga-1">
                         <v-btn height="32" active-color="primary" rounded="pill" text="Home" :to="{ name: 'home' }" />
                         <v-btn height="32" active-color="primary" rounded="pill" text="About" :to="{ name: 'about' }" />
@@ -67,17 +69,18 @@ function onScroll() {
                             :to="{ name: 'contact' }" />
                     </div>
                 </v-toolbar>
-                <v-icon-btn :icon="themeStore.isDark ? 'i-ri-moon-line' : 'i-ri-sun-line'" size="38" icon-size="18"
+                <v-icon-btn v-if="$vuetify.display.mdAndUp"
+                    :icon="themeStore.isDark ? 'i-ri-moon-line' : 'i-ri-sun-line'" size="38" icon-size="18"
                     v-tooltip="{ text: themeStore.isDark ? 'Light Mode' : 'Dark Mode', location: 'bottom' }"
-                    class="bg-transparent" @click="toggleTheme" />
+                    class="border" @click="toggleTheme" />
                 <v-icon-btn v-if="$vuetify.display.smAndDown" :key="layout.drawer" icon="i-ri-menu-fill" size="38"
-                    icon-size="18" class="bg-transparent" @click="layout.toggleDrawer()" />
+                    icon-size="18" class="border" @click="layout.toggleDrawer()" />
             </div>
         </template>
         <template v-slot:append v-else>
             <v-icon-btn :icon="themeStore.isDark ? 'i-ri-moon-line' : 'i-ri-sun-line'" size="38" icon-size="18"
-                v-tooltip="{ text: themeStore.isDark ? 'Light Mode' : 'Dark Mode', location: 'bottom' }"
-                class="bg-transparent" @click="toggleTheme" />
+                v-tooltip="{ text: themeStore.isDark ? 'Light Mode' : 'Dark Mode', location: 'bottom' }" class="border"
+                @click="toggleTheme" />
         </template>
     </v-app-bar>
 </template>
@@ -87,6 +90,6 @@ function onScroll() {
     max-width: 1400px;
     margin: auto;
     width: 100%;
-    padding-inline: 6px;
+    padding-inline: 3px;
 }
 </style>

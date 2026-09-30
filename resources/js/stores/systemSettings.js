@@ -20,8 +20,10 @@ export const useSystemSettingsStore = defineStore("systemSettings", {
                 this.systemOwner = data.systemOwner;
                 this.systemColor = data.systemColor;
                 this.applyTheme();
+                return data;
             } catch (err) {
                 console.error("Failed to load system settings", err);
+                return null;
             } finally {
                 this.loaded = true;
             }

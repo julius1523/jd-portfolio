@@ -28,6 +28,6 @@ const resolvedPlaceholder = computed(() => (usePlaceholder.value ? props.placeho
 <template>
     <v-text-field v-model="model" :type="show ? 'text' : 'password'" :label="resolvedLabel"
         :placeholder="resolvedPlaceholder" :error-messages="errorMessages"
-        :append-inner-icon="show ? 'i-ri-eye-off-line opacity-50' : 'i-ri-eye-line opacity-50'"
+        :append-inner-icon="show ? 'i-ri-eye-off-fill opacity-65' : 'i-ri-eye-fill opacity-65'"
         @click:append-inner="show = !show" color="primary" rounded="lg" autocomplete="off" />
 </template>

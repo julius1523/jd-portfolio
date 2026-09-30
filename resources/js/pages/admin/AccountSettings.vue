@@ -1,77 +1,107 @@
 <template>
-    <v-container max-width="1050">
+    <v-container>
         <Shimmer :loading="pageLoading">
-            <v-card flat class="pa-1 rounded-lg">
+            <v-card flat class="pa-1 rounded-[10px]">
                 <v-form @submit.prevent="submit" :disabled="loading">
-                    <v-row :gap="55">
-                        <v-col cols="12">
-                            <v-row :gap="10">
-                                <v-col cols="12">
-                                    <div class="mb-4">
-                                        <span class="text-title-medium font-weight-bold">Account Image</span><br />
-                                        <span class="text-title-small text-medium-emphasis">
-                                            Update your account image
-                                        </span>
-                                    </div>
-                                    <FileUpload v-model="fields.accountImage" file-type="image" :max-files="1" inset
-                                        :disabled="loading" :show-size="true" density="comfortable"
-                                        :error-messages="errors.accountImage" data-shimmer-no-children />
-                                </v-col>
-                            </v-row>
-                        </v-col>
-                        <v-col cols="12">
-                            <v-row :gap="10">
-                                <v-col cols="12">
-                                    <div class="mb-4">
-                                        <span class="text-title-medium font-weight-bold">Account Details</span><br />
-                                        <span class="text-title-small text-medium-emphasis">
-                                            Update your first name, last name, and email
-                                        </span>
-                                    </div>
-                                    <v-text-field v-model="fields.firstName" color="primary" variant="solo" flat
-                                        label="First Name" density="comfortable" clearable
-                                        :error-messages="errors.firstName" autocomplete="off" class="vfield-outline"
-                                        data-shimmer-no-children />
-                                </v-col>
-                                <v-col cols="12">
-                                    <v-text-field v-model="fields.lastName" color="primary" variant="solo" flat
-                                        label="Last Name" density="comfortable" clearable
-                                        :error-messages="errors.lastName" autocomplete="off" class="vfield-outline"
-                                        data-shimmer-no-children />
-                                </v-col>
-                                <v-col cols="12">
-                                    <v-text-field v-model="fields.email" color="primary" variant="solo" flat
-                                        label="Email" density="comfortable" clearable :error-messages="errors.email"
-                                        autocomplete="off" class="vfield-outline" data-shimmer-no-children />
-                                </v-col>
-                            </v-row>
-                        </v-col>
-                        <v-col cols="12">
-                            <v-row :gap="10">
-                                <v-col cols="12">
-                                    <div class="mb-4">
-                                        <span class="text-title-medium font-weight-bold">Account Password</span><br />
-                                        <span class="text-title-small text-medium-emphasis">
-                                            Update your account password
-                                        </span>
-                                    </div>
-                                    <PasswordField v-model="fields.password" variant="solo" flat density="comfortable"
-                                        label="Password" class="vfield-outline" :error-messages="errors.password" />
-
-                                    <v-expand-transition>
-                                        <div v-if="fields.password" class="mt-4">
-                                            <PasswordField v-model="fields.passwordConfirmation" variant="solo" flat
-                                                density="comfortable" label="Confirm Password" class="vfield-outline"
-                                                :error-messages="errors.passwordConfirmation" />
+                    <div class="d-flex flex-column ga-16">
+                        <div>
+                            <div class="d-inline-flex flex-column ga-1 mb-4">
+                                <div class="text-title-medium font-semibold">Account Settings</div>
+                                <div class="text-title-small opacity-60">
+                                    Update your account settings
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column ga-4">
+                                <v-card class="p-5 shadow-sm border rounded-[12px]">
+                                    <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                                        <div class="sm:shrink-0 text-label-large font-medium">
+                                            Account Image
                                         </div>
-                                    </v-expand-transition>
-                                </v-col>
-                            </v-row>
-                        </v-col>
-                        <v-col cols="12">
-                            <FormActions :dirty="meta.dirty" :ready="ready" :loading="loading" @cancel="cancelEdit" />
-                        </v-col>
-                    </v-row>
+                                        <div class="w-full sm:flex-1 sm:max-w-md sm:ml-auto min-w-0">
+                                            <div class="d-flex justify-center justify-sm-end">
+                                                <AvatarUpload v-model="fields.accountImage" :disabled="loading"
+                                                    :max-size="1" :size="160" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </v-card>
+
+                                <v-card class="p-5 shadow-sm border rounded-[12px]">
+                                    <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                                        <div class="sm:shrink-0 text-label-large font-medium">
+                                            First Name
+                                        </div>
+                                        <div class="w-full sm:flex-1 sm:max-w-md sm:ml-auto min-w-0">
+                                            <v-text-field v-model="fields.firstName" color="primary" variant="solo" flat
+                                                single-line label="First Name" density="compact" clearable
+                                                :error-messages="errors.firstName" autocomplete="off"
+                                                class="vfield-outline" hide-details="auto" data-shimmer-no-children />
+                                        </div>
+                                    </div>
+                                </v-card>
+
+                                <v-card class="p-5 shadow-sm border rounded-[12px]">
+                                    <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                                        <div class="sm:shrink-0 text-label-large font-medium">
+                                            Last Name
+                                        </div>
+                                        <div class="w-full sm:flex-1 sm:max-w-md sm:ml-auto min-w-0">
+                                            <v-text-field v-model="fields.lastName" color="primary" variant="solo" flat
+                                                single-line label="First Name" density="compact" clearable
+                                                :error-messages="errors.lastName" autocomplete="off"
+                                                class="vfield-outline" hide-details="auto" data-shimmer-no-children />
+                                        </div>
+                                    </div>
+                                </v-card>
+
+                                <v-card class="p-5 shadow-sm border rounded-[12px]">
+                                    <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                                        <div class="sm:shrink-0 text-label-large font-medium">
+                                            Email
+                                        </div>
+                                        <div class="w-full sm:flex-1 sm:max-w-md sm:ml-auto min-w-0">
+                                            <v-text-field v-model="fields.email" color="primary" variant="solo" flat
+                                                single-line label="First Name" density="compact" clearable
+                                                :error-messages="errors.email" autocomplete="off" class="vfield-outline"
+                                                hide-details="auto" data-shimmer-no-children />
+                                        </div>
+                                    </div>
+                                </v-card>
+
+                                <v-card class="p-5 shadow-sm border rounded-[12px]">
+                                    <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                                        <div class="sm:shrink-0 text-label-large font-medium">
+                                            Password
+                                        </div>
+                                        <div class="w-full sm:flex-1 sm:max-w-md sm:ml-auto min-w-0">
+                                            <PasswordField v-model="fields.password" variant="solo" flat single-line
+                                                density="compact" label="Password" class="vfield-outline"
+                                                :error-messages="errors.password" hide-details="auto"
+                                                data-shimmer-no-children />
+                                        </div>
+                                    </div>
+                                </v-card>
+
+                                <v-slide-y-transition>
+                                    <v-card v-if="fields.password" class="p-5 shadow-sm border rounded-[12px]">
+                                        <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                                            <div class="sm:shrink-0 text-label-large font-medium">
+                                                Confirm Password
+                                            </div>
+                                            <div class="w-full sm:flex-1 sm:max-w-md sm:ml-auto min-w-0">
+                                                <PasswordField v-model="fields.passwordConfirmation" variant="solo" flat
+                                                    single-line density="compact" label="Confirm Password"
+                                                    class="vfield-outline" :error-messages="errors.passwordConfirmation"
+                                                    hide-details="auto" data-shimmer-no-children />
+                                            </div>
+                                        </div>
+                                    </v-card>
+                                </v-slide-y-transition>
+                            </div>
+                        </div>
+                    </div>
+
+                    <FormActions :dirty="meta.dirty" :ready="ready" :loading="loading" @cancel="cancelEdit" />
                 </v-form>
             </v-card>
         </Shimmer>
@@ -82,11 +112,10 @@
 import axios from "@/plugins/axios";
 import { ref, onMounted } from "vue";
 import * as yup from "yup";
-import { useSystemSettingsStore } from "@/stores/systemSettings";
 import { useValidatedForm } from "@/composables/useValidatedForm";
 import { useSnackBarQueue } from "@/composables/useSnackBarQueue";
 import PasswordField from "@/components/forms/PasswordField";
-import FileUpload from "@/components/forms/FileUpload";
+import AvatarUpload from "@/components/forms/AvatarUpload";
 import FormActions from "@/components/forms/FormActions";
 
 const schema = yup.object({
@@ -97,7 +126,6 @@ const schema = yup.object({
     password: yup.string().label("Password").nullable().matches(/^.{8,}$/, { message: "Password must be at least 8 characters", excludeEmptyString: true }),
     passwordConfirmation: yup.string().label("Confirm Password").nullable().when("password", { is: (password) => !!password, then: (schema) => schema.required("Please confirm your password").oneOf([yup.ref("password")], "Passwords do not match") }),
 });
-const settingsStore = useSystemSettingsStore();
 const { error } = useSnackBarQueue();
 const pageLoading = ref(true);
 const { fields, errors, loading, submit, cancelEdit, resetForm, meta, ready } = useValidatedForm(
@@ -125,7 +153,6 @@ const { fields, errors, loading, submit, cancelEdit, resetForm, meta, ready } = 
 
         const response = await axios.post("/api/updateAccountSettings", formData);
         await getAccountSettings();
-        await settingsStore.fetch();
         return { message: response.data.message };
     },
     { resetOnSuccess: false }

@@ -28,7 +28,7 @@
         "overlayscrollbars": "^2.16.0",
         "overlayscrollbars-vue": "^0.5.10",
         "pinia": "^4.0.3",
-        "sass": "^1.105.0",
+        "sass": "^1.105.1",
         "typed.js": "^3.0.0",
         "vee-validate": "^4.15.1",
         "vite-plugin-vuetify": "^2.1.3",

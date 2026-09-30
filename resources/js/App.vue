@@ -15,10 +15,9 @@
         </v-main>
         <footr v-if="showFooter" />
 
-        <v-fab :active="visible" icon elevation="1" border app :layout="true" appear
-            transition="slide-y-reverse-transition" :size="$vuetify.display.mdAndUp ? undefined : 'small'"
-            @click="scrollToTop">
-            <v-icon icon="i-mdi-arrow-up" color="primary"></v-icon>
+        <v-fab :active="visible" variant="flat" icon border app :layout="true" appear size="small"
+            transition="slide-y-reverse-transition" class="[&_.v-btn]:shadow-sm" @click="scrollToTop">
+            <v-icon icon="i-mdi-arrow-up" color="primary" />
         </v-fab>
     </v-app>
 </template>

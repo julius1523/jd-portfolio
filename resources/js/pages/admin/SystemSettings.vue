@@ -1,82 +1,85 @@
 <template>
-    <v-container max-width="1050">
+    <v-container>
         <Shimmer :loading="pageLoading">
-            <v-card flat class="pa-1 rounded-lg">
+            <v-card flat class="pa-1 rounded-[10px]">
                 <v-form @submit.prevent="submit" :disabled="loading">
-                    <v-row :gap="55">
-                        <v-col cols="12">
-                            <v-row :gap="10">
-                                <v-col cols="12">
-                                    <div class="mb-4">
-                                        <span class="text-title-medium font-weight-bold">System Logo</span><br />
-                                        <span class="text-title-small text-medium-emphasis">
-                                            Update the system logo
-                                        </span>
+                    <div class="d-flex flex-column ga-16">
+                        <div>
+                            <div class="d-inline-flex flex-column ga-1 mb-4">
+                                <div class="text-title-medium font-semibold">System Settings</div>
+                                <div class="text-title-small opacity-60">
+                                    Update what and how your system should look
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column ga-4">
+                                <v-card class="p-5 shadow-sm border rounded-[12px]">
+                                    <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                                        <div class="sm:shrink-0 text-label-large font-medium">
+                                            System Logo
+                                        </div>
+                                        <div class="w-full sm:flex-1 sm:max-w-md sm:ml-auto min-w-0">
+                                            <div class="d-flex justify-center justify-sm-end">
+                                                <AvatarUpload v-model="fields.systemLogo" :disabled="loading"
+                                                    :max-size="1" :size="160" />
+                                            </div>
+                                        </div>
                                     </div>
-                                    <FileUpload v-model="fields.systemLogo" file-type="image" :max-files="1" inset
-                                        :disabled="loading" :show-size="true" density="comfortable"
-                                        :error-messages="errors.systemLogo" data-shimmer-no-children />
-                                </v-col>
-                            </v-row>
-                        </v-col>
-                        <v-col cols="12">
-                            <v-row :gap="10">
-                                <v-col cols="12">
-                                    <div class="mb-4">
-                                        <span class="text-title-medium font-weight-bold">System Name</span><br />
-                                        <span class="text-title-small text-medium-emphasis">
-                                            Update the system name
-                                        </span>
+                                </v-card>
+
+                                <v-card class="p-5 shadow-sm border rounded-[12px]">
+                                    <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                                        <div class="sm:shrink-0 text-label-large font-medium">
+                                            System Name
+                                        </div>
+                                        <div class="w-full sm:flex-1 sm:max-w-md sm:ml-auto min-w-0">
+                                            <v-text-field v-model="fields.systemName" color="primary" variant="solo"
+                                                flat label="System Name" density="compact" single-line clearable
+                                                :error-messages="errors.systemName" autocomplete="off"
+                                                class="vfield-outline" hide-details="auto" data-shimmer-no-children />
+                                        </div>
                                     </div>
-                                    <v-text-field v-model="fields.systemName" color="primary" variant="solo" flat
-                                        label="System Name" density="comfortable" :single-line="true" clearable
-                                        :error-messages="errors.systemName" autocomplete="off" class="vfield-outline"
-                                        data-shimmer-no-children />
-                                </v-col>
-                            </v-row>
-                        </v-col>
-                        <v-col cols="12">
-                            <v-row :gap="10">
-                                <v-col cols="12">
-                                    <div class="mb-4">
-                                        <span class="text-title-medium font-weight-bold">Owner Name</span><br />
-                                        <span class="text-title-small text-medium-emphasis">
-                                            Update the owner name
-                                        </span>
+                                </v-card>
+
+                                <v-card class="p-5 shadow-sm border rounded-[12px]">
+                                    <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                                        <div class="sm:shrink-0 text-label-large font-medium">
+                                            System Owner Name
+                                        </div>
+                                        <div class="w-full sm:flex-1 sm:max-w-md sm:ml-auto min-w-0">
+                                            <v-text-field v-model="fields.systemOwner" color="primary" variant="solo"
+                                                flat label="Owner" density="compact" single-line clearable
+                                                :error-messages="errors.systemOwner" autocomplete="off"
+                                                class="vfield-outline" hide-details="auto" data-shimmer-no-children />
+                                        </div>
                                     </div>
-                                    <v-text-field v-model="fields.systemOwner" color="primary" variant="solo" flat
-                                        label="Owner" density="comfortable" :single-line="true" clearable
-                                        :error-messages="errors.systemOwner" autocomplete="off" class="vfield-outline"
-                                        data-shimmer-no-children />
-                                </v-col>
-                            </v-row>
-                        </v-col>
-                        <v-col cols="12">
-                            <v-row :gap="10">
-                                <v-col cols="12">
-                                    <div class="mb-4">
-                                        <span class="text-title-medium font-weight-bold">System Color</span><br />
-                                        <span class="text-title-small text-medium-emphasis">
-                                            Update the system color
-                                        </span>
+                                </v-card>
+
+                                <v-card class="p-5 shadow-sm border rounded-[12px]">
+                                    <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                                        <div class="sm:shrink-0 text-label-large font-medium">
+                                            System Theme Color
+                                        </div>
+                                        <div class="w-full sm:flex-1 sm:max-w-md sm:ml-auto min-w-0">
+                                            <v-text-field ref="colorField" v-model="fields.systemColor" color="primary"
+                                                variant="solo" flat density="compact"
+                                                :error-messages="errors.systemColor" autocomplete="off"
+                                                class="vfield-outline" hide-details="auto" data-shimmer-no-children>
+                                                <template #prepend-inner>
+                                                    <v-icon icon="i-mdi-circle" :color="fields.systemColor" size="20" />
+                                                </template>
+                                                <template #append-inner>
+                                                    <ColorPicker v-model="fields.systemColor" :anchor="colorTarget"
+                                                        location="bottom end" />
+                                                </template>
+                                            </v-text-field>
+                                        </div>
                                     </div>
-                                    <v-text-field v-model="fields.systemColor" color="primary" variant="solo" flat
-                                        :error-messages="errors.systemColor" autocomplete="off" class="vfield-outline"
-                                        data-shimmer-no-children>
-                                        <template #prepend-inner>
-                                            <v-icon icon="i-mdi-circle" :color="fields.systemColor" size="20" />
-                                        </template>
-                                        <template #append-inner>
-                                            <ColorPicker v-model="fields.systemColor" />
-                                        </template>
-                                    </v-text-field>
-                                </v-col>
-                            </v-row>
-                        </v-col>
-                        <v-col cols="12">
-                            <FormActions :dirty="meta.dirty" :ready="ready" :loading="loading" @cancel="cancelEdit" />
-                        </v-col>
-                    </v-row>
+                                </v-card>
+                            </div>
+                        </div>
+                    </div>
+
+                    <FormActions :dirty="meta.dirty" :ready="ready" :loading="loading" @cancel="cancelEdit" />
                 </v-form>
             </v-card>
         </Shimmer>
@@ -85,15 +88,14 @@
 
 <script setup>
 import axios from "@/plugins/axios";
-import { ref, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import * as yup from "yup";
 import { useSystemSettingsStore } from "@/stores/systemSettings";
 import { useValidatedForm } from "@/composables/useValidatedForm";
 import { useSnackBarQueue } from "@/composables/useSnackBarQueue";
 import ColorPicker from "@/components/forms/ColorPicker";
-import FileUpload from "@/components/forms/FileUpload";
+import AvatarUpload from "@/components/forms/AvatarUpload";
 import FormActions from "@/components/forms/FormActions";
-
 
 const schema = yup.object({
     systemLogo: yup.mixed().label("System Logo").nullable(),
@@ -103,6 +105,8 @@ const schema = yup.object({
 });
 const settingsStore = useSystemSettingsStore();
 const { error } = useSnackBarQueue();
+const colorField = ref(null);
+const colorTarget = computed(() => colorField.value?.$el?.querySelector(".v-field") ?? undefined);
 const pageLoading = ref(true);
 const { fields, errors, loading, submit, cancelEdit, resetForm, meta, ready } = useValidatedForm(
     schema,
@@ -127,8 +131,8 @@ const { fields, errors, loading, submit, cancelEdit, resetForm, meta, ready } = 
         formData.append("payload", JSON.stringify(payload));
 
         const response = await axios.post("/api/updateSystemSettings", formData);
-        await getSystemSettings();
-        await settingsStore.fetch();
+        const data = await settingsStore.fetch();
+        if (data) resetForm({ values: data });
         return { message: response.data.message };
     },
     { resetOnSuccess: false }

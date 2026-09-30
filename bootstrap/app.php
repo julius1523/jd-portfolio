@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Middleware\PreventBack;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -15,9 +14,6 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->statefulApi();
-        $middleware->alias([
-            'prevent_back' => PreventBack::class
-        ]);
         $middleware->trustProxies(
             at: '*',
             headers: SymfonyRequest::HEADER_X_FORWARDED_FOR |

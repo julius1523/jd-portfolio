@@ -4,10 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * @property string|null $cv_path
- * @property string|null $image_path
- */
 class HomeContent extends Model
 {
 

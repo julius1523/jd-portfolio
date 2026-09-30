@@ -1,12 +1,11 @@
 <script>
 import * as yup from "yup";
 
-export const skillsSchema = yup.object({
+export const randomFactsSchema = yup.object({
     id: yup.mixed().nullable(),
-    category: yup.string().label("Category").required(),
-    skill: yup.array().of(yup.string()).label("Skills").min(1, "At least one skill is required").default([]),
-    icon: yup.string().label("Icon").nullable().default(null),
+    icon: yup.string().label("Icon").required(),
     iconSvg: yup.string().nullable().default(null),
+    randomFact: yup.string().label("Random Fact").required(),
 });
 </script>
 
@@ -14,29 +13,22 @@ export const skillsSchema = yup.object({
 import { ref, computed, reactive } from "vue";
 import { useForm } from "vee-validate";
 import Dialog from "@/components/forms/FormDialog";
-import Select from "@/components/forms/Select";
 import IconPicker from "@/components/forms/IconPicker";
-import { SKILL_CATEGORIES } from "@/src/constants/constants";
 
-const skillCategoryOptions = SKILL_CATEGORIES.map((category) => ({
-    title: category.title,
-    value: category.title,
-}));
-const availableSkills = computed(() => {
-    return SKILL_CATEGORIES.find((c) => c.title === fields.category)?.skills ?? [];
-});
+const iconField = ref(null);
+const iconTarget = computed(() => iconField.value?.$el?.querySelector(".v-field") ?? undefined);
 const props = defineProps({ list: { type: Array, required: true } });
 const dialog = ref(false);
 const editingIndex = ref(-1);
 const isEditing = computed(() => editingIndex.value > -1);
-const initialValues = skillsSchema.getDefault();
+const initialValues = randomFactsSchema.getDefault();
 const { defineField, errors, handleSubmit, resetForm, meta, validate } = useForm({
-    validationSchema: skillsSchema,
+    validationSchema: randomFactsSchema,
     initialValues,
 });
 const fields = reactive(
     Object.fromEntries(
-        Object.keys(skillsSchema.fields).map((name) => {
+        Object.keys(randomFactsSchema.fields).map((name) => {
             const [field] = defineField(name);
             return [name, field];
         }),
@@ -70,30 +62,30 @@ defineExpose({ open, remove });
 </script>
 
 <template>
-    <Dialog v-model="dialog" :is-editing="isEditing" add-title="Add Skill" edit-title="Edit Skill" save-text="Add skill"
-        edit-save-text="Save changes" cancel-text="Cancel" edit-cancel-text="Cancel edit"
+    <Dialog v-model="dialog" :is-editing="isEditing" add-title="Add Random Fact" edit-title="Edit Random Fact"
+        save-text="Add random fact" edit-save-text="Save changes" cancel-text="Cancel" edit-cancel-text="Cancel edit"
         :disable-save="!meta.valid || (isEditing && !meta.dirty)" @save="submit" @cancel="close">
         <v-form @submit.prevent="submit">
-            <v-row :gap="10">
+            <v-row :gap="15">
                 <v-col cols="12">
-                    <Select v-model="fields.category" :items="skillCategoryOptions" label="Skill Category"
-                        variant="solo" flat density="comfortable" :multiple="false" :chip="false"
-                        :error-messages="errors.category" />
+                    <div class="text-sm font-medium text-medium-emphasis mb-1">Random Fact</div>
+                    <v-text-field v-model="fields.randomFact" label="Enter random fact" color="primary" variant="solo"
+                        flat single-line density="compact" clearable :error-messages="errors.randomFact"
+                        class="vfield-outline" autocomplete="off" />
                 </v-col>
                 <v-col cols="12">
-                    <Select v-model="fields.skill" :items="availableSkills" label="Skills" variant="solo" flat
-                        density="comfortable" :multiple="true" :chip="false" :error-messages="errors.skill" />
-                </v-col>
-                <v-col cols="12">
-                    <v-text-field :model-value="fields.icon" label="Icon (optional)" color="primary" variant="solo" flat
-                        density="comfortable" :error-messages="errors.icon" readonly class="vfield-outline">
+                    <div class="text-sm font-medium text-medium-emphasis mb-1">Random Fact Icon</div>
+                    <v-text-field ref="iconField" :model-value="fields.icon" label="Select random fact icon"
+                        color="primary" variant="solo" flat single-line density="compact" :error-messages="errors.icon"
+                        readonly class="vfield-outline">
                         <template #default>
                             <v-icon v-if="fields.iconSvg" color="primary" size="20" class="mr-2">
                                 <span v-html="fields.iconSvg" class="inline-flex items-center" />
                             </v-icon>
                         </template>
                         <template #append-inner>
-                            <IconPicker v-model="fields.icon" @selected="fields.iconSvg = $event.svg" />
+                            <IconPicker v-model="fields.icon" :anchor="iconTarget" location="bottom end"
+                                @selected="fields.iconSvg = $event.svg" />
                         </template>
                     </v-text-field>
                 </v-col>

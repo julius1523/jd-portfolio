@@ -42,7 +42,7 @@ const canRemove = computed(() => props.addable && props.removable);
 const tableHeaders = computed(() => {
     const hasAction = props.headers.some((h) => h.key === "action");
     if ((canEdit.value || canRemove.value) && !hasAction) {
-        return [...props.headers, { title: "Action", key: "action", align: "end", sortable: false }];
+        return [...props.headers, { title: "Action", key: "action", align: "end", width: '5%', sortable: false }];
     }
     return props.headers;
 });
@@ -51,15 +51,15 @@ const tableHeaders = computed(() => {
 <template>
     <div>
         <div v-if="addable" class="mb-2">
-            <v-btn variant="tonal" prepend-icon="i-mdi-plus" :text="addLabel" :disabled="disabled"
-                class="rounded-[10px]" @click="$emit('add')" />
+            <v-btn variant="flat" color="surface-light" prepend-icon="i-mdi-plus" :text="addLabel" :disabled="disabled"
+                class="rounded-[10px] border" @click="$emit('add')" />
         </div>
 
         <v-data-table-server :headers="tableHeaders" :items="items" :items-length="itemsLength"
             v-model:sort-by="sortByModel" v-model:page="pageModel" v-model:items-per-page="itemsPerPageModel"
             :item-value="itemValue" v-model:expanded="expandedRows" :show-expand="expandable" expand-strategy="single"
-            :loading="loading" :mobile="$vuetify.display.smAndDown" :density="density" class="border rounded-[10px]"
-            data-shimmer-no-children>
+            :loading="loading" :mobile="$vuetify.display.smAndDown" :density="density"
+            class="shadow-sm border rounded-[10px]" data-shimmer-no-children>
 
             <template v-for="name in forwardedSlotNames" #[name]="slotProps" :key="name">
                 <slot :name="name" v-bind="slotProps" />
@@ -68,9 +68,9 @@ const tableHeaders = computed(() => {
             <template v-if="canEdit || canRemove" #item.action="{ item, index }">
                 <slot name="item.action" :item="item" :index="index">
                     <div class="d-flex ga-2 justify-end">
-                        <v-icon v-if="canEdit" icon="i-mdi-pencil-outline opacity-70" size="small" :disabled="disabled"
+                        <v-icon v-if="canEdit" icon="i-mdi-pencil-outline opacity-65" size="small" :disabled="disabled"
                             @click="$emit('edit', item, index)" />
-                        <v-icon v-if="canRemove" icon="i-mdi-delete-outline opacity-70" size="small"
+                        <v-icon v-if="canRemove" icon="i-mdi-delete-outline opacity-65" size="small"
                             :disabled="disabled" @click="$emit('remove', item)" />
                     </div>
                 </slot>

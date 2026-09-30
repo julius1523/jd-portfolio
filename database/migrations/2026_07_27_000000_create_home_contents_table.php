@@ -9,14 +9,14 @@ return new class extends Migration {
     {
         Schema::create('home_contents', function (Blueprint $table) {
             $table->id();
-            $table->text('profile_image')->nullable();
+            $table->json('profile_image')->nullable();
             $table->string('heading')->nullable();
             $table->string('subheading')->nullable();
             $table->text('description')->nullable();
             $table->string('primary_btn_text')->nullable();
             $table->string('primary_btn_link')->nullable();
             $table->string('secondary_btn_text')->nullable();
-            $table->text('secondary_btn_file')->nullable();
+            $table->json('secondary_btn_file')->nullable();
             $table->timestamps();
         });
     }

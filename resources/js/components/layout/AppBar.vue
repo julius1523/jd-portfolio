@@ -40,8 +40,9 @@ function onScroll() {
         :class="[layoutType === 'app' ? 'px-2 border-b' : 'bg-transparent topbar']">
         <template v-slot:prepend v-if="!isAppLayout">
             <router-link :to="{ name: 'home' }">
-                <v-avatar v-if="systemSettings.systemLogo?.url" variant="elevated" size="38"
-                    :image="systemSettings.systemLogo?.url" />
+                <v-avatar v-if="systemSettings.systemLogo?.url" variant="elevated" size="38">
+                    <v-img :src="systemSettings.systemLogo.url" eager />
+                </v-avatar>
                 <v-avatar v-else variant="elevated" size="38"
                     class="bg-gradient-to-br from-[rgb(var(--v-theme-primary))] to-[rgb(var(--v-theme-primary))]/85 text-white">
                     {{ ownerInitials }}

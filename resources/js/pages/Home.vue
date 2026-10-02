@@ -3,7 +3,7 @@
         <v-container>
             <v-row align="center" class="mt-0 mt-md-15">
                 <v-col class="order-1 order-md-0" cols="12" md="7">
-                    <div class="d-flex flex-column ga-2 ga-md-4">
+                    <div class="d-flex flex-column ga-4">
                         <div
                             class="text-headline-medium text-lg-headline-large font-weight-semibold text-center text-md-left reveal-item">
                             {{ data.heading }}
@@ -13,7 +13,7 @@
                             <span ref="el" />
                         </div>
                         <div
-                            class="text-medium-emphasis text-center text-md-left w-100 w-sm-75 w-md-100 mx-auto whitespace-pre-line reveal-item">
+                            class="font-weight-light text-center text-md-left w-100 w-sm-75 w-md-100 mx-auto whitespace-pre-line reveal-item">
                             {{ data.description }}
                         </div>
                         <div

@@ -6,46 +6,40 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UpdateSystemSettingsRequest;
 use App\Models\SystemSettings;
 use App\Services\FileUploadService;
+use App\Services\SystemSettingsService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 
 class SystemSettingsController extends Controller
 {
     public function __construct(
-        private FileUploadService $fileUploadService
+        private FileUploadService $fileUploadService,
+        private SystemSettingsService $settings
     ) {
     }
 
     public function getSystemSettings()
     {
-        $settings = Cache::remember('system_settings', now()->addHours(6), function () {
-            $logoSetting = SystemSettings::where('key', 'system_logo')->first();
-
-            return [
-                'systemLogo' => $logoSetting?->value,
-                'systemName' => SystemSettings::get('system_name') ?? "Portfolio",
-                'systemOwner' => SystemSettings::get('system_owner') ?? null,
-                'systemColor' => SystemSettings::get('system_color') ?? "#1976D2",
-            ];
-        });
-
-        return response()->json($settings);
+        return response()->json($this->settings->all());
     }
 
     public function updateSystemSettings(UpdateSystemSettingsRequest $request)
     {
         $data = $request->validated();
 
-        SystemSettings::set('system_name', $data['systemName']);
-        SystemSettings::set('system_owner', $data['systemOwner']);
-        SystemSettings::set('system_color', $data['systemColor']);
+        DB::transaction(function () use ($data, $request) {
+            SystemSettings::set('system_name', $data['systemName']);
+            SystemSettings::set('system_owner', $data['systemOwner']);
+            SystemSettings::set('system_color', $data['systemColor']);
 
-        $logoSetting = SystemSettings::firstOrNew(['key' => 'system_logo']);
-        $logoSetting->type = 'image';
-        $logoSetting->group = $logoSetting->group ?? 'general';
+            $logo = SystemSettings::firstOrNew(['key' => 'system_logo']);
+            $logo->type = 'image';
+            $logo->group ??= 'general';
+            $this->fileUploadService->handle($request, $logo, 'systemLogo', 'value', 'uploads/images');
+            $logo->save();
+        });
 
-        $this->fileUploadService->handle($request, $logoSetting, 'systemLogo', 'value', 'uploads/images');
-
-        $logoSetting->save();
+        Cache::forget('system_settings');
 
         Cache::forget('system_settings');
 

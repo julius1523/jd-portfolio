@@ -1,3 +1,6 @@
+@php
+    $settings = app(\App\Services\SystemSettingsService::class)->all();
+@endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
@@ -5,23 +8,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <title>{{ config('app.name') }}</title>
-
-    <link rel="preconnect" href="https://cdn-assets.juliusdolana13.workers.dev" />
+    <title>{{ $settings['systemName'] }}</title>
 
     <style>
         @layer vuetify-core, vuetify-components, vuetify-overrides, vuetify-utilities, uno, vuetify-final;
     </style>
 
-    @vite(['resources/js/app.js'])
-
-</head>
-
-<body>
-    <div id="app" />
-
     <script>
-        window.__APP_NAME__ = "{{ config('app.name') }}";
+        window.__SYSTEM_SETTINGS__ = {{ Js::from($settings) }};
         window.__AUTH_USER__ = {{ Js::from(
     auth()->user() ? [
         'id' => auth()->user()->id,
@@ -31,6 +25,13 @@
     : null
 ) }};
     </script>
+
+    @vite(['resources/js/app.js'])
+
+</head>
+
+<body>
+    <div id="app"></div>
 </body>
 
 </html>

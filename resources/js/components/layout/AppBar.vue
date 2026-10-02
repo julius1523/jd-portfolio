@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from "vue";
-import { useTheme } from "vuetify";
+import { useTheme, useDisplay } from "vuetify";
 import { useRoute } from "vue-router";
 import { useLayoutStore } from "@/stores/layout";
 import { useThemeStore } from "@/stores/theme";
@@ -8,12 +8,20 @@ import { useSystemSettingsStore } from "@/stores/systemSettings";
 import { useLayoutType } from "@/composables/useLayoutType";
 
 const theme = useTheme();
+const display = useDisplay();
 const route = useRoute();
 const layout = useLayoutStore();
 const themeStore = useThemeStore();
 const layoutType = useLayoutType();
 const systemSettings = useSystemSettingsStore();
 const isAppLayout = computed(() => layoutType.value === "app");
+const menuOpen = computed(() => layout.drawer && display.smAndDown.value);
+const links = [
+    { title: "Home", to: "home" },
+    { title: "About", to: "about" },
+    { title: "Projects", to: "projects" },
+    { title: "Contact", to: "contact" },
+];
 const toggleTheme = (e) => {
     theme.setTransitionOrigin(e.target);
     themeStore.setDark(!themeStore.isDark);
@@ -36,14 +44,13 @@ function onScroll() {
 </script>
 
 <template>
-    <v-app-bar v-scroll="onScroll" app flat :order="1" density="comfortable"
-        :class="[layoutType === 'app' ? 'px-2 border-b' : 'bg-transparent topbar']">
+    <v-app-bar v-scroll="onScroll" app flat :order="1" density="comfortable" class="px-1" :class="[
+        layoutType === 'app' ? 'border-b' : [menuOpen ? 'bg-surface' : 'bg-transparent', 'topbar !z-[1011]']]">
         <template v-slot:prepend v-if="!isAppLayout">
             <router-link :to="{ name: 'home' }">
-                <v-avatar v-if="systemSettings.systemLogo?.url" variant="elevated" size="38">
-                    <v-img :src="systemSettings.systemLogo.url" eager />
-                </v-avatar>
-                <v-avatar v-else variant="elevated" size="38"
+                <v-img v-if="systemSettings.systemLogo?.url" :src="systemSettings.systemLogo.url" height="38" width="38"
+                    rounded="circle" eager />
+                <v-avatar v-else variant="flat" size="38"
                     class="bg-gradient-to-br from-[rgb(var(--v-theme-primary))] to-[rgb(var(--v-theme-primary))]/85 text-white">
                     {{ ownerInitials }}
                 </v-avatar>
@@ -62,20 +69,15 @@ function onScroll() {
                 <v-toolbar v-if="$vuetify.display.mdAndUp" color="surface" height="38" location="top end" floating
                     rounded="pill" border>
                     <div class="d-flex ga-1">
-                        <v-btn height="32" active-color="primary" rounded="pill" text="Home" :to="{ name: 'home' }" />
-                        <v-btn height="32" active-color="primary" rounded="pill" text="About" :to="{ name: 'about' }" />
-                        <v-btn height="32" active-color="primary" rounded="pill" text="Projects"
-                            :to="{ name: 'projects' }" />
-                        <v-btn height="32" active-color="primary" rounded="pill" text="Contact"
-                            :to="{ name: 'contact' }" />
+                        <v-btn v-for="link in links" :key="link.to" height="32" active-color="primary" rounded="pill"
+                            :text="link.title" :to="{ name: link.to }" />
                     </div>
                 </v-toolbar>
-                <v-icon-btn v-if="$vuetify.display.mdAndUp"
-                    :icon="themeStore.isDark ? 'i-ri-moon-line' : 'i-ri-sun-line'" size="38" icon-size="18"
+                <v-icon-btn :icon="themeStore.isDark ? 'i-ri-moon-line' : 'i-ri-sun-line'" size="38" icon-size="18"
                     v-tooltip="{ text: themeStore.isDark ? 'Light Mode' : 'Dark Mode', location: 'bottom' }"
                     class="border" @click="toggleTheme" />
-                <v-icon-btn v-if="$vuetify.display.smAndDown" :key="layout.drawer" icon="i-ri-menu-fill" size="38"
-                    icon-size="18" class="border" @click="layout.toggleDrawer()" />
+                <v-icon-btn v-if="$vuetify.display.smAndDown" :icon="menuOpen ? 'i-mdi-close' : 'i-ri-menu-fill'"
+                    size="38" icon-size="18" class="border" @click="layout.toggleDrawer()" />
             </div>
         </template>
         <template v-slot:append v-else>
@@ -84,6 +86,19 @@ function onScroll() {
                 @click="toggleTheme" />
         </template>
     </v-app-bar>
+
+    <v-overlay v-if="!isAppLayout" :model-value="menuOpen" persistent no-click-animation :scrim="false"
+        scroll-strategy="block" location-strategy="static" transition="fade-transition" :z-index="1010"
+        content-class="w-100 h-100">
+        <v-list density="compact" nav class="h-100 w-100 px-[18px] overflow-y-auto pt-[85px]">
+            <v-list-item v-for="link in links" :key="link.to" :to="{ name: link.to }" exact color="primary"
+                rounded="pill" class="text-center">
+                <template #title>
+                    <span class="text-title-medium">{{ link.title }}</span>
+                </template>
+            </v-list-item>
+        </v-list>
+    </v-overlay>
 </template>
 
 <style scoped>

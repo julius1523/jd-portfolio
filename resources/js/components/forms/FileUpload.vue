@@ -127,7 +127,7 @@ watch(() => props.modelValue, syncFromModelValue, { immediate: true });
                 class="border-0">
                 <template #prepend>
                     <v-avatar size="46" class="border">
-                        <v-img v-if="file.type?.startsWith('image/')" :src="getPreviewUrl(file)" cover
+                        <v-img v-if="file.type?.startsWith('image/')" :src="getPreviewUrl(file)" :cover="false"
                             alt="Uploaded Image" eager />
                         <v-icon v-else :class="getFileIconComponent(file)" size="24" />
                     </v-avatar>
@@ -143,7 +143,7 @@ watch(() => props.modelValue, syncFromModelValue, { immediate: true });
                 class="border-0">
                 <template #prepend>
                     <v-avatar size="46" class="border">
-                        <v-img v-if="file.type?.startsWith('image/')" :src="getPreviewUrl(file)" cover class="border"
+                        <v-img v-if="file.type?.startsWith('image/')" :src="getPreviewUrl(file)" :cover="false"
                             alt="Uploaded Image" eager />
                         <v-icon v-else :class="getFileIconComponent(file)" size="24" />
                     </v-avatar>

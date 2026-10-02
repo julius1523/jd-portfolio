@@ -1,4 +1,3 @@
-// useValidatedForm.js
 import { reactive, ref, computed, onMounted, nextTick } from "vue";
 import { useForm } from "vee-validate";
 import { useSnackBarQueue } from "@/composables/useSnackBarQueue";
@@ -7,9 +6,9 @@ export function useValidatedForm(schema, onSubmit, options = {}) {
     const { resetOnSuccess = true, cancelMessage = "No changes made." } =
         options;
     const {
-        success: notifySuccess,
-        error: notifyError,
-        info: notifyInfo,
+        success: showSuccess,
+        error: showError,
+        info: showInfo,
     } = useSnackBarQueue();
 
     const loading = ref(false);
@@ -29,7 +28,6 @@ export function useValidatedForm(schema, onSubmit, options = {}) {
         ),
     );
 
-    // Pure schema validity, independent of server-side setFieldError calls
     const valid = computed(() => schema.isValidSync(fields));
 
     const ready = ref(false);
@@ -43,7 +41,7 @@ export function useValidatedForm(schema, onSubmit, options = {}) {
         loading.value = true;
         try {
             const result = await onSubmit(values, actions);
-            if (result?.message) notifySuccess(result.message);
+            if (result?.message) showSuccess(result.message);
             if (resetOnSuccess) actions.resetForm();
             return result;
         } catch (error) {
@@ -56,9 +54,7 @@ export function useValidatedForm(schema, onSubmit, options = {}) {
                     actions.setFieldError(field, messages[0]);
                 }
             }
-            notifyError(
-                error.response?.data?.message ?? "Something went wrong.",
-            );
+            showError(error.response?.data?.message ?? "Something went wrong.");
         } finally {
             loading.value = false;
         }
@@ -66,7 +62,7 @@ export function useValidatedForm(schema, onSubmit, options = {}) {
 
     function cancelEdit() {
         resetForm();
-        notifyInfo(cancelMessage);
+        showInfo(cancelMessage);
     }
 
     return {

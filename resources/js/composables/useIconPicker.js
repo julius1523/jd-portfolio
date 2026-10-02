@@ -1,5 +1,6 @@
 import { ref } from "vue";
 import axios from "@/plugins/axios";
+import { useSnackBarQueue } from "@/composables/useSnackBarQueue";
 
 function debounce(fn, delay = 300) {
     let timer;
@@ -10,6 +11,7 @@ function debounce(fn, delay = 300) {
 }
 
 export function useIconPicker(perPage = 60, initialSets = ["mdi"]) {
+    const { error: showError } = useSnackBarQueue();
     const icons = ref([]);
     const search = ref("");
     const sets = ref([...initialSets]);
@@ -33,8 +35,9 @@ export function useIconPicker(perPage = 60, initialSets = ["mdi"]) {
             icons.value = reset ? data.data : [...icons.value, ...data.data];
             total.value = data.total;
         } catch (e) {
-            console.error("Failed to fetch icons:", e);
+            showError(e.response?.data?.message ?? "Failed to fetch icons.");
             if (reset) icons.value = [];
+            else if (page.value > 1) page.value--;
         } finally {
             loading.value = false;
         }

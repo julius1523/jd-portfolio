@@ -12,6 +12,7 @@ import tooltipPlugin from "@/plugins/tooltip";
 import { Shimmer } from "@shimmer-from-structure/vue";
 import { historyGuard } from "@/router/guard";
 import { useSystemSettingsStore } from "@/stores/systemSettings";
+import allowChars from "@/src/directives/allowChars";
 
 const app = createApp(App);
 const pinia = createPinia();
@@ -21,18 +22,15 @@ app.use(pinia);
 app.use(vuetify);
 app.use(router);
 app.use(tooltipPlugin);
+app.directive("allow-chars", allowChars);
 historyGuard(router);
 
 const settingsStore = useSystemSettingsStore();
+const hydrated = settingsStore.hydrate();
 
 Promise.all([
     router.isReady(),
-    settingsStore.fetch(),
-    Promise.all([
-        document.fonts.load("400 1em Roboto"),
-        document.fonts.load("500 1em Roboto"),
-        document.fonts.load("700 1em Roboto"),
-    ]).catch(() => {}),
+    hydrated ? Promise.resolve() : settingsStore.fetch(),
 ]).then(() => {
     app.mount("#app");
 });

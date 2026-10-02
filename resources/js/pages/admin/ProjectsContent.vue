@@ -81,7 +81,7 @@
                             @add="openDialog()" @edit="openDialog($event)" @remove="removeItem($event)">
                             <template #item.image="{ item }">
                                 <v-img v-if="projectImagePreview(item)" height="48" width="48" :aspect-ratio="1" rounded
-                                    :src="projectImagePreview(item)" class="border [&_img]:object-fill"
+                                    :src="projectImagePreview(item)" class="border"
                                     :class="$vuetify.display.mdAndUp ? 'mx-auto' : 'ml-auto'" />
                                 <span v-else class="text-medium-emphasis">—</span>
                             </template>

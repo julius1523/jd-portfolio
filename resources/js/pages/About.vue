@@ -11,7 +11,7 @@
                             <div class="text-headline-small reveal-item">
                                 {{ data.heading }}
                             </div>
-                            <div class="text-medium-emphasis whitespace-pre-line reveal-item">
+                            <div class="text-medium-emphasis font-weight-light whitespace-pre-line reveal-item">
                                 {{ data.description }}
                             </div>
                         </div>
@@ -19,7 +19,7 @@
                     <v-col cols="12" md="5" class="d-flex">
                         <v-img :src="data.profileImage?.url" :position="$vuetify.display.mdAndUp ? 'right' : 'center'"
                             aspect-ratio="1" alt="About Character Image"
-                            class="clamped-img [--img-min-h:180px] [--img-max-h:285px] fade-bottom reveal-item" />
+                            class="clamped-img [--img-min-h:180px] [--img-max-h:220px] lg:[--img-max-h:285px] fade-bottom reveal-item" />
                     </v-col>
                 </v-row>
             </v-container>
@@ -89,7 +89,7 @@
                         </div>
                     </div>
                     <v-row>
-                        <v-col cols="12" class="text-center whitespace-pre-line reveal-item">
+                        <v-col cols="12" class="text-center font-weight-light whitespace-pre-line reveal-item">
                             {{ data.others?.description }}
                         </v-col>
                         <v-col cols="12">

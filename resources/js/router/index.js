@@ -1,12 +1,6 @@
-import {
-    createRouter,
-    createWebHistory,
-    isNavigationFailure,
-    START_LOCATION,
-} from "vue-router";
+import { createRouter, createWebHistory, START_LOCATION } from "vue-router";
 import routes from "./routes";
 import { resolveAuthRedirect } from "@/middleware/auth";
-import { useSystemSettingsStore } from "@/stores/systemSettings";
 import { scrollGate, trackScroll, readReloadScroll } from "./scrollGate";
 
 const router = createRouter({
@@ -50,16 +44,6 @@ router.beforeEach(async (to) => {
     try {
         await store.fetch();
     } catch (err) {}
-});
-
-router.afterEach((to, from, failure) => {
-    if (isNavigationFailure(failure)) return;
-
-    const settingsStore = useSystemSettingsStore();
-    const systemName = settingsStore.systemName ?? window.__APP_NAME__;
-    const pageTitle = to.meta?.title;
-
-    document.title = pageTitle ? `${pageTitle} | ${systemName}` : systemName;
 });
 
 export default router;

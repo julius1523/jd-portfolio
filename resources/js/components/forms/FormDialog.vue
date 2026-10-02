@@ -34,7 +34,7 @@ function onCancel() {
                         {{ isEditing ? editTitle : addTitle }}
                     </span>
                     <div class="flex justify-end">
-                        <v-icon icon="i-mdi-close" size="small" class="me-[18px]" @click="onCancel"
+                        <v-icon icon="i-mdi-close" size="small" class="me-[20px]" @click="onCancel"
                             v-tooltip="{ text: 'Close' }" />
                     </div>
                 </div>
@@ -46,7 +46,7 @@ function onCancel() {
                 <slot />
             </OverlayScrollbarsComponent>
 
-            <v-card-actions class="pa-[15px] mt-auto border-t flex-column flex-sm-row">
+            <v-card-actions class="py-[15px] px-[20px] mt-auto border-t flex-column flex-sm-row">
                 <div class="order-1 order-sm-0" :class="{ 'w-100': $vuetify.display.smAndDown }">
                     <v-btn variant="flat" color="surface-light" height="40" block :slim="false" rounded="pill"
                         class="border" @click="onCancel">

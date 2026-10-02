@@ -11,7 +11,7 @@
                             <div class="text-headline-small reveal-item">
                                 {{ data.heading }}
                             </div>
-                            <div class="text-medium-emphasis whitespace-pre-line reveal-item">
+                            <div class="font-weight-light whitespace-pre-line reveal-item">
                                 {{ data.description }}
                             </div>
                         </div>
@@ -29,7 +29,7 @@
                     <v-col cols="12" md="5">
                         <v-img :src="data.profileImage?.url" :position="$vuetify.display.mdAndUp ? 'right' : 'center'"
                             aspect-ratio="1" alt="Contact Character Image"
-                            class="clamped-img [--img-min-h:180px] [--img-max-h:285px] fade-bottom reveal-item" />
+                            class="clamped-img [--img-min-h:180px] [--img-max-h:220px] lg:[--img-max-h:285px] fade-bottom reveal-item" />
                     </v-col>
                 </v-row>
             </v-container>

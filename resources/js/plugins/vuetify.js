@@ -2,7 +2,7 @@ import "vuetify/styles";
 import { h } from "vue";
 import { createVuetify } from "vuetify";
 import { aliases, mdi } from "vuetify/iconsets/mdi-unocss";
-
+const primary = window.__SYSTEM_SETTINGS__?.systemColor ?? "#1976D2";
 const savedTheme = localStorage.getItem("theme") ?? "dark";
 const unoIcons = {
     component: (props) =>
@@ -23,6 +23,7 @@ export default createVuetify({
             light: {
                 dark: false,
                 colors: {
+                    primary,
                     "surface-light": "#f5f5f7",
                     grey: "#757575",
                 },
@@ -30,6 +31,7 @@ export default createVuetify({
             dark: {
                 dark: true,
                 colors: {
+                    primary,
                     background: "#1e1e1e",
                     surface: "#1e1e1e",
                     "surface-light": "#232323",
@@ -39,15 +41,12 @@ export default createVuetify({
         },
     },
     defaults: {
-        global: {
-            ripple: false,
-        },
+        global: { ripple: false },
         VBtn: { style: { webkitUserDrag: "none" } },
         VListItem: { style: { webkitUserDrag: "none" } },
         VChip: { style: { userSelect: "none" } },
         VImg: { draggable: false },
         VAppBar: { style: { userSelect: "none" } },
-        VCarousel: { style: { height: "100%" } },
         VCardTitle: { style: { textWrap: "wrap" } },
         VNavigationDrawer: { style: { userSelect: "none" } },
         VFileUploadItem: {

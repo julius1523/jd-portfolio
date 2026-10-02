@@ -23,7 +23,7 @@
 </template>
 
 <script setup>
-import { watch, computed, defineAsyncComponent, watchEffect, nextTick } from "vue";
+import { watch, computed, defineAsyncComponent, nextTick, watchEffect } from "vue";
 import { useTheme, useDisplay } from "vuetify";
 import { useRoute } from "vue-router";
 import { useThemeStore } from "@/stores/theme";
@@ -33,23 +33,15 @@ import { useSystemColor } from "@/composables/useSystemColor";
 import { useScrollToTop } from "@/composables/useScrollToTop";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { scrollGate } from "@/router/scrollGate";
+import { useSystemSettingsStore } from "@/stores/systemSettings";
 import appbar from "@/components/layout/AppBar";
 import sidebar from "@/components/layout/SideBar";
 import footr from "@/components/layout/Footer";
 
 const snackbar = defineAsyncComponent(() => import("@/components/ui/SnackBarQueue"));
 const confirm = defineAsyncComponent(() => import("@/components/ui/ConfirmDialog"));
-
-useSystemColor();
-
-provideShimmerConfig({
-    shimmerColor: "rgba(156, 163, 175, 0.4)",
-    backgroundColor: "rgba(156, 163, 175, 0.15)",
-    duration: 1.5,
-    fallbackBorderRadius: 8,
-});
-
 const route = useRoute();
+const settings = useSystemSettingsStore();
 const theme = useTheme();
 const themeStore = useThemeStore();
 const { smAndDown } = useDisplay();
@@ -62,13 +54,20 @@ const showSidebar = computed(
         (layoutType.value === "app" || smAndDown.value)
 );
 const showFooter = computed(() => layoutType.value === "public");
-
 const onEnter = () => {
     nextTick(() => {
         ScrollTrigger.refresh();
         scrollGate.open();
     });
 };
+
+useSystemColor();
+provideShimmerConfig({
+    shimmerColor: "rgba(156, 163, 175, 0.4)",
+    backgroundColor: "rgba(156, 163, 175, 0.15)",
+    duration: 1.5,
+    fallbackBorderRadius: 8,
+});
 
 watch(
     () => themeStore.isDark,
@@ -79,5 +78,11 @@ watchEffect(() => {
     const bg = theme.current.value.colors.background;
     document.documentElement.style.backgroundColor = bg;
     document.body.style.backgroundColor = bg;
+});
+
+watchEffect(() => {
+    const name = settings.systemName ?? "Portfolio";
+    const pageTitle = route.meta?.title;
+    document.title = pageTitle ? `${pageTitle} | ${name}` : name;
 });
 </script>

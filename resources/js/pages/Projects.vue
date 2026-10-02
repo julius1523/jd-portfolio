@@ -70,8 +70,12 @@
                                 class="reveal-item">
                                 <v-card flat border class="rounded-[18px] flex flex-col cursor-pointer"
                                     @click="openProject(project)">
-                                    <v-img :src="project.image?.url" :alt="`${project.name} preview`" aspect-ratio="4/3"
-                                        cover />
+                                    <v-img :src="project.image?.url" :alt="`${project.name} preview`"
+                                        class="w-full aspect-[4/3]" cover>
+                                        <template #placeholder>
+                                            <v-skeleton-loader type="image" class="h-full" />
+                                        </template>
+                                    </v-img>
 
                                     <div class="flex flex-col gap-3 pa-5">
                                         <div class="text-title-large font-medium truncate">

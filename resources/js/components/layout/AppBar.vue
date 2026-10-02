@@ -23,6 +23,8 @@ const links = [
     { title: "Contact", to: "contact" },
 ];
 const toggleTheme = (e) => {
+    if (menuOpen.value) layout.toggleDrawer();
+
     theme.setTransitionOrigin(e.target);
     themeStore.setDark(!themeStore.isDark);
 };
@@ -45,7 +47,10 @@ function onScroll() {
 
 <template>
     <v-app-bar v-scroll="onScroll" app flat :order="1" density="comfortable" class="px-1" :class="[
-        layoutType === 'app' ? 'border-b' : [menuOpen ? 'bg-surface' : 'bg-transparent', 'topbar !z-[1011]']]">
+        layoutType === 'app'
+            ? 'border-b'
+            : [menuOpen ? 'bg-surface' : 'bg-background', 'topbar !z-[1011]', { 'border-b': scrolled }]
+    ]">
         <template v-slot:prepend v-if="!isAppLayout">
             <router-link :to="{ name: 'home' }">
                 <v-img v-if="systemSettings.systemLogo?.url" :src="systemSettings.systemLogo.url" height="38" width="38"
@@ -67,7 +72,7 @@ function onScroll() {
         <template v-slot:append v-if="!isAppLayout">
             <div class="d-flex ga-1 align-center">
                 <v-toolbar v-if="$vuetify.display.mdAndUp" color="surface" height="38" location="top end" floating
-                    rounded="pill" border>
+                    rounded="pill">
                     <div class="d-flex ga-1">
                         <v-btn v-for="link in links" :key="link.to" height="32" active-color="primary" rounded="pill"
                             :text="link.title" :to="{ name: link.to }" />
@@ -90,7 +95,7 @@ function onScroll() {
     <v-overlay v-if="!isAppLayout" :model-value="menuOpen" persistent no-click-animation :scrim="false"
         scroll-strategy="block" location-strategy="static" transition="fade-transition" :z-index="1010"
         content-class="w-100 h-100">
-        <v-list density="compact" nav class="h-100 w-100 px-[18px] overflow-y-auto pt-[85px]">
+        <v-list density="compact" nav class="h-100 w-100 px-[13px] overflow-y-auto pt-[85px]">
             <v-list-item v-for="link in links" :key="link.to" :to="{ name: link.to }" exact color="primary"
                 rounded="pill" class="text-center">
                 <template #title>

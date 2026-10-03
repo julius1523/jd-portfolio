@@ -54,7 +54,7 @@ const schema = yup.object({
 });
 const { fields, errors, loading, submit, ready, valid } = useValidatedForm(schema, async (values) => {
     await auth.login(values);
-    router.replace({ name: 'manage-content' });
+    router.replace({ name: 'dashboard' });
 },
     { resetOnSuccess: false, useAlertForErrors: true }
 );
@@ -67,6 +67,6 @@ onMounted(async () => {
     const { reason } = route.query;
     if (reason === 'session_expired') warning('Your session has expired. Please log in again.');
     else if (reason === 'unauthenticated') error('You are unauthenticated. Please log in again.');
-    if (reason) router.replace({ name: 'login' });
+    if (reason) router.replace({ name: 'dashboard' });
 });
 </script>

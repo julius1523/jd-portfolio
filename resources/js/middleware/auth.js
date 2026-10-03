@@ -6,7 +6,7 @@ export function resolveAuthRedirect(route) {
     switch (route.meta.middleware) {
         case "guest":
             if (auth.isAuthenticated) {
-                return { name: "manage-content" };
+                return { name: "dashboard" };
             }
             break;
 

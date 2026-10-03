@@ -1,87 +1,82 @@
 <template>
     <v-container>
+        <div class="inline-flex text-headline-medium font-semibold mb-4">
+            {{ route.meta.title }}
+        </div>
         <Shimmer :loading="pageLoading">
-            <v-card flat class="pa-1 rounded-[10px]">
-                <v-form @submit.prevent="submit" :disabled="loading">
-                    <div class="d-flex flex-column ga-16">
-                        <div>
-                            <div class="d-inline-flex flex-column ga-1 mb-4">
-                                <div class="text-title-medium font-semibold">System Settings</div>
-                                <div class="text-title-small opacity-60">
-                                    Update what and how your system should look
+            <v-form @submit.prevent="submit" :disabled="loading">
+                <div class="d-flex flex-column ga-16">
+                    <div>
+                        <div class="d-flex flex-column ga-4">
+                            <v-card class="p-5 shadow-sm border rounded-[12px]">
+                                <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                                    <div class="sm:shrink-0 text-label-large font-medium">
+                                        System Logo
+                                    </div>
+                                    <div class="w-full sm:flex-1 sm:max-w-md sm:ml-auto min-w-0">
+                                        <div class="d-flex justify-center justify-sm-end">
+                                            <AvatarUpload v-model="fields.systemLogo" :disabled="loading" :max-size="1"
+                                                :size="160" />
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="d-flex flex-column ga-4">
-                                <v-card class="p-5 shadow-sm border rounded-[12px]">
-                                    <div class="flex flex-col sm:flex-row sm:items-center gap-4">
-                                        <div class="sm:shrink-0 text-label-large font-medium">
-                                            System Logo
-                                        </div>
-                                        <div class="w-full sm:flex-1 sm:max-w-md sm:ml-auto min-w-0">
-                                            <div class="d-flex justify-center justify-sm-end">
-                                                <AvatarUpload v-model="fields.systemLogo" :disabled="loading"
-                                                    :max-size="1" :size="160" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </v-card>
+                            </v-card>
 
-                                <v-card class="p-5 shadow-sm border rounded-[12px]">
-                                    <div class="flex flex-col sm:flex-row sm:items-center gap-4">
-                                        <div class="sm:shrink-0 text-label-large font-medium">
-                                            System Name
-                                        </div>
-                                        <div class="w-full sm:flex-1 sm:max-w-md sm:ml-auto min-w-0">
-                                            <v-text-field v-model="fields.systemName" color="primary" variant="solo"
-                                                flat label="System Name" density="compact" single-line clearable
-                                                :error-messages="errors.systemName" autocomplete="off"
-                                                class="vfield-outline" hide-details="auto" data-shimmer-no-children />
-                                        </div>
+                            <v-card class="p-5 shadow-sm border rounded-[12px]">
+                                <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                                    <div class="sm:shrink-0 text-label-large font-medium">
+                                        System Name
                                     </div>
-                                </v-card>
+                                    <div class="w-full sm:flex-1 sm:max-w-md sm:ml-auto min-w-0">
+                                        <v-text-field v-model="fields.systemName" color="primary" variant="solo" flat
+                                            label="System Name" density="compact" single-line clearable
+                                            :error-messages="errors.systemName" autocomplete="off"
+                                            class="vfield-outline" hide-details="auto" data-shimmer-no-children />
+                                    </div>
+                                </div>
+                            </v-card>
 
-                                <v-card class="p-5 shadow-sm border rounded-[12px]">
-                                    <div class="flex flex-col sm:flex-row sm:items-center gap-4">
-                                        <div class="sm:shrink-0 text-label-large font-medium">
-                                            System Owner Name
-                                        </div>
-                                        <div class="w-full sm:flex-1 sm:max-w-md sm:ml-auto min-w-0">
-                                            <v-text-field v-model="fields.systemOwner" color="primary" variant="solo"
-                                                flat label="Owner" density="compact" single-line clearable
-                                                :error-messages="errors.systemOwner" autocomplete="off"
-                                                class="vfield-outline" hide-details="auto" data-shimmer-no-children />
-                                        </div>
+                            <v-card class="p-5 shadow-sm border rounded-[12px]">
+                                <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                                    <div class="sm:shrink-0 text-label-large font-medium">
+                                        System Owner Name
                                     </div>
-                                </v-card>
+                                    <div class="w-full sm:flex-1 sm:max-w-md sm:ml-auto min-w-0">
+                                        <v-text-field v-model="fields.systemOwner" color="primary" variant="solo" flat
+                                            label="Owner" density="compact" single-line clearable
+                                            :error-messages="errors.systemOwner" autocomplete="off"
+                                            class="vfield-outline" hide-details="auto" data-shimmer-no-children />
+                                    </div>
+                                </div>
+                            </v-card>
 
-                                <v-card class="p-5 shadow-sm border rounded-[12px]">
-                                    <div class="flex flex-col sm:flex-row sm:items-center gap-4">
-                                        <div class="sm:shrink-0 text-label-large font-medium">
-                                            System Theme Color
-                                        </div>
-                                        <div class="w-full sm:flex-1 sm:max-w-md sm:ml-auto min-w-0">
-                                            <v-text-field ref="colorField" v-model="fields.systemColor" color="primary"
-                                                variant="solo" flat density="compact"
-                                                :error-messages="errors.systemColor" autocomplete="off"
-                                                class="vfield-outline" hide-details="auto" data-shimmer-no-children>
-                                                <template #prepend-inner>
-                                                    <v-icon icon="i-mdi-circle" :color="fields.systemColor" size="20" />
-                                                </template>
-                                                <template #append-inner>
-                                                    <ColorPicker v-model="fields.systemColor" :anchor="colorTarget"
-                                                        location="bottom end" />
-                                                </template>
-                                            </v-text-field>
-                                        </div>
+                            <v-card class="p-5 shadow-sm border rounded-[12px]">
+                                <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                                    <div class="sm:shrink-0 text-label-large font-medium">
+                                        System Theme Color
                                     </div>
-                                </v-card>
-                            </div>
+                                    <div class="w-full sm:flex-1 sm:max-w-md sm:ml-auto min-w-0">
+                                        <v-text-field ref="colorField" v-model="fields.systemColor" color="primary"
+                                            variant="solo" flat density="compact" :error-messages="errors.systemColor"
+                                            autocomplete="off" class="vfield-outline" hide-details="auto"
+                                            data-shimmer-no-children>
+                                            <template #prepend-inner>
+                                                <v-icon icon="i-mdi-circle" :color="fields.systemColor" size="20" />
+                                            </template>
+                                            <template #append-inner>
+                                                <ColorPicker v-model="fields.systemColor" :anchor="colorTarget"
+                                                    location="bottom end" />
+                                            </template>
+                                        </v-text-field>
+                                    </div>
+                                </div>
+                            </v-card>
                         </div>
                     </div>
+                </div>
 
-                    <FormActions :dirty="meta.dirty" :ready="ready" :loading="loading" @cancel="cancelEdit" />
-                </v-form>
-            </v-card>
+                <FormActions :dirty="meta.dirty" :ready="ready" :loading="loading" @cancel="cancelEdit" />
+            </v-form>
         </Shimmer>
     </v-container>
 </template>
@@ -89,6 +84,7 @@
 <script setup>
 import axios from "@/plugins/axios";
 import { ref, computed, onMounted } from "vue";
+import { useRoute } from "vue-router";
 import * as yup from "yup";
 import { useSystemSettingsStore } from "@/stores/systemSettings";
 import { useValidatedForm } from "@/composables/useValidatedForm";
@@ -97,6 +93,7 @@ import ColorPicker from "@/components/forms/ColorPicker";
 import AvatarUpload from "@/components/forms/AvatarUpload";
 import FormActions from "@/components/forms/FormActions";
 
+const route = useRoute();
 const schema = yup.object({
     systemLogo: yup.mixed().label("System Logo").nullable(),
     systemName: yup.string().label("System Name").required(),

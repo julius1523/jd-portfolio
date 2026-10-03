@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Public\TrackVisitController;
 use App\Http\Controllers\Public\ContactController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\IconController;
@@ -18,28 +20,24 @@ Route::get('/health-check', function () {
     return response()->json(['status' => 'ok']);
 });
 
-Route::post('/contact', [ContactController::class, 'send']);
-
-// Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/track', TrackVisitController::class)->middleware('throttle:track');
+Route::post('/contact', [ContactController::class, 'send'])->middleware('throttle:contact');
+Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:login');
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', fn(Request $request) => $request->user()->only(['name', 'email']));
     Route::post('/logout', [AuthController::class, 'logout']);
-
     Route::get('/icons/getIcons', [IconController::class, 'getIcons']);
-
     Route::get('/getHomeContent', [HomeContentController::class, 'getHomeContent']);
     Route::post('/updateHomeContent', [HomeContentController::class, 'updateHomeContent']);
+    Route::get('/getDashboard', [DashboardController::class, 'getDashboard']);
     Route::get('/getAboutContent', [AboutContentController::class, 'getAboutContent']);
     Route::post('/updateAboutContent', [AboutContentController::class, 'updateAboutContent']);
     Route::get('/getProjectContent', [ProjectsContentController::class, 'getProjectContent']);
     Route::post('/updateProjectContent', [ProjectsContentController::class, 'updateProjectContent']);
     Route::get('/getContactContent', [ContactContentController::class, 'getContactContent']);
     Route::post('/updateContactContent', [ContactContentController::class, 'updateContactContent']);
-
     Route::post('/updateSystemSettings', [SystemSettingsController::class, 'updateSystemSettings']);
-
     Route::get('/getAccountSettings', [AccountSettingsController::class, 'getAccountSettings']);
     Route::post('/updateAccountSettings', [AccountSettingsController::class, 'updateAccountSettings']);
 });
@@ -48,5 +46,4 @@ Route::get('/public/home', [HomeContentController::class, 'getHomeContent']);
 Route::get('/public/about', [AboutContentController::class, 'getAboutContent']);
 Route::get('/public/projects', [ProjectsContentController::class, 'getProjectContent']);
 Route::get('/public/contact', [ContactContentController::class, 'getContactContent']);
-
 Route::get('/getSystemSettings', [SystemSettingsController::class, 'getSystemSettings']);

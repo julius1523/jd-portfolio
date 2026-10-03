@@ -1,158 +1,156 @@
 <template>
     <Shimmer :loading="pageLoading">
-        <v-card flat class="pa-1 mt-8 rounded-[10px]">
-            <v-form @submit.prevent="submit" :disabled="loading">
-                <div class="d-flex flex-column ga-16">
-                    <div>
-                        <div class="d-inline-flex flex-column ga-1 mb-4">
-                            <div class="text-title-medium font-semibold">Profile Image</div>
-                            <div class="text-title-small opacity-60">
-                                Update your profile image to display to your home page
+        <v-form @submit.prevent="submit" :disabled="loading">
+            <div class="d-flex flex-column ga-16 mt-8">
+                <div>
+                    <div class="d-inline-flex flex-column ga-1 mb-4">
+                        <div class="text-title-medium font-semibold">Profile Image</div>
+                        <div class="text-title-small opacity-60">
+                            Update your profile image to display to your home page
+                        </div>
+                    </div>
+                    <v-card class="p-5 shadow-sm border rounded-[12px]">
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                            <div class="sm:shrink-0 text-label-large font-medium">
+                                Image
+                            </div>
+                            <div class="w-full sm:flex-1 sm:max-w-md sm:ml-auto min-w-0">
+                                <div class="d-flex justify-center justify-sm-end">
+                                    <AvatarUpload v-model="fields.profileImage" :disabled="loading" :max-size="1"
+                                        :size="160" />
+                                </div>
                             </div>
                         </div>
+                    </v-card>
+                </div>
+
+                <div>
+                    <div class="d-inline-flex flex-column ga-1 mb-4">
+                        <div class="text-title-medium font-semibold">
+                            Text
+                        </div>
+                        <div class="text-title-small opacity-60">
+                            Update what users can see and read from your site
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-column ga-4">
                         <v-card class="p-5 shadow-sm border rounded-[12px]">
                             <div class="flex flex-col sm:flex-row sm:items-center gap-4">
                                 <div class="sm:shrink-0 text-label-large font-medium">
-                                    Image
+                                    Heading
                                 </div>
                                 <div class="w-full sm:flex-1 sm:max-w-md sm:ml-auto min-w-0">
-                                    <div class="d-flex justify-center justify-sm-end">
-                                        <AvatarUpload v-model="fields.profileImage" :disabled="loading" :max-size="1"
-                                            :size="160" />
-                                    </div>
+                                    <v-text-field v-model="fields.heading" color="primary" variant="solo" flat
+                                        single-line density="compact" clearable :error-messages="errors.heading"
+                                        autocomplete="off" class="vfield-outline" hide-details="auto"
+                                        data-shimmer-no-children />
+                                </div>
+                            </div>
+                        </v-card>
+
+                        <v-card class="p-5 shadow-sm border rounded-[12px]">
+                            <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                                <div class="sm:shrink-0 text-label-large font-medium">
+                                    Subheading
+                                </div>
+                                <div class="w-full sm:flex-1 sm:max-w-md sm:ml-auto min-w-0">
+                                    <Select v-model="fields.subheading" :items="subHeadingItems" label="Subheading"
+                                        variant="solo" flat single-line density="compact" :chip="false"
+                                        :error-messages="errors.subheading" hide-details="auto"
+                                        data-shimmer-no-children />
+                                </div>
+                            </div>
+                        </v-card>
+
+                        <v-card class="p-5 shadow-sm border rounded-[12px]">
+                            <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                                <div class="sm:shrink-0 text-label-large font-medium">
+                                    Description
+                                </div>
+                                <div class="w-full sm:flex-1 sm:max-w-md sm:ml-auto min-w-0">
+                                    <v-textarea v-model="fields.description" rows="3" color="primary" auto-grow
+                                        variant="solo" flat single-line label="Description" density="compact"
+                                        :error-messages="errors.description" autocomplete="off" class="vfield-outline"
+                                        hide-details="auto" data-shimmer-no-children />
                                 </div>
                             </div>
                         </v-card>
                     </div>
-
-                    <div>
-                        <div class="d-inline-flex flex-column ga-1 mb-4">
-                            <div class="text-title-medium font-semibold">
-                                Text
-                            </div>
-                            <div class="text-title-small opacity-60">
-                                Update what users can see and read from your site
-                            </div>
-                        </div>
-
-                        <div class="d-flex flex-column ga-4">
-                            <v-card class="p-5 shadow-sm border rounded-[12px]">
-                                <div class="flex flex-col sm:flex-row sm:items-center gap-4">
-                                    <div class="sm:shrink-0 text-label-large font-medium">
-                                        Heading
-                                    </div>
-                                    <div class="w-full sm:flex-1 sm:max-w-md sm:ml-auto min-w-0">
-                                        <v-text-field v-model="fields.heading" color="primary" variant="solo" flat
-                                            single-line density="compact" clearable :error-messages="errors.heading"
-                                            autocomplete="off" class="vfield-outline" hide-details="auto"
-                                            data-shimmer-no-children />
-                                    </div>
-                                </div>
-                            </v-card>
-
-                            <v-card class="p-5 shadow-sm border rounded-[12px]">
-                                <div class="flex flex-col sm:flex-row sm:items-center gap-4">
-                                    <div class="sm:shrink-0 text-label-large font-medium">
-                                        Subheading
-                                    </div>
-                                    <div class="w-full sm:flex-1 sm:max-w-md sm:ml-auto min-w-0">
-                                        <Select v-model="fields.subheading" :items="subHeadingItems" label="Subheading"
-                                            variant="solo" flat single-line density="compact" :chip="false"
-                                            :error-messages="errors.subheading" hide-details="auto"
-                                            data-shimmer-no-children />
-                                    </div>
-                                </div>
-                            </v-card>
-
-                            <v-card class="p-5 shadow-sm border rounded-[12px]">
-                                <div class="flex flex-col sm:flex-row sm:items-center gap-4">
-                                    <div class="sm:shrink-0 text-label-large font-medium">
-                                        Description
-                                    </div>
-                                    <div class="w-full sm:flex-1 sm:max-w-md sm:ml-auto min-w-0">
-                                        <v-textarea v-model="fields.description" rows="3" color="primary" auto-grow
-                                            variant="solo" flat single-line label="Description" density="compact"
-                                            :error-messages="errors.description" autocomplete="off"
-                                            class="vfield-outline" hide-details="auto" data-shimmer-no-children />
-                                    </div>
-                                </div>
-                            </v-card>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="d-inline-flex flex-column ga-1 mb-4">
-                            <div class="text-title-medium font-semibold">
-                                Buttons
-                            </div>
-                            <div class="text-title-small opacity-60">
-                                Update the contents of your buttons
-                            </div>
-                        </div>
-
-                        <div class="d-flex flex-column ga-4">
-                            <v-card class="p-5 shadow-sm border rounded-[12px]">
-                                <div class="flex flex-col sm:flex-row sm:items-center gap-4">
-                                    <div class="sm:shrink-0 text-label-large font-medium">
-                                        Primary Button Text
-                                    </div>
-                                    <div class="w-full sm:flex-1 sm:max-w-md sm:ml-auto min-w-0">
-                                        <v-text-field v-model="fields.primaryBtnText" color="primary" variant="solo"
-                                            flat single-line label="Primary Button Text" density="compact" clearable
-                                            :error-messages="errors.primaryBtnText" autocomplete="off"
-                                            class="vfield-outline" hide-details="auto" data-shimmer-no-children />
-                                    </div>
-                                </div>
-                            </v-card>
-
-                            <v-card class="p-5 shadow-sm border rounded-[12px]">
-                                <div class="flex flex-col sm:flex-row sm:items-center gap-4">
-                                    <div class="sm:shrink-0 text-label-large font-medium">
-                                        Primary Button Link
-                                    </div>
-                                    <div class="w-full sm:flex-1 sm:max-w-md sm:ml-auto min-w-0">
-                                        <v-text-field v-model="fields.primaryBtnLink" color="primary" variant="solo"
-                                            flat single-line label="Primary Button Link" density="compact" clearable
-                                            :error-messages="errors.primaryBtnLink" autocomplete="off"
-                                            class="vfield-outline" hide-details="auto" data-shimmer-no-children />
-                                    </div>
-                                </div>
-                            </v-card>
-
-                            <v-card class="p-5 shadow-sm border rounded-[12px]">
-                                <div class="flex flex-col sm:flex-row sm:items-center gap-4">
-                                    <div class="sm:shrink-0 text-label-large font-medium">
-                                        Secondary Button Text
-                                    </div>
-                                    <div class="w-full sm:flex-1 sm:max-w-md sm:ml-auto min-w-0">
-                                        <v-text-field v-model="fields.secondaryBtnText" color="primary" variant="solo"
-                                            flat single-line label="Secondary Button Text" density="compact" clearable
-                                            :error-messages="errors.secondaryBtnText" autocomplete="off"
-                                            class="vfield-outline" hide-details="auto" data-shimmer-no-children />
-                                    </div>
-                                </div>
-                            </v-card>
-
-                            <v-card class="p-5 shadow-sm border rounded-[12px]">
-                                <div class="flex flex-col sm:flex-row sm:items-center gap-4">
-                                    <div class="sm:shrink-0 text-label-large font-medium">
-                                        Secondary Button File
-                                    </div>
-                                    <div class="w-full sm:flex-1 sm:max-w-md sm:ml-auto min-w-0">
-                                        <FileUpload v-model="fields.secondaryBtnFile" file-type="pdf" :max-files="1"
-                                            inset :disabled="loading" :show-size="true" density="comfortable"
-                                            :hide-browse="true" :error-messages="errors.secondaryBtnFile"
-                                            hide-details="auto" data-shimmer-no-children />
-                                    </div>
-                                </div>
-                            </v-card>
-                        </div>
-                    </div>
                 </div>
 
-                <FormActions :dirty="meta.dirty" :ready="ready" :loading="loading" @cancel="cancelEdit" />
-            </v-form>
-        </v-card>
+                <div>
+                    <div class="d-inline-flex flex-column ga-1 mb-4">
+                        <div class="text-title-medium font-semibold">
+                            Buttons
+                        </div>
+                        <div class="text-title-small opacity-60">
+                            Update the contents of your buttons
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-column ga-4">
+                        <v-card class="p-5 shadow-sm border rounded-[12px]">
+                            <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                                <div class="sm:shrink-0 text-label-large font-medium">
+                                    Primary Button Text
+                                </div>
+                                <div class="w-full sm:flex-1 sm:max-w-md sm:ml-auto min-w-0">
+                                    <v-text-field v-model="fields.primaryBtnText" color="primary" variant="solo" flat
+                                        single-line label="Primary Button Text" density="compact" clearable
+                                        :error-messages="errors.primaryBtnText" autocomplete="off"
+                                        class="vfield-outline" hide-details="auto" data-shimmer-no-children />
+                                </div>
+                            </div>
+                        </v-card>
+
+                        <v-card class="p-5 shadow-sm border rounded-[12px]">
+                            <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                                <div class="sm:shrink-0 text-label-large font-medium">
+                                    Primary Button Link
+                                </div>
+                                <div class="w-full sm:flex-1 sm:max-w-md sm:ml-auto min-w-0">
+                                    <v-text-field v-model="fields.primaryBtnLink" color="primary" variant="solo" flat
+                                        single-line label="Primary Button Link" density="compact" clearable
+                                        :error-messages="errors.primaryBtnLink" autocomplete="off"
+                                        class="vfield-outline" hide-details="auto" data-shimmer-no-children />
+                                </div>
+                            </div>
+                        </v-card>
+
+                        <v-card class="p-5 shadow-sm border rounded-[12px]">
+                            <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                                <div class="sm:shrink-0 text-label-large font-medium">
+                                    Secondary Button Text
+                                </div>
+                                <div class="w-full sm:flex-1 sm:max-w-md sm:ml-auto min-w-0">
+                                    <v-text-field v-model="fields.secondaryBtnText" color="primary" variant="solo" flat
+                                        single-line label="Secondary Button Text" density="compact" clearable
+                                        :error-messages="errors.secondaryBtnText" autocomplete="off"
+                                        class="vfield-outline" hide-details="auto" data-shimmer-no-children />
+                                </div>
+                            </div>
+                        </v-card>
+
+                        <v-card class="p-5 shadow-sm border rounded-[12px]">
+                            <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                                <div class="sm:shrink-0 text-label-large font-medium">
+                                    Secondary Button File
+                                </div>
+                                <div class="w-full sm:flex-1 sm:max-w-md sm:ml-auto min-w-0">
+                                    <FileUpload v-model="fields.secondaryBtnFile" file-type="pdf" :max-files="1" inset
+                                        :disabled="loading" :show-size="true" density="comfortable" :hide-browse="true"
+                                        :error-messages="errors.secondaryBtnFile" hide-details="auto"
+                                        data-shimmer-no-children />
+                                </div>
+                            </div>
+                        </v-card>
+                    </div>
+                </div>
+            </div>
+
+            <FormActions :dirty="meta.dirty" :ready="ready" :loading="loading" @cancel="cancelEdit" />
+        </v-form>
     </Shimmer>
 </template>
 

@@ -69,6 +69,16 @@ export default [
         },
     },
     {
+        path: "/dashboard",
+        name: "dashboard",
+        component: page("admin/Dashboard"),
+        meta: {
+            title: "Dashboard",
+            middleware: "auth",
+            layout: "app",
+        },
+    },
+    {
         path: "/manage-content/:tab?",
         name: "manage-content",
         component: page("admin/ManageContent"),

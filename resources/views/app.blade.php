@@ -10,9 +10,6 @@
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <title>{{ $settings['systemName'] }}</title>
 
-    <script defer src="https://cloud.umami.is/script.js"
-        data-website-id="af43aa23-ee8d-4988-85ee-504b83234836"></script>
-
     <style>
         @layer vuetify-core, vuetify-components, vuetify-overrides, vuetify-utilities, uno, vuetify-final;
     </style>

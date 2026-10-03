@@ -14,6 +14,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->statefulApi();
+        $middleware->preventRequestForgery(except: [
+            'api/track',
+        ]);
         $middleware->trustProxies(
             at: '*',
             headers: SymfonyRequest::HEADER_X_FORWARDED_FOR |

@@ -18,7 +18,7 @@
                         <div class="d-flex flex-row justify-center justify-md-start ga-3 my-4 my-md-10">
                             <div v-for="item in data.socials" :key="item.linkUrl" class="reveal-item">
                                 <v-icon-btn icon variant="tonal" size="x-large" color="primary"
-                                    class="translate-y-hover" :href="item.linkUrl" target="_blank">
+                                    class="translate-y-hover" @click="openLink(item.linkUrl)">
                                     <v-icon size="33">
                                         <span v-html="item.iconSvg" class="inline-flex items-center" />
                                     </v-icon>
@@ -86,18 +86,18 @@ const contactStore = useContactStore();
 const { data, loaded } = storeToRefs(contactStore);
 const contactSection = ref(null);
 const contactBodySection = ref(null);
-
 const schema = yup.object({
     name: yup.string().label('Name').required(),
     email: yup.string().label('Email').email().required(),
     message: yup.string().label('Message').required(),
 });
-
 const { fields, errors, loading, submit, ready, valid } = useValidatedForm(schema, async (values) => {
     const response = await axios.post('/api/contact', values);
     return { message: response.data.message };
 });
-
+const openLink = (url) => {
+    window.open(url, '_blank', 'noopener,noreferrer');
+};
 const contactReveal = useScrollReveal(contactSection, { selector: '.reveal-item', stagger: 0.15, y: 40 });
 const contactBodyReveal = useScrollReveal(contactBodySection, { selector: '.reveal-item', stagger: 0.15, y: 40 });
 

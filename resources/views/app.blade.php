@@ -26,6 +26,20 @@
 ) }};
     </script>
 
+    @php
+        $weights = [100, 300, 400, 500, 700, 900];
+        $fontFiles = [];
+        foreach ($weights as $w) {
+            $match = glob(public_path("build/assets/roboto-latin-{$w}-normal-*.woff2"))[0] ?? null;
+            if ($match) {
+                $fontFiles[] = basename($match);
+            }
+        }
+    @endphp
+    @foreach ($fontFiles as $file)
+        <link rel="preload" as="font" type="font/woff2" crossorigin href="/build/assets/{{ $file }}">
+    @endforeach
+
     @vite(['resources/js/app.js'])
 
 </head>

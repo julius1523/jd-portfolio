@@ -9,7 +9,7 @@
                             Update your profile image to display to your contact page
                         </div>
                     </div>
-                    <v-card class="p-5 shadow-sm border rounded-[12px]">
+                    <v-card class="p-5 shadow-sm border rounded-[15px]">
                         <div class="flex flex-col sm:flex-row sm:items-center gap-4">
                             <div class="sm:shrink-0 text-label-large font-medium">
                                 Image
@@ -35,7 +35,7 @@
                     </div>
 
                     <div class="d-flex flex-column ga-4">
-                        <v-card class="p-5 shadow-sm border rounded-[12px]">
+                        <v-card class="p-5 shadow-sm border rounded-[15px]">
                             <div class="flex flex-col sm:flex-row sm:items-center gap-4">
                                 <div class="sm:shrink-0 text-label-large font-medium">
                                     Heading
@@ -49,7 +49,7 @@
                             </div>
                         </v-card>
 
-                        <v-card class="p-5 shadow-sm border rounded-[12px]">
+                        <v-card class="p-5 shadow-sm border rounded-[15px]">
                             <div class="flex flex-col sm:flex-row sm:items-center gap-4">
                                 <div class="sm:shrink-0 text-label-large font-medium">
                                     Description
@@ -76,8 +76,8 @@
                         add-label="New Social" v-model:sort-by="socialsOptions.sortBy"
                         v-model:page="socialsOptions.page" v-model:items-per-page="socialsOptions.itemsPerPage"
                         :items-length="socialsTotal" :loading="socialsLoading" no-data-text="No socials added yet."
-                        :disabled="loading" density="comfortable" @add="openDialog()" @edit="openDialog($event)"
-                        @remove="removeItem($event)">
+                        :disabled="loading" density="compact" :row-status="socialStatus" @add="openDialog()"
+                        @edit="openDialog($event)" @remove="removeItem($event)">
                         <template #item.name="{ item }">
                             <div class="d-flex ga-3 align-center"
                                 :class="{ 'justify-end': $vuetify.display.smAndDown }">
@@ -113,8 +113,8 @@ import FormActions from "@/components/forms/FormActions";
 import SocialsDialog from "./dialogs/SocialsDialog";
 
 const socialHeaders = [
-    { title: "Social Name", key: "name", align: "start" },
-    { title: "Link URL", key: "linkUrl", align: "start", sortable: false },
+    { title: "Social Name", key: "name", align: "start", width: "25%", },
+    { title: "Link URL", key: "linkUrl", align: "start", width: "70%", sortable: false },
 ];
 const schema = yup.object({
     profileImage: yup.mixed().label("Profile Image").nullable(),
@@ -158,7 +158,17 @@ const { fields, errors, loading, submit, cancelEdit, resetForm, resetField, meta
 const socialsOptions = reactive({ page: 1, itemsPerPage: 10, sortBy: [] });
 const socialsTotal = ref(0);
 const socialsLoading = ref(false);
+const SOCIAL_KEYS = ["name", "linkUrl", "icon"];
+const socialSignature = (s) => JSON.stringify(SOCIAL_KEYS.map((k) => s[k] ?? ""));
+const originalSocials = ref(new Map());
 
+function snapshotSocials(list) {
+    originalSocials.value = new Map((list ?? []).map((s) => [s.id, socialSignature(s)]));
+};
+function socialStatus(item) {
+    if (item.id == null || !originalSocials.value.has(item.id)) return "new";
+    return originalSocials.value.get(item.id) !== socialSignature(item) ? "edited" : null;
+};
 function openDialog(item = null) {
     dialogRef.value?.open(item);
 };
@@ -171,6 +181,8 @@ async function getContactContent() {
         const { data } = await axios.get("/api/getContactContent");
         if (!data) return;
         resetForm({ values: { ...data } });
+        snapshotSocials(data.socials);
+        socialsTotal.value = data.socialsMeta?.total ?? 0;
     } catch (err) {
         error(err?.response?.data?.message ?? "Failed to load contact content.");
     } finally {
@@ -191,7 +203,8 @@ async function fetchSocials() {
         });
         if (!data) return;
         resetField('socials', { value: data.socials ?? [] });
-        socialsTotal.value = data.total ?? 0;
+        snapshotSocials(data.socials);
+        socialsTotal.value = data.socialsMeta?.total ?? 0;
     } catch (err) {
         error(err?.response?.data?.message ?? "Failed to load socials.");
     } finally {

@@ -26,7 +26,7 @@ function onCancel() {
 <template>
     <v-dialog :model-value="modelValue" @update:model-value="$emit('update:modelValue', $event)" scrollable
         :max-width="maxWidth" :max-height="maxHeight">
-        <v-card class="rounded-[18px] shadow-sm">
+        <v-card class="rounded-[15px] shadow-sm">
             <v-toolbar density="compact" color="surface" class="border-b">
                 <div class="grid w-full grid-cols-[1fr_auto_1fr] items-center">
                     <div></div>

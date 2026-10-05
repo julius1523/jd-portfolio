@@ -40,10 +40,16 @@ class ProjectsContentController extends Controller
 
         if ($perPage === -1) {
             $paged = $sorted;
+            $page = 1;
         } else {
             $page = max((int) $request->query('page', 1), 1);
             $perPage = max($perPage, 1);
-            $paged = array_slice($sorted, ($page - 1) * $perPage, $perPage);
+
+            $paged = array_slice(
+                $sorted,
+                ($page - 1) * $perPage,
+                $perPage
+            );
         }
 
         return response()->json([
@@ -51,7 +57,11 @@ class ProjectsContentController extends Controller
             'heading' => $data?->heading,
             'description' => $data?->description,
             'projects' => $paged,
-            'total' => $total,
+            'projectsMeta' => [
+                'total' => $total,
+                'perPage' => $perPage,
+                'page' => $page,
+            ],
         ]);
     }
 

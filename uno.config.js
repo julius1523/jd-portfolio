@@ -70,23 +70,21 @@ export default defineConfig({
     preflights: [
         {
             getCSS: () => `
-                .vfield-outline .v-field.v-field--variant-solo {
-                border: 1px solid rgba(var(--v-border-color), 0.25);
-                border-radius: 8px;
-                transition: border-color 150ms ease-out, box-shadow 150ms ease-out;
-                }
-                .vfield-outline.v-input--focused .v-field.v-field--variant-solo {
-                border-color: rgb(var(--v-theme-primary));
-                box-shadow: 0 0 0 1px rgb(var(--v-theme-primary));
-                }
-                .vfield-outline.v-input--error .v-field.v-field--variant-solo {
-                border-color: rgb(var(--v-theme-error))
-                }
-                .vfield-outline.v-input--focused.v-input--error .v-field.v-field--variant-solo {
-                border-color: rgb(var(--v-theme-error));
-                box-shadow: 0 0 0 1px rgb(var(--v-theme-error));
-                }
-            `,
+        .vfield-outline .v-field.v-field--variant-solo {
+            border-radius: 10px;
+            box-shadow: inset 0 0 0 1px rgba(var(--v-border-color), 0.25);
+            transition: box-shadow 150ms ease-out;
+        }
+        .vfield-outline.v-input--focused .v-field.v-field--variant-solo {
+            box-shadow: inset 0 0 0 2px rgb(var(--v-theme-primary));
+        }
+        .vfield-outline.v-input--error .v-field.v-field--variant-solo {
+            box-shadow: inset 0 0 0 1px rgb(var(--v-theme-error));
+        }
+        .vfield-outline.v-input--focused.v-input--error .v-field.v-field--variant-solo {
+            box-shadow: inset 0 0 0 2px rgb(var(--v-theme-error));
+        }
+    `,
         },
     ],
     shortcuts: {

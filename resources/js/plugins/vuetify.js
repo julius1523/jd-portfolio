@@ -52,7 +52,7 @@ export default createVuetify({
             fileIcon: "i-mdi-file-document",
             density: "compact",
         },
-        VFileUploadDropzone: { rounded: "lg" },
+        VFileUploadDropzone: { class: "rounded-[10px]" },
         VMenu: {
             offset: 6,
             scrollStrategy: "close",

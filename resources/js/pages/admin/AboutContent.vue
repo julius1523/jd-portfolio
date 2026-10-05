@@ -9,7 +9,7 @@
                             Update your profile image to display to your about page
                         </div>
                     </div>
-                    <v-card class="p-5 shadow-sm border rounded-[12px]">
+                    <v-card class="p-5 shadow-sm border rounded-[15px]">
                         <div class="flex flex-col sm:flex-row sm:items-center gap-4">
                             <div class="sm:shrink-0 text-label-large font-medium">
                                 Image
@@ -35,7 +35,7 @@
                     </div>
 
                     <div class="d-flex flex-column ga-4">
-                        <v-card class="p-5 shadow-sm border rounded-[12px]">
+                        <v-card class="p-5 shadow-sm border rounded-[15px]">
                             <div class="flex flex-col sm:flex-row sm:items-center gap-4">
                                 <div class="sm:shrink-0 text-label-large font-medium">
                                     Heading
@@ -49,7 +49,7 @@
                             </div>
                         </v-card>
 
-                        <v-card class="p-5 shadow-sm border rounded-[12px]">
+                        <v-card class="p-5 shadow-sm border rounded-[15px]">
                             <div class="flex flex-col sm:flex-row sm:items-center gap-4">
                                 <div class="sm:shrink-0 text-label-large font-medium">
                                     Description
@@ -76,8 +76,8 @@
                         add-label="New Skill" v-model:sort-by="skillsOptions.sortBy" v-model:page="skillsOptions.page"
                         v-model:items-per-page="skillsOptions.itemsPerPage" :items-length="skillsTotal"
                         :loading="skillsLoading" no-data-text="No skills added yet." :disabled="loading"
-                        density="compact" @add="openSkillsDialog()" @edit="openSkillsDialog($event)"
-                        @remove="removeSkillsItem($event)">
+                        density="compact" :row-status="skillStatus" @add="openSkillsDialog()"
+                        @edit="openSkillsDialog($event)" @remove="removeSkillsItem($event)">
                         <template #item.category="{ item }">
                             {{ item.category }}
                         </template>
@@ -109,8 +109,9 @@
                     <DataTable :items="fields.randomFacts" :headers="randomFactHeaders" :addable="true"
                         :expandable="false" add-label="New Fact" v-model:sort-by="randomFacts.sortBy"
                         v-model:page="randomFacts.page" v-model:items-per-page="randomFacts.itemsPerPage"
-                        :items-length="factsTotal" :loading="factsLoading" no-data-text="No facts added yet."
-                        :disabled="loading" density="compact" @add="openRandomFactsDialog()"
+                        :items-length="randomFactsTotal" :loading="randomFactsLoading"
+                        no-data-text="No facts added yet." :disabled="loading" density="compact"
+                        :row-status="randomFactStatus" @add="openRandomFactsDialog()"
                         @edit="openRandomFactsDialog($event)" @remove="removeFactsItem($event)">
                         <template #item.icon="{ item }">
                             <v-icon color="primary">
@@ -131,7 +132,7 @@
                     </div>
 
                     <div class="d-flex flex-column ga-4">
-                        <v-card class="p-5 shadow-sm border rounded-[12px]">
+                        <v-card class="p-5 shadow-sm border rounded-[15px]">
                             <div class="flex flex-col sm:flex-row sm:items-center gap-4">
                                 <div class="sm:shrink-0 text-label-large font-medium">
                                     Heading
@@ -145,7 +146,7 @@
                             </div>
                         </v-card>
 
-                        <v-card class="p-5 shadow-sm border rounded-[12px]">
+                        <v-card class="p-5 shadow-sm border rounded-[15px]">
                             <div class="flex flex-col sm:flex-row sm:items-center gap-4">
                                 <div class="sm:shrink-0 text-label-large font-medium">
                                     Description
@@ -159,10 +160,10 @@
                             </div>
                         </v-card>
 
-                        <v-card class="p-5 shadow-sm border rounded-[12px]">
+                        <v-card class="p-5 shadow-sm border rounded-[15px]">
                             <div class="flex flex-col sm:flex-row sm:items-center gap-4">
                                 <div class="sm:shrink-0 text-label-large font-medium">
-                                    Secondary Button File
+                                    Image
                                 </div>
                                 <div class="w-full sm:flex-1 sm:max-w-md sm:ml-auto min-w-0">
                                     <FileUpload v-model="fields.others.image" file-type="image" :max-files="1" inset
@@ -198,12 +199,12 @@ import SkillsDialog, { skillsSchema } from "./dialogs/SkillsDialog";
 import RandomFactsDialog, { randomFactsSchema } from "./dialogs/RandomFactsDialog";
 
 const skillHeaders = [
-    { title: "Category", key: "category", align: "start" },
-    { title: "Skills", key: "skill", align: "start", sortable: false },
+    { title: "Category", key: "category", align: "start", width: "15%" },
+    { title: "Skills", key: "skill", align: "start", width: "70%", sortable: false },
     { title: "Icon", key: "icon", align: "center", width: '10%', sortable: false },
 ];
 const randomFactHeaders = [
-    { title: "Fact", key: "randomFact", align: "start" },
+    { title: "Fact", key: "randomFact", align: "start", width: "85%" },
     { title: "Icon", key: "icon", align: "center", width: '10%', sortable: false },
 ];
 const schema = yup.object({
@@ -211,7 +212,7 @@ const schema = yup.object({
     heading: yup.string().label("Heading").required(),
     description: yup.string().label("Description").required(),
     skills: yup.array().of(skillsSchema).min(1, "At least one skill is required").label("Skills").default([]),
-    randomFacts: yup.array().of(randomFactsSchema).min(1, "At least one fact is required").label("Random Facts").default([]),
+    randomFacts: yup.array().of(randomFactsSchema).min(1, "At least one random fact is required").label("Random Facts").default([]),
     others: yup.object({
         title: yup.string().label("Title").required(),
         description: yup.string().label("Description").required(),
@@ -269,10 +270,30 @@ const { fields, errors, loading, submit, cancelEdit, resetForm, resetField, meta
 const skillsOptions = reactive({ page: 1, itemsPerPage: 10, sortBy: [] });
 const skillsTotal = ref(0);
 const skillsLoading = ref(false);
+const SKILL_KEYS = ["category", "skill", "icon"];
+const skillSignature = (s) => JSON.stringify(SKILL_KEYS.map((k) => s[k] ?? ""));
+const originalSkills = ref(new Map());
 const randomFacts = reactive({ page: 1, itemsPerPage: 10, sortBy: [] });
-const factsTotal = ref(0);
-const factsLoading = ref(false);
+const randomFactsTotal = ref(0);
+const randomFactsLoading = ref(false);
+const RANDOM_FACT_KEYS = ["randomFact", "icon"];
+const randomFactSignature = (f) => JSON.stringify(RANDOM_FACT_KEYS.map((k) => f[k] ?? ""));
+const originalRandomFacts = ref(new Map());
 
+function snapshotSkills(list) {
+    originalSkills.value = new Map((list ?? []).map((s) => [s.id, skillSignature(s)]));
+};
+function skillStatus(item) {
+    if (item.id == null || !originalSkills.value.has(item.id)) return "new";
+    return originalSkills.value.get(item.id) !== skillSignature(item) ? "edited" : null;
+};
+function snapshotRandomFacts(list) {
+    originalRandomFacts.value = new Map((list ?? []).map((f) => [f.id, randomFactSignature(f)]));
+};
+function randomFactStatus(item) {
+    if (item.id == null || !originalRandomFacts.value.has(item.id)) return "new";
+    return originalRandomFacts.value.get(item.id) !== randomFactSignature(item) ? "edited" : null;
+};
 function openSkillsDialog(item = null) {
     dialogSkillsRef.value?.open(item);
 };
@@ -291,6 +312,10 @@ async function getAboutContent() {
         const { data } = await axios.get("/api/getAboutContent");
         if (!data) return;
         resetForm({ values: { ...data } });
+        snapshotSkills(data.skills);
+        snapshotRandomFacts(data.randomFacts);
+        skillsTotal.value = data.skillsMeta?.total ?? 0;
+        randomFactsTotal.value = data.randomFactsMeta?.total ?? 0;
     } catch (err) {
         error(err?.response?.data?.message ?? "Failed to load about content.");
     } finally {
@@ -311,6 +336,7 @@ async function fetchSkills() {
         });
         if (!data) return;
         resetField('skills', { value: data.skills ?? [] });
+        snapshotSkills(data.skills);
         skillsTotal.value = data.skillsMeta?.total ?? 0;
     } catch (err) {
         error(err?.response?.data?.message ?? "Failed to load skills.");
@@ -319,7 +345,7 @@ async function fetchSkills() {
     }
 };
 async function fetchRandomFacts() {
-    factsLoading.value = true;
+    randomFactsLoading.value = true;
     try {
         const [sort] = randomFacts.sortBy ?? [];
         const { data } = await axios.get("/api/getAboutContent", {
@@ -332,11 +358,12 @@ async function fetchRandomFacts() {
         });
         if (!data) return;
         resetField('randomFacts', { value: data.randomFacts ?? [] });
-        factsTotal.value = data.randomFactsMeta?.total ?? 0;
+        snapShotRandomFacts(data.randomFacts);
+        randomFactsTotal.value = data.randomFactsMeta?.total ?? 0;
     } catch (err) {
         error(err?.response?.data?.message ?? "Failed to load facts.");
     } finally {
-        factsLoading.value = false;
+        randomFactsLoading.value = false;
     }
 };
 

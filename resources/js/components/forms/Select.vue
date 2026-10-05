@@ -5,7 +5,7 @@ const slots = useSlots();
 const reservedSlotNames = ["item", "selection", "no-data"];
 const forwardedSlotNames = computed(() => Object.keys(slots).filter((name) => !reservedSlotNames.includes(name)));
 const props = defineProps({
-    modelValue: { type: [Array, String], default: () => [] },
+    modelValue: { type: [Array, String, Number, Boolean, Object], default: null },
     items: { type: Array, default: () => [] },
     label: { type: String, default: '' },
     hint: { type: String, default: '' },
@@ -24,7 +24,6 @@ const props = defineProps({
     chip: { type: Boolean, default: true },
 })
 const emit = defineEmits(['update:modelValue']);
-
 const search = ref('');
 const selectRef = ref(null);
 const menuWidth = ref(undefined);
@@ -131,6 +130,7 @@ watch(
             :no-auto-scroll="true" color="primary" class="vfield-outline" autocomplete="off" :list-props="{
                 density: 'comfortable',
                 prependGap: 15,
+                class: 'overflow-x-hidden'
             }" :menu-props="{
                 location: 'bottom center',
                 scrollStrategy: 'close',
@@ -146,14 +146,18 @@ watch(
             <template #item="scope">
                 <slot v-if="slots.item" name="item" v-bind="scope" />
                 <v-list-item v-else v-bind="scope.props" :title="undefined">
-                    <template #prepend="{ isSelected }">
+                    <template v-if="multiple" #prepend="{ isSelected }">
                         <v-checkbox-btn color="primary" :model-value="isSelected" density="compact" :ripple="false"
                             @click.stop="scope.props.onClick" />
                     </template>
 
-                    <v-list-item-title class="text-label-medium">
+                    <v-list-item-title class="font-size-[14px]">
                         {{ resolveText(scope.item) }}
                     </v-list-item-title>
+
+                    <template v-if="!multiple" #append="{ isSelected }">
+                        <v-icon v-if="isSelected" icon="mdi-check" size="small" color="primary" />
+                    </template>
                 </v-list-item>
             </template>
 

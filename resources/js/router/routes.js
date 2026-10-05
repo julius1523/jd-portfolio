@@ -69,11 +69,11 @@ export default [
         },
     },
     {
-        path: "/dashboard",
-        name: "dashboard",
-        component: page("admin/Dashboard"),
+        path: "/admin-dashboard",
+        name: "admin-dashboard",
+        component: page("admin/AdminDashboard"),
         meta: {
-            title: "Dashboard",
+            title: "Admin Dashboard",
             middleware: "auth",
             layout: "app",
         },

@@ -113,7 +113,7 @@ defineExpose({ open, remove });
                 <v-col cols="12">
                     <div class="text-sm font-medium text-medium-emphasis mb-1">Project File/Link</div>
                     <v-btn-toggle v-model="fields.linkType" variant="flat" color="surface-light" density="compact"
-                        mandatory divided class="rounded-[8px] border mb-3">
+                        mandatory divided class="rounded-[10px] border mb-3">
                         <v-btn size="small" prepend-icon="i-mdi-cloud-upload-outline" value="upload" text="Upload" />
                         <v-btn size="small" prepend-icon="i-mdi-link-variant" value="link" text="Link" />
                     </v-btn-toggle>

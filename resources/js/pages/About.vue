@@ -62,7 +62,7 @@
                     <div class="d-flex flex-row flex-wrap ga-4 justify-center">
                         <div v-for="item in data.randomFacts" :key="item.text" class="reveal-item">
                             <v-card color="surface-light" flat height="175" width="175"
-                                class="rounded-[18px] pa-3 d-flex flex-column align-center">
+                                class="rounded-[15px] pa-3 d-flex flex-column align-center">
                                 <div class="h-50 w-100 d-flex align-center justify-center">
                                     <v-icon color="primary" size="50">
                                         <span v-html="item.iconSvg" class="inline-flex items-center" />
@@ -94,7 +94,11 @@
                         </v-col>
                         <v-col cols="12">
                             <v-img :src="data.others?.image?.url" alt="Design System Image" aspect-ratio="1.6"
-                                class="clamped-img [--img-max-h:500px] [--img-max-w:800px] mx-auto reveal-item" />
+                                class="clamped-img [--img-max-h:500px] [--img-max-w:800px] mx-auto reveal-item">
+                                <template #placeholder>
+                                    <v-skeleton-loader type="image" class="h-full" />
+                                </template>
+                            </v-img>
                         </v-col>
                     </v-row>
                 </div>

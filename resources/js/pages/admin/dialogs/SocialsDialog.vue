@@ -83,7 +83,7 @@ defineExpose({ open, remove });
                             <v-list-item v-bind="itemProps" :prepend-icon="item?.value" color="primary"
                                 :title="undefined">
                                 <template #title>
-                                    <span class="text-label-medium">{{ item?.name }}</span>
+                                    <span class="font-size-[14px]">{{ item?.name }}</span>
                                 </template>
                             </v-list-item>
                         </template>

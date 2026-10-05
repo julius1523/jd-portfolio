@@ -1,8 +1,8 @@
 <template>
     <section id="login" ref="loginSection">
         <v-container>
-            <v-card flat class="pa-6 mx-auto mt-10 shadow-sm border reveal-item" max-width="400" rounded="xl"
-                :loading="loading" :disabled="loading">
+            <v-card flat max-width="400" :loading="loading" :disabled="loading"
+                class="pa-6 mx-auto mt-10 shadow-sm rounded-[15px] border reveal-item">
                 <template v-if="loading" #loader>
                     <v-progress-linear indeterminate color="primary" />
                 </template>
@@ -54,7 +54,7 @@ const schema = yup.object({
 });
 const { fields, errors, loading, submit, ready, valid } = useValidatedForm(schema, async (values) => {
     await auth.login(values);
-    router.replace({ name: 'dashboard' });
+    router.replace({ name: 'admin-dashboard' });
 },
     { resetOnSuccess: false, useAlertForErrors: true }
 );
@@ -67,6 +67,6 @@ onMounted(async () => {
     const { reason } = route.query;
     if (reason === 'session_expired') warning('Your session has expired. Please log in again.');
     else if (reason === 'unauthenticated') error('You are unauthenticated. Please log in again.');
-    if (reason) router.replace({ name: 'dashboard' });
+    if (reason) router.replace({ name: 'admin-dashboard' });
 });
 </script>

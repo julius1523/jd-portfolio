@@ -1,0 +1,121 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f3f4f6;
+    font-family:
+        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+        sans-serif;
+}
+
+.wrapper {
+    background-color: #f3f4f6;
+    padding: 32px 16px;
+}
+
+.card {
+    max-width: 560px;
+    background-color: #ffffff;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.header {
+    padding: 28px 32px;
+}
+
+.eyebrow {
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.title {
+    margin-top: 6px;
+    font-size: 22px;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.sender {
+    padding: 28px 32px 8px 32px;
+}
+
+.avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 22px;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 44px;
+    text-align: center;
+}
+
+.name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.email {
+    font-size: 14px;
+    margin-top: 2px;
+}
+
+.email a {
+    text-decoration: none;
+}
+
+.section {
+    padding: 16px 32px 8px 32px;
+}
+
+.label {
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #6b7280;
+    margin-bottom: 8px;
+}
+
+.message {
+    background-color: #f9fafb;
+    border-radius: 8px;
+    padding: 16px 18px;
+    font-size: 15px;
+    line-height: 1.65;
+    color: #1f2937;
+}
+
+.cta {
+    padding: 24px 32px 8px 32px;
+}
+
+.btn {
+    display: inline-block;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 999px;
+}
+
+.footer {
+    padding: 24px 32px 28px 32px;
+}
+
+.footer-text {
+    border-top: 1px solid #e5e7eb;
+    padding-top: 16px;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #9ca3af;
+}
+
+.preheader {
+    display: none;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+}

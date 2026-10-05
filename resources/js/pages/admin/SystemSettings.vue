@@ -8,7 +8,7 @@
                 <div class="d-flex flex-column ga-16">
                     <div>
                         <div class="d-flex flex-column ga-4">
-                            <v-card class="p-5 shadow-sm border rounded-[12px]">
+                            <v-card class="p-5 shadow-sm border rounded-[15px]">
                                 <div class="flex flex-col sm:flex-row sm:items-center gap-4">
                                     <div class="sm:shrink-0 text-label-large font-medium">
                                         System Logo
@@ -22,7 +22,7 @@
                                 </div>
                             </v-card>
 
-                            <v-card class="p-5 shadow-sm border rounded-[12px]">
+                            <v-card class="p-5 shadow-sm border rounded-[15px]">
                                 <div class="flex flex-col sm:flex-row sm:items-center gap-4">
                                     <div class="sm:shrink-0 text-label-large font-medium">
                                         System Name
@@ -36,7 +36,7 @@
                                 </div>
                             </v-card>
 
-                            <v-card class="p-5 shadow-sm border rounded-[12px]">
+                            <v-card class="p-5 shadow-sm border rounded-[15px]">
                                 <div class="flex flex-col sm:flex-row sm:items-center gap-4">
                                     <div class="sm:shrink-0 text-label-large font-medium">
                                         System Owner Name
@@ -50,7 +50,7 @@
                                 </div>
                             </v-card>
 
-                            <v-card class="p-5 shadow-sm border rounded-[12px]">
+                            <v-card class="p-5 shadow-sm border rounded-[15px]">
                                 <div class="flex flex-col sm:flex-row sm:items-center gap-4">
                                     <div class="sm:shrink-0 text-label-large font-medium">
                                         System Theme Color

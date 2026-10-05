@@ -51,8 +51,8 @@ const logout = () => {
                 </template>
             </v-list-item>
             <v-divider class="mx-n3 mb-[15px]" />
-            <v-list-item prepend-icon="i-mdi-view-dashboard-outline" icon-size="14" title="Dashboard" value="dashboard"
-                rounded="pill" :to="{ name: 'dashboard' }"
+            <v-list-item prepend-icon="i-mdi-view-dashboard-outline" icon-size="14" title="Admin Dashboard"
+                value="admin-dashboard" rounded="pill" :to="{ name: 'admin-dashboard' }"
                 v-tooltip="{ text: 'Manage Content', location: 'end', disabled: !layout.rail }" />
             <v-list-item prepend-icon="i-mdi-pencil-outline" icon-size="14" title="Manage Content" value="home-content"
                 rounded="pill" :to="{ name: 'manage-content' }"

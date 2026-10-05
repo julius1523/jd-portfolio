@@ -9,7 +9,7 @@
                             Update your profile image to display to your home page
                         </div>
                     </div>
-                    <v-card class="p-5 shadow-sm border rounded-[12px]">
+                    <v-card class="p-5 shadow-sm border rounded-[15px]">
                         <div class="flex flex-col sm:flex-row sm:items-center gap-4">
                             <div class="sm:shrink-0 text-label-large font-medium">
                                 Image
@@ -35,7 +35,7 @@
                     </div>
 
                     <div class="d-flex flex-column ga-4">
-                        <v-card class="p-5 shadow-sm border rounded-[12px]">
+                        <v-card class="p-5 shadow-sm border rounded-[15px]">
                             <div class="flex flex-col sm:flex-row sm:items-center gap-4">
                                 <div class="sm:shrink-0 text-label-large font-medium">
                                     Heading
@@ -49,7 +49,7 @@
                             </div>
                         </v-card>
 
-                        <v-card class="p-5 shadow-sm border rounded-[12px]">
+                        <v-card class="p-5 shadow-sm border rounded-[15px]">
                             <div class="flex flex-col sm:flex-row sm:items-center gap-4">
                                 <div class="sm:shrink-0 text-label-large font-medium">
                                     Subheading
@@ -63,7 +63,7 @@
                             </div>
                         </v-card>
 
-                        <v-card class="p-5 shadow-sm border rounded-[12px]">
+                        <v-card class="p-5 shadow-sm border rounded-[15px]">
                             <div class="flex flex-col sm:flex-row sm:items-center gap-4">
                                 <div class="sm:shrink-0 text-label-large font-medium">
                                     Description
@@ -90,7 +90,7 @@
                     </div>
 
                     <div class="d-flex flex-column ga-4">
-                        <v-card class="p-5 shadow-sm border rounded-[12px]">
+                        <v-card class="p-5 shadow-sm border rounded-[15px]">
                             <div class="flex flex-col sm:flex-row sm:items-center gap-4">
                                 <div class="sm:shrink-0 text-label-large font-medium">
                                     Primary Button Text
@@ -104,7 +104,7 @@
                             </div>
                         </v-card>
 
-                        <v-card class="p-5 shadow-sm border rounded-[12px]">
+                        <v-card class="p-5 shadow-sm border rounded-[15px]">
                             <div class="flex flex-col sm:flex-row sm:items-center gap-4">
                                 <div class="sm:shrink-0 text-label-large font-medium">
                                     Primary Button Link
@@ -118,7 +118,7 @@
                             </div>
                         </v-card>
 
-                        <v-card class="p-5 shadow-sm border rounded-[12px]">
+                        <v-card class="p-5 shadow-sm border rounded-[15px]">
                             <div class="flex flex-col sm:flex-row sm:items-center gap-4">
                                 <div class="sm:shrink-0 text-label-large font-medium">
                                     Secondary Button Text
@@ -132,7 +132,7 @@
                             </div>
                         </v-card>
 
-                        <v-card class="p-5 shadow-sm border rounded-[12px]">
+                        <v-card class="p-5 shadow-sm border rounded-[15px]">
                             <div class="flex flex-col sm:flex-row sm:items-center gap-4">
                                 <div class="sm:shrink-0 text-label-large font-medium">
                                     Secondary Button File

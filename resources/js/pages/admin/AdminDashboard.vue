@@ -4,15 +4,14 @@
             {{ route.meta.title }}
         </div>
         <Shimmer :loading="pageLoading">
-            <v-card class="p-5 shadow-sm rounded-[10px] border">
-                <div class="d-flex flex-wrap ga-3 align-center mb-2">
+            <v-card class="p-5 shadow-sm rounded-[15px] border">
+                <div class="d-flex flex-wrap justify-space-between ga-3 mb-2">
                     <div>
                         <div class="text-label-large font-medium mb-1">Page Views</div>
-                        <div class="text-body-small text-medium-emphasis">Last {{ periods[period] }} days</div>
+                        <div class="text-title-small opacity-60">Last {{ periods[period] }} days</div>
                     </div>
-                    <v-spacer />
-                    <v-btn-toggle v-model="period" density="compact" rounded="lg" variant="outlined" mandatory divided
-                        data-shimmer-no-children>
+                    <v-btn-toggle v-model="period" density="compact" variant="outlined" mandatory divided
+                        class="rounded-[10px]" data-shimmer-no-children>
                         <v-btn value="weekly">Weekly</v-btn>
                         <v-btn value="monthly">Monthly</v-btn>
                         <v-btn value="quarterly">Quarterly</v-btn>

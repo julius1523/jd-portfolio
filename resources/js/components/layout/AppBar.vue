@@ -39,6 +39,12 @@ const ownerInitials = computed(() => {
         .toUpperCase();
 });
 const scrolled = ref(false);
+const onBeforeEnter = (el) => {
+    el.style.transitionDelay = `${el.dataset.index * 50}ms`;
+};
+const onAfterEnter = (el) => {
+    el.style.transitionDelay = "";
+};
 
 function onScroll() {
     scrolled.value = window.scrollY > 10;
@@ -96,12 +102,15 @@ function onScroll() {
         scroll-strategy="block" location-strategy="static" transition="fade-transition" :z-index="1010"
         content-class="w-100 h-100">
         <v-list density="compact" nav class="h-100 w-100 px-[13px] overflow-y-auto pt-[85px]">
-            <v-list-item v-for="link in links" :key="link.to" :to="{ name: link.to }" exact color="primary"
-                rounded="pill" class="text-center">
-                <template #title>
-                    <span class="text-title-medium">{{ link.title }}</span>
-                </template>
-            </v-list-item>
+            <TransitionGroup appear name="slide-y-reverse-transition" @before-enter="onBeforeEnter"
+                @after-enter="onAfterEnter">
+                <v-list-item v-for="(link, i) in links" :key="link.to" :data-index="i" :to="{ name: link.to }" exact
+                    color="primary" rounded="pill" class="text-center">
+                    <template #title>
+                        <span class="text-title-medium">{{ link.title }}</span>
+                    </template>
+                </v-list-item>
+            </TransitionGroup>
         </v-list>
     </v-overlay>
 </template>

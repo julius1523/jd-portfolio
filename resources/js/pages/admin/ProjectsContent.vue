@@ -9,7 +9,7 @@
                             Update your profile image to display to your projects page
                         </div>
                     </div>
-                    <v-card class="p-5 shadow-sm border rounded-[12px]">
+                    <v-card class="p-5 shadow-sm border rounded-[15px]">
                         <div class="flex flex-col sm:flex-row sm:items-center gap-4">
                             <div class="sm:shrink-0 text-label-large font-medium">
                                 Image
@@ -35,7 +35,7 @@
                     </div>
 
                     <div class="d-flex flex-column ga-4">
-                        <v-card class="p-5 shadow-sm border rounded-[12px]">
+                        <v-card class="p-5 shadow-sm border rounded-[15px]">
                             <div class="flex flex-col sm:flex-row sm:items-center gap-4">
                                 <div class="sm:shrink-0 text-label-large font-medium">
                                     Heading
@@ -49,7 +49,7 @@
                             </div>
                         </v-card>
 
-                        <v-card class="p-5 shadow-sm border rounded-[12px]">
+                        <v-card class="p-5 shadow-sm border rounded-[15px]">
                             <div class="flex flex-col sm:flex-row sm:items-center gap-4">
                                 <div class="sm:shrink-0 text-label-large font-medium">
                                     Description
@@ -76,12 +76,16 @@
                         add-label="New Project" expand-key="description" v-model:sort-by="projectsOptions.sortBy"
                         v-model:page="projectsOptions.page" v-model:items-per-page="projectsOptions.itemsPerPage"
                         :items-length="projectsTotal" :loading="projectsLoading" no-data-text="No projects added yet."
-                        :disabled="loading" density="compact" @add="openDialog()" @edit="openDialog($event)"
-                        @remove="removeItem($event)">
+                        :disabled="loading" density="compact" :row-status="projectStatus" @add="openDialog()"
+                        @edit="openDialog($event)" @remove="removeItem($event)">
                         <template #item.image="{ item }">
                             <v-img v-if="projectImagePreview(item)" height="48" width="48" :aspect-ratio="1" rounded
                                 :src="projectImagePreview(item)" class="border"
-                                :class="$vuetify.display.mdAndUp ? 'mx-auto' : 'ml-auto'" />
+                                :class="$vuetify.display.mdAndUp ? 'mx-auto' : 'ml-auto'">
+                                <template #placeholder>
+                                    <v-skeleton-loader type="image" class="h-full" />
+                                </template>
+                            </v-img>
                             <span v-else class="text-medium-emphasis">—</span>
                         </template>
                         <template #item.name="{ item }">
@@ -119,9 +123,9 @@ import FormActions from "@/components/forms/FormActions";
 import ProjectsDialog from "./dialogs/ProjectsDialog";
 
 const projectHeaders = [
-    { title: "Category", key: "category", align: "start" },
-    { title: "Project", key: "name", align: "start" },
-    { title: "Image", key: "image", align: "center", sortable: false },
+    { title: "Category", key: "category", align: "start", width: "25%" },
+    { title: "Project", key: "name", align: "start", width: "55%" },
+    { title: "Image", key: "image", align: "center", width: "10%", sortable: false },
 ];
 const schema = yup.object({
     profileImage: yup.mixed().label("Profile Image").nullable(),
@@ -180,7 +184,17 @@ const { fields, errors, loading, submit, cancelEdit, resetForm, resetField, meta
 const projectsOptions = reactive({ page: 1, itemsPerPage: 10, sortBy: [] });
 const projectsTotal = ref(0);
 const projectsLoading = ref(false);
+const PROJECT_KEYS = ["name", "description", "linkUrl"];
+const projectSignature = (p) => JSON.stringify(PROJECT_KEYS.map((k) => p[k] ?? ""));
+const originalProjects = ref(new Map());
 
+function snapshotProjects(list) {
+    originalProjects.value = new Map((list ?? []).map((p) => [p.id, projectSignature(p)]));
+};
+function projectStatus(item) {
+    if (item.id == null || !originalProjects.value.has(item.id)) return "new";
+    return originalProjects.value.get(item.id) !== projectSignature(item) ? "edited" : null;
+};
 function openDialog(item = null) {
     dialogRef.value?.open(item);
 };
@@ -196,12 +210,11 @@ function projectImagePreview(item) {
 
 async function getProjectContent() {
     try {
-        const { data } = await axios.get("/api/getProjectContent", {
-            params: { page: projectsOptions.page, perPage: projectsOptions.itemsPerPage },
-        });
+        const { data } = await axios.get("/api/getProjectContent");
         if (!data) return;
         resetForm({ values: { ...data, projects: data.projects ?? [] } });
-        projectsTotal.value = data.total ?? 0;
+        snapshotProjects(data.projects);
+        projectsTotal.value = data.projectsMeta.total ?? 0;
     } catch (err) {
         error(err?.response?.data?.message ?? "Failed to load project content.");
     } finally {
@@ -222,7 +235,8 @@ async function fetchProjects() {
         });
         if (!data) return;
         resetField('projects', { value: data.projects ?? [] });
-        projectsTotal.value = data.total ?? 0;
+        snapshotProjects(data.projects);
+        projectsTotal.value = data.projectsMeta.total ?? 0;
     } catch (err) {
         error(err?.response?.data?.message ?? "Failed to load projects.");
     } finally {

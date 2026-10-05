@@ -13,8 +13,7 @@ use function in_array;
 
 class FileUploadService
 {
-
-    private const array COMPRESSIBLE_IMAGE_MIMES = [
+    private const array CONVERTIBLE_IMAGE_MIMES = [
         'image/jpeg',
         'image/png',
         'image/webp',
@@ -43,17 +42,16 @@ class FileUploadService
             }
 
             $oldFile = $model->{$column};
-            $filename = $file->hashName();
 
-            $this->storeCompressed($file, $path, $filename);
+            [$filename, $mime] = $this->store($file, $path);
 
             $filePath = "$path/$filename";
 
             $model->{$column} = [
-                'file_name' => (string) $filename,
+                'file_name' => $filename,
                 'orig_name' => $file->getClientOriginalName(),
                 'file_size' => Storage::disk('public')->size($filePath),
-                'mime_type' => $file->getMimeType(),
+                'mime_type' => $mime,
                 'url' => Storage::url($filePath),
             ];
 
@@ -68,41 +66,46 @@ class FileUploadService
         }
     }
 
-    private function storeCompressed(UploadedFile $file, string $path, string $filename): void
+    private function store(UploadedFile $file, string $path): array
     {
         $mime = $file->getMimeType();
+        $hashName = $file->hashName();
 
-        if (in_array($mime, self::COMPRESSIBLE_IMAGE_MIMES, true)) {
-            if ($this->compressImage($file, $path, $filename)) {
-                return;
+        if (in_array($mime, self::CONVERTIBLE_IMAGE_MIMES, true)) {
+            $webpName = pathinfo($hashName, PATHINFO_FILENAME) . '.webp';
+
+            if ($this->convertToWebp($file, "$path/$webpName")) {
+                return [$webpName, 'image/webp'];
             }
 
-            Log::warning('Image compression failed, storing original file.', [
-                'filename' => $filename,
+            Log::warning('WebP conversion failed, storing original file.', [
+                'filename' => $hashName,
                 'mime' => $mime,
             ]);
         }
 
-        $file->storeAs($path, $filename, 'public');
+        $file->storeAs($path, $hashName, 'public');
 
         if ($mime === self::PDF_MIME) {
-            $this->compressPdf(Storage::disk('public')->path("$path/$filename"));
+            $this->compressPdf(Storage::disk('public')->path("$path/$hashName"));
         }
+
+        return [$hashName, $mime];
     }
 
-    private function compressImage(UploadedFile $file, string $path, string $filename): bool
+    private function convertToWebp(UploadedFile $file, string $target): bool
     {
         try {
             $encoded = Image::decode($file)
                 ->scaleDown(width: $this->imageMaxWidth)
-                ->encodeUsingMediaType($file->getMimeType(), quality: $this->imageQuality);
+                ->encodeUsingMediaType('image/webp', quality: $this->imageQuality);
 
-            Storage::disk('public')->put("$path/$filename", (string) $encoded);
+            Storage::disk('public')->put($target, (string) $encoded);
 
             return true;
         } catch (\Throwable $e) {
             Log::warning('Image encode/decode failed.', [
-                'filename' => $filename,
+                'target' => $target,
                 'error' => $e->getMessage(),
             ]);
 

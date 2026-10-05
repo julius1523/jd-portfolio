@@ -68,10 +68,10 @@
                         <v-row :gap="35">
                             <v-col v-for="{ raw: project } in items" :key="project.id" cols="12" sm="6" lg="4"
                                 class="reveal-item">
-                                <v-card flat border class="rounded-[18px] flex flex-col cursor-pointer"
+                                <v-card flat border class="rounded-[15px] flex flex-col cursor-pointer"
                                     @click="openProject(project)">
                                     <v-img :src="project.image?.url" :alt="`${project.name} preview`"
-                                        class="w-full aspect-[4/3]" cover>
+                                        class="w-full aspect-[4/3]" cover loading="lazy">
                                         <template #placeholder>
                                             <v-skeleton-loader type="image" class="h-full" />
                                         </template>
@@ -114,7 +114,7 @@
                     </template>
                 </v-data-iterator>
 
-                <div v-if="loaded && pageCount > 1" class="mt-10">
+                <div v-if="loaded && pageCount > 1" class="mt-10 reveal-item">
                     <v-pagination v-model="page" :length="pageCount" :total-visible="5" rounded="circle"
                         active-color="primary" density="comfortable" />
                 </div>

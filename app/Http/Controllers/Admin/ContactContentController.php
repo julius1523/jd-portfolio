@@ -52,6 +52,7 @@ class ContactContentController extends Controller
 
         if ($perPage === -1) {
             $paged = $sorted;
+            $page = 1;
         } else {
             $page = max((int) $request->query('page', 1), 1);
             $perPage = max($perPage, 1);
@@ -68,7 +69,11 @@ class ContactContentController extends Controller
             'heading' => $data?->heading,
             'description' => $data?->description,
             'socials' => $paged,
-            'total' => $total,
+            'socialsMeta' => [
+                'total' => $total,
+                'perPage' => $perPage,
+                'page' => $page,
+            ],
         ]);
     }
 

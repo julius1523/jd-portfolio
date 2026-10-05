@@ -3,7 +3,7 @@
         <div class="inline-flex text-headline-medium font-semibold mb-4">
             {{ route.meta.title }}
         </div>
-        <v-tabs v-model="tab" inset :inset-padding="4" :inset-radius="6" density="compact" bg-color="surface-light"
+        <v-tabs v-model="tab" inset :inset-padding="4" :inset-radius="8" density="compact" bg-color="surface-light"
             selected-class="shadow-sm text-high-emphasis font-weight-bold border mb-8" slider-color="surface"
             slider-transition="fade" class="shadow-none">
             <v-tab :value="1" :ripple="false" class="text-medium-emphasis">Home</v-tab>

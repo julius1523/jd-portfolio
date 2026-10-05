@@ -16,6 +16,8 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction
 COPY docker/entrypoint.d/25-config-cache.sh /opt/docker/provision/entrypoint.d/25-config-cache.sh
 RUN chmod +x /opt/docker/provision/entrypoint.d/25-config-cache.sh
 
+COPY docker/nginx/fonts.conf /opt/docker/etc/nginx/vhost.common.d/fonts.conf
+
 ENV WEB_DOCUMENT_ROOT=/var/www/html/public
 ENV APP_ENV=production
 ENV APP_DEBUG=false

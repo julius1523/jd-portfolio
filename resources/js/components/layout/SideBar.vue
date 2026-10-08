@@ -41,7 +41,7 @@ const logout = () => {
                     </span>
                 </template>
                 <template v-if="$vuetify.display.smAndDown" #append>
-                    <v-icon-btn color="surface" icon="i-mdi-close" size="38" icon-size="18" class="border me-[-8px]"
+                    <v-icon-btn color="surface-light" icon="i-mdi-close" size="38" icon-size="18" class="me-[-8px]"
                         @click.stop.prevent="layout.toggleDrawer()" />
                 </template>
                 <template v-else #append>

@@ -68,7 +68,7 @@
                         <v-row :gap="35">
                             <v-col v-for="{ raw: project } in items" :key="project.id" cols="12" sm="6" lg="4"
                                 class="reveal-item">
-                                <v-card flat border class="rounded-[15px] flex flex-col cursor-pointer"
+                                <v-card flat border class="rounded-[24px] flex flex-col cursor-pointer"
                                     @click="openProject(project)">
                                     <v-img :src="project.image?.url" :alt="`${project.name} preview`"
                                         class="w-full aspect-[4/3]" cover loading="lazy">
@@ -189,10 +189,10 @@ watch([activeCategory, search], () => {
     page.value = 1;
 });
 
-watch(page, () => {
+watch(page, async () => {
+    await nextTick();
     const el = projectsBodySection.value?.$el ?? projectsBodySection.value;
     if (!el) return;
-
     const y = el.getBoundingClientRect().top + window.scrollY - 60;
     window.scrollTo({ top: y, behavior: "smooth" });
 });

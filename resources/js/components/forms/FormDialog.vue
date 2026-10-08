@@ -1,4 +1,5 @@
 <script setup>
+import { ref } from "vue";
 import { OverlayScrollbarsComponent } from "overlayscrollbars-vue";
 
 const props = defineProps({
@@ -16,18 +17,23 @@ const props = defineProps({
     maxHeight: { type: [String, Number], default: 630 },
 });
 const emit = defineEmits(["update:modelValue", "save", "cancel"]);
+const isScrollable = ref(false);
 
 function onCancel() {
     emit("update:modelValue", false);
     emit("cancel");
-}
+};
+function checkOverflow(instance) {
+    const { viewport } = instance.elements()
+    isScrollable.value = viewport.scrollHeight > viewport.clientHeight
+};
 </script>
 
 <template>
     <v-dialog :model-value="modelValue" @update:model-value="$emit('update:modelValue', $event)" scrollable
         :max-width="maxWidth" :max-height="maxHeight">
-        <v-card class="rounded-[15px] shadow-sm">
-            <v-toolbar density="compact" color="surface" class="border-b">
+        <v-card class="rounded-[24px] shadow-sm">
+            <v-toolbar density="compact" color="surface">
                 <div class="grid w-full grid-cols-[1fr_auto_1fr] items-center">
                     <div></div>
                     <span class="min-w-0 truncate text-center text-title-medium">
@@ -41,12 +47,16 @@ function onCancel() {
             </v-toolbar>
 
             <OverlayScrollbarsComponent element="div" class="pa-5 overflow-y-auto"
-                :options="{ scrollbars: { autoHide: 'move', theme: $vuetify.theme.current.dark ? 'os-theme-light' : 'os-theme-dark', } }"
-                defer>
+                :options="{ scrollbars: { autoHide: 'move', theme: $vuetify.theme.current.dark ? 'os-theme-light' : 'os-theme-dark' } }"
+                :events="{
+                    initialized: checkOverflow,
+                    updated: checkOverflow,
+                }" defer>
                 <slot />
             </OverlayScrollbarsComponent>
 
-            <v-card-actions class="py-[15px] px-[20px] mt-auto border-t flex-column flex-sm-row">
+            <v-card-actions class="py-[15px] px-[20px] mt-auto flex-column flex-sm-row"
+                :class="{ 'border-t': isScrollable }">
                 <div class="order-1 order-sm-0" :class="{ 'w-100': $vuetify.display.smAndDown }">
                     <v-btn variant="flat" color="surface-light" height="40" block :slim="false" rounded="pill"
                         class="border" @click="onCancel">

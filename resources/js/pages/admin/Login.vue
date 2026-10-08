@@ -2,7 +2,7 @@
     <section id="login" ref="loginSection">
         <v-container>
             <v-card flat max-width="400" :loading="loading" :disabled="loading"
-                class="pa-6 mx-auto mt-10 shadow-sm rounded-[15px] border reveal-item">
+                class="pa-6 mx-auto mt-10 shadow-sm rounded-[24px] border reveal-item">
                 <template v-if="loading" #loader>
                     <v-progress-linear indeterminate color="primary" />
                 </template>
@@ -63,7 +63,6 @@ useScrollReveal(loginSection, { selector: '.reveal-item', y: 20 });
 
 onMounted(async () => {
     await nextTick();
-
     const { reason } = route.query;
     if (reason === 'session_expired') warning('Your session has expired. Please log in again.');
     else if (reason === 'unauthenticated') error('You are unauthenticated. Please log in again.');

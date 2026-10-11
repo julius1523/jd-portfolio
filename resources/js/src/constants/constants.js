@@ -16,6 +16,13 @@ export const DEVELOPER_TITLES = [
     "Information Systems Developer",
 ];
 
+export const PROJECT_CATEGORIES = [
+    "Software Development",
+    "UI/UX Design",
+    "Technical Documentation",
+    "Presentations/Multimedia",
+];
+
 export const SKILL_CATEGORIES = [
     {
         title: "Front-End Development",

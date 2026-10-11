@@ -5,10 +5,10 @@ import { useForm } from "vee-validate";
 import Dialog from "@/components/forms/FormDialog";
 import Select from "@/components/forms/Select";
 import FileUpload from "@/components/forms/FileUpload";
-import { PROJECT_MATERIALS } from "@/src/constants/constants";
+import { PROJECT_MATERIALS, PROJECT_CATEGORIES } from "@/src/constants/constants";
 
+const emit = defineEmits(["added"]);
 const props = defineProps({ list: { type: Array, required: true } });
-const categoryOptions = ["Software Development", "Technical Documentation", "Presentations/Multimedia"];
 const dialog = ref(false);
 const editingIndex = ref(-1);
 const isEditing = computed(() => editingIndex.value > -1);
@@ -25,7 +25,7 @@ const materialItems = computed(() =>
 );
 const schema = yup.object({
     id: yup.mixed().nullable(),
-    category: yup.string().label("Category").oneOf(categoryOptions, "Select a valid category").required(),
+    category: yup.string().label("Category").oneOf(PROJECT_CATEGORIES, "Select a valid category").required(),
     name: yup.string().label("Project name").required(),
     description: yup.string().label("Description").required(),
     materials: yup.array().label("Materials").min(1, "At least one material is required"),
@@ -53,6 +53,7 @@ const submit = handleSubmit((values) => {
         props.list.splice(editingIndex.value, 1, row);
     } else {
         props.list.push(row);
+        emit("added", row.id);
     }
     dialog.value = false;
 });
@@ -83,7 +84,7 @@ defineExpose({ open, remove });
             <v-row :gap="15">
                 <v-col cols="12">
                     <div class="text-sm font-medium text-medium-emphasis mb-1">Project Category</div>
-                    <Select v-model="fields.category" :items="categoryOptions" label="Select project category"
+                    <Select v-model="fields.category" :items="PROJECT_CATEGORIES" label="Select project category"
                         variant="solo" flat single-line density="compact" :error-messages="errors.category"
                         :multiple="false" :chip="false" />
                 </v-col>

@@ -169,7 +169,7 @@ class FileUploadService
         }
     }
 
-    private function deleteOldFile(?array $file, string $path): void
+    public function deleteOldFile(?array $file, string $path): void
     {
         if (!empty($file['file_name'])) {
             Storage::disk('public')->delete("$path/{$file['file_name']}");

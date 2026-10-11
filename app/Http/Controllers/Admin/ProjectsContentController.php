@@ -2,15 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\Admin\UpdateProjectsContentRequest;
-use App\Services\FileUploadService;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\UpdateProjectsContentRequest;
 use App\Models\ProjectContent;
-use Illuminate\Http\Request;
+use App\Services\FileUploadService;
 use Illuminate\Support\Str;
-use App\Support\ArraySort;
-use function array_slice;
-use function count;
 
 class ProjectsContentController extends Controller
 {
@@ -19,7 +15,7 @@ class ProjectsContentController extends Controller
     ) {
     }
 
-    public function getProjectContent(Request $request)
+    public function getProjectContent()
     {
         $data = ProjectContent::select([
             'profile_image',
@@ -28,47 +24,28 @@ class ProjectsContentController extends Controller
             'projects',
         ])->first();
 
-        $sorted = ArraySort::byKey(
-            $data?->projects ?? [],
-            $request->query('sortBy'),
-            $request->query('sortOrder', 'asc'),
-            ['category', 'name']
-        );
+        $order = array_flip(UpdateProjectsContentRequest::CATEGORIES);
+        $projects = $data?->projects ?? [];
 
-        $total = count($sorted);
-        $perPage = (int) $request->query('perPage', 10);
-
-        if ($perPage === -1) {
-            $paged = $sorted;
-            $page = 1;
-        } else {
-            $page = max((int) $request->query('page', 1), 1);
-            $perPage = max($perPage, 1);
-
-            $paged = array_slice(
-                $sorted,
-                ($page - 1) * $perPage,
-                $perPage
-            );
-        }
+        usort($projects, fn($a, $b) => [
+            $order[$a['category'] ?? ''] ?? PHP_INT_MAX,
+            mb_strtolower($a['name'] ?? ''),
+        ] <=> [
+            $order[$b['category'] ?? ''] ?? PHP_INT_MAX,
+            mb_strtolower($b['name'] ?? ''),
+        ]);
 
         return response()->json([
             'profileImage' => $data?->profile_image,
             'heading' => $data?->heading,
             'description' => $data?->description,
-            'projects' => $paged,
-            'projectsMeta' => [
-                'total' => $total,
-                'perPage' => $perPage,
-                'page' => $page,
-            ],
+            'projects' => $projects,
         ]);
     }
 
     public function updateProjectContent(UpdateProjectsContentRequest $request)
     {
         $validated = $request->validated();
-
         $projectsInput = $request->input('projects', []);
 
         $data = ProjectContent::firstOrCreate([]);
@@ -80,27 +57,30 @@ class ProjectsContentController extends Controller
 
         $this->fileUploadService->handle($request, $data, 'profileImage', 'profile_image', 'uploads/images');
 
+        $existingById = collect($data->projects ?? [])->keyBy('id');
+
         $projects = [];
 
         foreach ($projectsInput as $index => $project) {
-            $existing = $data->projects[$index] ?? null;
+            $existing = $existingById->get($project['id'] ?? '');
 
             $imageHolder = new \stdClass();
-            $imageHolder->image = $project['image'] ?? $existing['image'] ?? null;
+            $imageHolder->image = $existing['image'] ?? null;
             $this->fileUploadService->handle($request, $imageHolder, "projectImages.$index", 'image', 'uploads/images');
 
             $linkType = $project['linkType'] ?? 'link';
 
             $linkFileHolder = new \stdClass();
-            $linkFileHolder->file = $project['linkFile'] ?? $existing['linkFile'] ?? null;
+            $linkFileHolder->file = $existing['linkFile'] ?? null;
             if ($linkType === 'upload') {
                 $this->fileUploadService->handle($request, $linkFileHolder, "projectLinkFiles.$index", 'file', 'uploads/files');
             } else {
+                $this->fileUploadService->deleteOldFile($linkFileHolder->file, 'uploads/files');
                 $linkFileHolder->file = null;
             }
 
             $projects[] = [
-                'id' => $project['id'] ?? $existing['id'] ?? (string) Str::uuid(),
+                'id' => $existing['id'] ?? (string) Str::uuid7(),
                 'category' => $project['category'] ?? null,
                 'name' => $project['name'] ?? null,
                 'description' => $project['description'] ?? null,
@@ -114,6 +94,15 @@ class ProjectsContentController extends Controller
 
         $data->projects = $projects;
         $data->save();
+
+        $kept = array_flip(array_column($projects, 'id'));
+
+        foreach ($existingById as $id => $old) {
+            if (!isset($kept[$id])) {
+                $this->fileUploadService->deleteOldFile($old['image'] ?? null, 'uploads/images');
+                $this->fileUploadService->deleteOldFile($old['linkFile'] ?? null, 'uploads/files');
+            }
+        }
 
         return response()->json([
             'message' => 'Changes successfully saved.',

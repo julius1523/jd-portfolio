@@ -49,7 +49,7 @@ export const useHomeStore = createResourceStore("home", "/api/public/home");
 export const useAboutStore = createResourceStore("about", "/api/public/about");
 export const useProjectsStore = createResourceStore(
     "projects",
-    "/api/public/projects",
+    "/api/public/projects?perPage=-1",
 );
 export const useContactStore = createResourceStore(
     "contact",

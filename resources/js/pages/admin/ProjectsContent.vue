@@ -72,35 +72,38 @@
                             Update your projects to showcase
                         </div>
                     </div>
-                    <DataTable :items="fields.projects" :headers="projectHeaders" :addable="true"
-                        add-label="New Project" expand-key="description" v-model:sort-by="projectsOptions.sortBy"
-                        v-model:page="projectsOptions.page" v-model:items-per-page="projectsOptions.itemsPerPage"
-                        :items-length="projectsTotal" :loading="projectsLoading" no-data-text="No projects added yet."
-                        :disabled="loading" density="compact" :row-status="projectStatus" @add="openDialog()"
-                        @edit="openDialog($event)" @remove="removeItem($event)">
-                        <template #item.image="{ item }">
-                            <v-img v-if="projectImagePreview(item)" height="48" width="48" :aspect-ratio="1" rounded
-                                :src="projectImagePreview(item)" class="border"
-                                :class="$vuetify.display.mdAndUp ? 'mx-auto' : 'ml-auto'">
-                                <template #placeholder>
-                                    <v-skeleton-loader type="image" class="h-full" />
-                                </template>
-                            </v-img>
-                            <span v-else class="text-medium-emphasis">—</span>
-                        </template>
-                        <template #item.name="{ item }">
-                            <div class="d-flex flex-column ga-1 mb-1">
-                                <div>{{ item.name }}</div>
-                                <div class="d-flex flex-wrap ga-1"
-                                    :class="{ 'justify-end': $vuetify.display.smAndDown }">
-                                    <v-chip v-for="(material, i) in item.materials" :key="i" size="small"
-                                        color="primary" variant="tonal">
-                                        {{ material }}
-                                    </v-chip>
+
+                    <v-card class="p-5 shadow-sm border rounded-[15px]">
+                        <DataTable :items="fields.projects" :headers="projectHeaders" :addable="true"
+                            add-label="New Project" expand-key="description" v-model:sort-by="projectsOptions.sortBy"
+                            v-model:page="projectsOptions.page" v-model:items-per-page="projectsOptions.itemsPerPage"
+                            no-data-text="No projects added yet." :disabled="loading" density="compact"
+                            :row-status="projectStatus" @add="openDialog()" @edit="openDialog($event)"
+                            @remove="removeItem($event)">
+                            <template #item.image="{ item }">
+                                <v-img v-if="projectImagePreview(item)" height="48" width="48" :aspect-ratio="1" rounded
+                                    :src="projectImagePreview(item)" class="border"
+                                    :class="$vuetify.display.mdAndUp ? 'mx-auto' : 'ml-auto'">
+                                    <template #placeholder>
+                                        <v-skeleton-loader type="image" class="h-full" />
+                                    </template>
+                                </v-img>
+                                <span v-else class="text-medium-emphasis">—</span>
+                            </template>
+                            <template #item.name="{ item }">
+                                <div class="d-flex flex-column ga-1 mb-1">
+                                    <div>{{ item.name }}</div>
+                                    <div class="d-flex flex-wrap ga-1"
+                                        :class="{ 'justify-end': $vuetify.display.smAndDown }">
+                                        <v-chip v-for="(material, i) in item.materials" :key="i" size="small"
+                                            color="primary" variant="tonal">
+                                            {{ material }}
+                                        </v-chip>
+                                    </div>
                                 </div>
-                            </div>
-                        </template>
-                    </DataTable>
+                            </template>
+                        </DataTable>
+                    </v-card>
                 </div>
             </div>
 
@@ -108,15 +111,16 @@
         </v-form>
     </Shimmer>
 
-    <ProjectsDialog ref="dialogRef" :list="fields.projects" />
+    <ProjectsDialog ref="dialogRef" :list="fields.projects" @added="goToItem" />
 </template>
 
 <script setup>
 import axios from "@/plugins/axios";
-import { ref, reactive, onMounted, watch } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import * as yup from "yup";
 import { useValidatedForm } from "@/composables/useValidatedForm";
 import { useSnackBarQueue } from "@/composables/useSnackBarQueue";
+import { useGoToItem } from "@/composables/useGoToItem";
 import DataTable from "@/components/data/DataTable";
 import AvatarUpload from "@/components/forms/AvatarUpload";
 import FormActions from "@/components/forms/FormActions";
@@ -136,7 +140,7 @@ const schema = yup.object({
 const { error } = useSnackBarQueue();
 const pageLoading = ref(true);
 const dialogRef = ref();
-const { fields, errors, loading, submit, cancelEdit, resetForm, resetField, meta, ready } = useValidatedForm(
+const { fields, errors, loading, submit, cancelEdit, resetForm, meta, ready } = useValidatedForm(
     schema,
     async (values) => {
         const formData = new FormData();
@@ -182,8 +186,7 @@ const { fields, errors, loading, submit, cancelEdit, resetForm, resetField, meta
     { resetOnSuccess: false }
 );
 const projectsOptions = reactive({ page: 1, itemsPerPage: 10, sortBy: [] });
-const projectsTotal = ref(0);
-const projectsLoading = ref(false);
+const goToItem = useGoToItem(() => fields.projects, projectsOptions);
 const PROJECT_KEYS = ["name", "description", "linkUrl"];
 const projectSignature = (p) => JSON.stringify(PROJECT_KEYS.map((k) => p[k] ?? ""));
 const originalProjects = ref(new Map());
@@ -205,7 +208,7 @@ function projectImagePreview(item) {
     if (item.image instanceof File || item.image instanceof Blob) {
         return URL.createObjectURL(item.image);
     }
-    return item.image.url ?? null;
+    return item.image?.url ?? null;
 };
 
 async function getProjectContent() {
@@ -214,37 +217,12 @@ async function getProjectContent() {
         if (!data) return;
         resetForm({ values: { ...data, projects: data.projects ?? [] } });
         snapshotProjects(data.projects);
-        projectsTotal.value = data.projectsMeta.total ?? 0;
     } catch (err) {
         error(err?.response?.data?.message ?? "Failed to load project content.");
     } finally {
         pageLoading.value = false;
     }
 };
-async function fetchProjects() {
-    projectsLoading.value = true;
-    try {
-        const [sort] = projectsOptions.sortBy ?? [];
-        const { data } = await axios.get("/api/getProjectContent", {
-            params: {
-                page: projectsOptions.page,
-                perPage: projectsOptions.itemsPerPage,
-                sortBy: sort?.key,
-                sortOrder: sort?.order,
-            },
-        });
-        if (!data) return;
-        resetField('projects', { value: data.projects ?? [] });
-        snapshotProjects(data.projects);
-        projectsTotal.value = data.projectsMeta.total ?? 0;
-    } catch (err) {
-        error(err?.response?.data?.message ?? "Failed to load projects.");
-    } finally {
-        projectsLoading.value = false;
-    }
-};
-
-watch(() => [projectsOptions.page, projectsOptions.itemsPerPage, projectsOptions.sortBy], fetchProjects);
 
 onMounted(() => {
     getProjectContent();

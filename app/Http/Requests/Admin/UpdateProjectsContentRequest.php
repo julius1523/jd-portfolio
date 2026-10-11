@@ -8,6 +8,13 @@ use function is_array;
 
 class UpdateProjectsContentRequest extends FormRequest
 {
+    public const CATEGORIES = [
+        'Software Development',
+        'UI/UX Design',
+        'Technical Documentation',
+        'Presentations/Multimedia',
+    ];
+
     public function authorize(): bool
     {
         return true;
@@ -32,15 +39,7 @@ class UpdateProjectsContentRequest extends FormRequest
             'description' => ['nullable', 'string'],
 
             'projects' => ['nullable', 'array'],
-            'projects.*.category' => [
-                'required',
-                'string',
-                Rule::in([
-                    'Software Development',
-                    'Technical Documentation',
-                    'Presentations/Multimedia',
-                ])
-            ],
+            'projects.*.category' => ['required', 'string', Rule::in(self::CATEGORIES)],
             'projects.*.name' => ['required', 'string', 'max:255'],
             'projects.*.description' => ['required', 'string'],
             'projects.*.materials' => ['required', 'array', 'min:1'],

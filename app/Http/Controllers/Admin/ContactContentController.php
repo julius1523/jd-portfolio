@@ -7,11 +7,8 @@ use App\Services\IconResolverService;
 use App\Services\FileUploadService;
 use App\Http\Controllers\Controller;
 use App\Models\ContactContent;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Support\ArraySort;
-use function array_slice;
-use function count;
 
 class ContactContentController extends Controller
 {
@@ -21,7 +18,7 @@ class ContactContentController extends Controller
     ) {
     }
 
-    public function getContactContent(Request $request)
+    public function getContactContent()
     {
         $data = ContactContent::select([
             'profile_image',
@@ -40,40 +37,11 @@ class ContactContentController extends Controller
             })
             ->all();
 
-        $sorted = ArraySort::byKey(
-            $socials,
-            $request->query('sortBy'),
-            $request->query('sortOrder', 'asc'),
-            ['name']
-        );
-
-        $total = count($sorted);
-        $perPage = (int) $request->query('perPage', 10);
-
-        if ($perPage === -1) {
-            $paged = $sorted;
-            $page = 1;
-        } else {
-            $page = max((int) $request->query('page', 1), 1);
-            $perPage = max($perPage, 1);
-
-            $paged = array_slice(
-                $sorted,
-                ($page - 1) * $perPage,
-                $perPage
-            );
-        }
-
         return response()->json([
             'profileImage' => $data?->profile_image,
             'heading' => $data?->heading,
             'description' => $data?->description,
-            'socials' => $paged,
-            'socialsMeta' => [
-                'total' => $total,
-                'perPage' => $perPage,
-                'page' => $page,
-            ],
+            'socials' => array_values(ArraySort::byKey($socials, null, 'asc', ['name'])),
         ]);
     }
 
@@ -92,13 +60,15 @@ class ContactContentController extends Controller
 
         $this->fileUploadService->handle($request, $data, 'profileImage', 'profile_image', 'uploads/images');
 
+        $existingById = collect($data->socials ?? [])->keyBy('id');
+
         $socials = [];
 
-        foreach ($socialsInput as $index => $social) {
-            $existing = $data->socials[$index] ?? null;
+        foreach ($socialsInput as $social) {
+            $existing = $existingById->get($social['id'] ?? '');
 
             $socials[] = [
-                'id' => $social['id'] ?? $existing['id'] ?? (string) Str::uuid(),
+                'id' => $existing['id'] ?? (string) Str::uuid7(),
                 'name' => $social['name'] ?? null,
                 'linkUrl' => $social['linkUrl'] ?? null,
                 'icon' => $social['icon'] ?? null,

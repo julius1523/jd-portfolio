@@ -72,25 +72,28 @@
                             Update your social accounts to link
                         </div>
                     </div>
-                    <DataTable :items="fields.socials" :headers="socialHeaders" :addable="true" :expandable="false"
-                        add-label="New Social" v-model:sort-by="socialsOptions.sortBy"
-                        v-model:page="socialsOptions.page" v-model:items-per-page="socialsOptions.itemsPerPage"
-                        :items-length="socialsTotal" :loading="socialsLoading" no-data-text="No socials added yet."
-                        :disabled="loading" density="compact" :row-status="socialStatus" @add="openDialog()"
-                        @edit="openDialog($event)" @remove="removeItem($event)">
-                        <template #item.name="{ item }">
-                            <div class="d-flex ga-3 align-center"
-                                :class="{ 'justify-end': $vuetify.display.smAndDown }">
-                                <v-icon :class="item.icon" color="primary" />
-                                <span>{{ item.name }}</span>
-                            </div>
-                        </template>
-                        <template #item.linkUrl="{ item }">
-                            <div class="break-all">
-                                {{ item.linkUrl }}
-                            </div>
-                        </template>
-                    </DataTable>
+
+                    <v-card class="p-5 shadow-sm border rounded-[15px]">
+                        <DataTable :items="fields.socials" :headers="socialHeaders" :addable="true" :expandable="false"
+                            add-label="New Social" v-model:sort-by="socialsOptions.sortBy"
+                            v-model:page="socialsOptions.page" v-model:items-per-page="socialsOptions.itemsPerPage"
+                            no-data-text="No socials added yet." :disabled="loading" density="compact"
+                            :row-status="socialStatus" @add="openDialog()" @edit="openDialog($event)"
+                            @remove="removeItem($event)">
+                            <template #item.name="{ item }">
+                                <div class="d-flex ga-3 align-center"
+                                    :class="{ 'justify-end': $vuetify.display.smAndDown }">
+                                    <v-icon :class="item.icon" color="primary" />
+                                    <span>{{ item.name }}</span>
+                                </div>
+                            </template>
+                            <template #item.linkUrl="{ item }">
+                                <div class="break-all">
+                                    {{ item.linkUrl }}
+                                </div>
+                            </template>
+                        </DataTable>
+                    </v-card>
                 </div>
             </div>
 
@@ -98,15 +101,16 @@
         </v-form>
     </Shimmer>
 
-    <SocialsDialog ref="dialogRef" :list="fields.socials" />
+    <SocialsDialog ref="dialogRef" :list="fields.socials" @added="goToItem" />
 </template>
 
 <script setup>
 import axios from "@/plugins/axios";
-import { ref, reactive, onMounted, watch } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import * as yup from "yup";
 import { useValidatedForm } from "@/composables/useValidatedForm";
 import { useSnackBarQueue } from "@/composables/useSnackBarQueue";
+import { useGoToItem } from "@/composables/useGoToItem";
 import DataTable from "@/components/data/DataTable";
 import AvatarUpload from "@/components/forms/AvatarUpload";
 import FormActions from "@/components/forms/FormActions";
@@ -125,7 +129,7 @@ const schema = yup.object({
 const { error } = useSnackBarQueue();
 const pageLoading = ref(true);
 const dialogRef = ref();
-const { fields, errors, loading, submit, cancelEdit, resetForm, resetField, meta, ready } = useValidatedForm(
+const { fields, errors, loading, submit, cancelEdit, resetForm, meta, ready } = useValidatedForm(
     schema,
     async (values) => {
         const formData = new FormData();
@@ -156,8 +160,7 @@ const { fields, errors, loading, submit, cancelEdit, resetForm, resetField, meta
     { resetOnSuccess: false }
 );
 const socialsOptions = reactive({ page: 1, itemsPerPage: 10, sortBy: [] });
-const socialsTotal = ref(0);
-const socialsLoading = ref(false);
+const goToItem = useGoToItem(() => fields.projects, socialsOptions);
 const SOCIAL_KEYS = ["name", "linkUrl", "icon"];
 const socialSignature = (s) => JSON.stringify(SOCIAL_KEYS.map((k) => s[k] ?? ""));
 const originalSocials = ref(new Map());
@@ -182,37 +185,12 @@ async function getContactContent() {
         if (!data) return;
         resetForm({ values: { ...data } });
         snapshotSocials(data.socials);
-        socialsTotal.value = data.socialsMeta?.total ?? 0;
     } catch (err) {
         error(err?.response?.data?.message ?? "Failed to load contact content.");
     } finally {
         pageLoading.value = false;
     }
 };
-async function fetchSocials() {
-    socialsLoading.value = true;
-    try {
-        const [sort] = socialsOptions.sortBy ?? [];
-        const { data } = await axios.get("/api/getContactContent", {
-            params: {
-                page: socialsOptions.page,
-                perPage: socialsOptions.itemsPerPage,
-                sortBy: sort?.key,
-                sortOrder: sort?.order,
-            },
-        });
-        if (!data) return;
-        resetField('socials', { value: data.socials ?? [] });
-        snapshotSocials(data.socials);
-        socialsTotal.value = data.socialsMeta?.total ?? 0;
-    } catch (err) {
-        error(err?.response?.data?.message ?? "Failed to load socials.");
-    } finally {
-        socialsLoading.value = false;
-    }
-};
-
-watch(() => [socialsOptions.page, socialsOptions.itemsPerPage, socialsOptions.sortBy], fetchSocials);
 
 onMounted(() => {
     getContactContent();

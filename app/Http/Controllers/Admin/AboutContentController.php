@@ -7,11 +7,8 @@ use App\Services\IconResolverService;
 use App\Services\FileUploadService;
 use App\Http\Controllers\Controller;
 use App\Models\AboutContent;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Support\ArraySort;
-use function array_slice;
-use function count;
 
 class AboutContentController extends Controller
 {
@@ -21,7 +18,7 @@ class AboutContentController extends Controller
     ) {
     }
 
-    public function getAboutContent(Request $request)
+    public function getAboutContent()
     {
         $data = AboutContent::select([
             'profile_image',
@@ -42,70 +39,12 @@ class AboutContentController extends Controller
             return $fact;
         })->all();
 
-        $skillsSorted = ArraySort::byKey(
-            $skills,
-            $request->query('skillsSortBy'),
-            $request->query('skillsSortOrder', 'asc'),
-            ['category']
-        );
-
-        $skillsTotal = count($skillsSorted);
-        $skillsPerPage = (int) $request->query('skillsPerPage', 10);
-
-        if ($skillsPerPage === -1) {
-            $skillsPaged = $skillsSorted;
-            $skillsPage = 1;
-        } else {
-            $skillsPage = max((int) $request->query('skillsPage', 1), 1);
-            $skillsPerPage = max($skillsPerPage, 1);
-
-            $skillsPaged = array_slice(
-                $skillsSorted,
-                ($skillsPage - 1) * $skillsPerPage,
-                $skillsPerPage
-            );
-        }
-
-        $randomFactsSorted = ArraySort::byKey(
-            $randomFacts,
-            $request->query('randomFactsSortBy'),
-            $request->query('randomFactsSortOrder', 'asc'),
-            ['randomFact']
-        );
-
-        $randomFactsTotal = count($randomFactsSorted);
-        $randomFactsPerPage = (int) $request->query('randomFactsPerPage', 10);
-
-        if ($randomFactsPerPage === -1) {
-            $randomFactsPaged = $randomFactsSorted;
-            $randomFactsPage = 1;
-        } else {
-            $randomFactsPage = max((int) $request->query('randomFactsPage', 1), 1);
-            $randomFactsPerPage = max($randomFactsPerPage, 1);
-
-            $randomFactsPaged = array_slice(
-                $randomFactsSorted,
-                ($randomFactsPage - 1) * $randomFactsPerPage,
-                $randomFactsPerPage
-            );
-        }
-
         return response()->json([
             'profileImage' => $data?->profile_image,
             'heading' => $data?->heading,
             'description' => $data?->description,
-            'skills' => $skillsPaged,
-            'skillsMeta' => [
-                'total' => $skillsTotal,
-                'perPage' => $skillsPerPage,
-                'page' => $skillsPage,
-            ],
-            'randomFacts' => $randomFactsPaged,
-            'randomFactsMeta' => [
-                'total' => $randomFactsTotal,
-                'perPage' => $randomFactsPerPage,
-                'page' => $randomFactsPage,
-            ],
+            'skills' => array_values(ArraySort::byKey($skills, null, 'asc', ['category'])),
+            'randomFacts' => array_values(ArraySort::byKey($randomFacts, null, 'asc', ['randomFact'])),
             'others' => [
                 'title' => $data?->others['title'] ?? null,
                 'description' => $data?->others['description'] ?? null,
@@ -130,13 +69,16 @@ class AboutContentController extends Controller
 
         $this->fileUploadService->handle($request, $data, 'profile_image', 'profile_image', 'uploads/images');
 
+        $skillsById = collect($data->skills ?? [])->keyBy('id');
+        $factsById = collect($data->random_facts ?? [])->keyBy('id');
+
         $skills = [];
 
-        foreach ($skillsInput as $index => $skill) {
-            $existing = $data->skills[$index] ?? null;
+        foreach ($skillsInput as $skill) {
+            $existing = $skillsById->get($skill['id'] ?? '');
 
             $skills[] = [
-                'id' => $skill['id'] ?? $existing['id'] ?? (string) Str::uuid(),
+                'id' => $existing['id'] ?? (string) Str::uuid7(),
                 'category' => $skill['category'] ?? null,
                 'skill' => array_values($skill['skill'] ?? []),
                 'icon' => $skill['icon'] ?? null,
@@ -147,11 +89,11 @@ class AboutContentController extends Controller
 
         $randomFacts = [];
 
-        foreach ($randomFactsInput as $index => $fact) {
-            $existing = $data->random_facts[$index] ?? null;
+        foreach ($randomFactsInput as $fact) {
+            $existing = $factsById->get($fact['id'] ?? '');
 
             $randomFacts[] = [
-                'id' => $fact['id'] ?? $existing['id'] ?? (string) Str::uuid(),
+                'id' => $existing['id'] ?? (string) Str::uuid7(),
                 'icon' => $fact['icon'] ?? null,
                 'randomFact' => $fact['randomFact'] ?? null,
             ];

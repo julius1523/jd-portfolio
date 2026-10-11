@@ -72,31 +72,34 @@
                             Update what skills to showcase per category
                         </div>
                     </div>
-                    <DataTable :items="fields.skills" :headers="skillHeaders" :addable="true" :expandable="false"
-                        add-label="New Skill" v-model:sort-by="skillsOptions.sortBy" v-model:page="skillsOptions.page"
-                        v-model:items-per-page="skillsOptions.itemsPerPage" :items-length="skillsTotal"
-                        :loading="skillsLoading" no-data-text="No skills added yet." :disabled="loading"
-                        density="compact" :row-status="skillStatus" @add="openSkillsDialog()"
-                        @edit="openSkillsDialog($event)" @remove="removeSkillsItem($event)">
-                        <template #item.category="{ item }">
-                            {{ item.category }}
-                        </template>
-                        <template #item.skill="{ item }">
-                            <div class="d-flex flex-wrap ga-1 py-2"
-                                :class="{ 'justify-end': $vuetify.display.smAndDown }">
-                                <v-chip v-for="skillName in item.skill" :key="skillName" size="small" color="primary"
-                                    variant="tonal">
-                                    {{ skillName }}
-                                </v-chip>
-                            </div>
-                        </template>
-                        <template #item.icon="{ item }">
-                            <v-icon v-if="item.iconSvg" color="primary" size="35">
-                                <span v-html="item.iconSvg" class="inline-flex items-center" />
-                            </v-icon>
-                            <span v-else class="text-medium-emphasis">—</span>
-                        </template>
-                    </DataTable>
+
+                    <v-card class="p-5 shadow-sm border rounded-[15px]">
+                        <DataTable :items="fields.skills" :headers="skillHeaders" :addable="true" :expandable="false"
+                            add-label="New Skill" v-model:sort-by="skillsOptions.sortBy"
+                            v-model:page="skillsOptions.page" v-model:items-per-page="skillsOptions.itemsPerPage"
+                            no-data-text="No skills added yet." :disabled="loading" density="compact"
+                            :row-status="skillStatus" @add="openSkillsDialog()" @edit="openSkillsDialog($event)"
+                            @remove="removeSkillsItem($event)">
+                            <template #item.category="{ item }">
+                                {{ item.category }}
+                            </template>
+                            <template #item.skill="{ item }">
+                                <div class="d-flex flex-wrap ga-1 py-2"
+                                    :class="{ 'justify-end': $vuetify.display.smAndDown }">
+                                    <v-chip v-for="skillName in item.skill" :key="skillName" size="small"
+                                        color="primary" variant="tonal">
+                                        {{ skillName }}
+                                    </v-chip>
+                                </div>
+                            </template>
+                            <template #item.icon="{ item }">
+                                <v-icon v-if="item.iconSvg" color="primary" size="35">
+                                    <span v-html="item.iconSvg" class="inline-flex items-center" />
+                                </v-icon>
+                                <span v-else class="text-medium-emphasis">—</span>
+                            </template>
+                        </DataTable>
+                    </v-card>
                 </div>
 
                 <div>
@@ -106,19 +109,21 @@
                             Update what the users must know about you
                         </div>
                     </div>
-                    <DataTable :items="fields.randomFacts" :headers="randomFactHeaders" :addable="true"
-                        :expandable="false" add-label="New Fact" v-model:sort-by="randomFacts.sortBy"
-                        v-model:page="randomFacts.page" v-model:items-per-page="randomFacts.itemsPerPage"
-                        :items-length="randomFactsTotal" :loading="randomFactsLoading"
-                        no-data-text="No facts added yet." :disabled="loading" density="compact"
-                        :row-status="randomFactStatus" @add="openRandomFactsDialog()"
-                        @edit="openRandomFactsDialog($event)" @remove="removeFactsItem($event)">
-                        <template #item.icon="{ item }">
-                            <v-icon color="primary">
-                                <span v-html="item.iconSvg" class="inline-flex items-center" />
-                            </v-icon>
-                        </template>
-                    </DataTable>
+
+                    <v-card class="p-5 shadow-sm border rounded-[15px]">
+                        <DataTable :items="fields.randomFacts" :headers="randomFactHeaders" :addable="true"
+                            :expandable="false" add-label="New Fact" v-model:sort-by="randomFacts.sortBy"
+                            v-model:page="randomFacts.page" v-model:items-per-page="randomFacts.itemsPerPage"
+                            no-data-text="No facts added yet." :disabled="loading" density="compact"
+                            :row-status="randomFactStatus" @add="openRandomFactsDialog()"
+                            @edit="openRandomFactsDialog($event)" @remove="removeFactsItem($event)">
+                            <template #item.icon="{ item }">
+                                <v-icon color="primary">
+                                    <span v-html="item.iconSvg" class="inline-flex items-center" />
+                                </v-icon>
+                            </template>
+                        </DataTable>
+                    </v-card>
                 </div>
 
                 <div>
@@ -181,16 +186,17 @@
         </v-form>
     </Shimmer>
 
-    <SkillsDialog ref="dialogSkillsRef" :list="fields.skills" />
-    <RandomFactsDialog ref="dialogRandomFactsRef" :list="fields.randomFacts" />
+    <SkillsDialog ref="dialogSkillsRef" :list="fields.skills" @added="goToSkill" />
+    <RandomFactsDialog ref="dialogRandomFactsRef" :list="fields.randomFacts" @added="goToRandomFact" />
 </template>
 
 <script setup>
 import axios from "@/plugins/axios";
-import { ref, reactive, onMounted, watch } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import * as yup from "yup";
 import { useValidatedForm } from "@/composables/useValidatedForm";
 import { useSnackBarQueue } from "@/composables/useSnackBarQueue";
+import { useGoToItem } from "@/composables/useGoToItem";
 import DataTable from "@/components/data/DataTable";
 import FileUpload from "@/components/forms/FileUpload";
 import AvatarUpload from "@/components/forms/AvatarUpload";
@@ -223,7 +229,7 @@ const { error } = useSnackBarQueue();
 const pageLoading = ref(true);
 const dialogSkillsRef = ref();
 const dialogRandomFactsRef = ref();
-const { fields, errors, loading, submit, cancelEdit, resetForm, resetField, meta, ready } = useValidatedForm(
+const { fields, errors, loading, submit, cancelEdit, resetForm, meta, ready } = useValidatedForm(
     schema,
     async (values) => {
         const formData = new FormData();
@@ -268,14 +274,12 @@ const { fields, errors, loading, submit, cancelEdit, resetForm, resetField, meta
     { resetOnSuccess: false }
 );
 const skillsOptions = reactive({ page: 1, itemsPerPage: 10, sortBy: [] });
-const skillsTotal = ref(0);
-const skillsLoading = ref(false);
+const goToSkill = useGoToItem(() => fields.skills, skillsOptions);
 const SKILL_KEYS = ["category", "skill", "icon"];
 const skillSignature = (s) => JSON.stringify(SKILL_KEYS.map((k) => s[k] ?? ""));
 const originalSkills = ref(new Map());
 const randomFacts = reactive({ page: 1, itemsPerPage: 10, sortBy: [] });
-const randomFactsTotal = ref(0);
-const randomFactsLoading = ref(false);
+const goToRandomFact = useGoToItem(() => fields.randomFacts, randomFacts);
 const RANDOM_FACT_KEYS = ["randomFact", "icon"];
 const randomFactSignature = (f) => JSON.stringify(RANDOM_FACT_KEYS.map((k) => f[k] ?? ""));
 const originalRandomFacts = ref(new Map());
@@ -314,61 +318,12 @@ async function getAboutContent() {
         resetForm({ values: { ...data } });
         snapshotSkills(data.skills);
         snapshotRandomFacts(data.randomFacts);
-        skillsTotal.value = data.skillsMeta?.total ?? 0;
-        randomFactsTotal.value = data.randomFactsMeta?.total ?? 0;
     } catch (err) {
         error(err?.response?.data?.message ?? "Failed to load about content.");
     } finally {
         pageLoading.value = false;
     }
 };
-async function fetchSkills() {
-    skillsLoading.value = true;
-    try {
-        const [sort] = skillsOptions.sortBy ?? [];
-        const { data } = await axios.get("/api/getAboutContent", {
-            params: {
-                skillsPage: skillsOptions.page,
-                skillsPerPage: skillsOptions.itemsPerPage,
-                skillsSortBy: sort?.key,
-                skillsSortOrder: sort?.order,
-            },
-        });
-        if (!data) return;
-        resetField('skills', { value: data.skills ?? [] });
-        snapshotSkills(data.skills);
-        skillsTotal.value = data.skillsMeta?.total ?? 0;
-    } catch (err) {
-        error(err?.response?.data?.message ?? "Failed to load skills.");
-    } finally {
-        skillsLoading.value = false;
-    }
-};
-async function fetchRandomFacts() {
-    randomFactsLoading.value = true;
-    try {
-        const [sort] = randomFacts.sortBy ?? [];
-        const { data } = await axios.get("/api/getAboutContent", {
-            params: {
-                randomFactsPage: randomFacts.page,
-                randomFactsPerPage: randomFacts.itemsPerPage,
-                randomFactsSortBy: sort?.key,
-                randomFactsSortOrder: sort?.order,
-            },
-        });
-        if (!data) return;
-        resetField('randomFacts', { value: data.randomFacts ?? [] });
-        snapShotRandomFacts(data.randomFacts);
-        randomFactsTotal.value = data.randomFactsMeta?.total ?? 0;
-    } catch (err) {
-        error(err?.response?.data?.message ?? "Failed to load facts.");
-    } finally {
-        randomFactsLoading.value = false;
-    }
-};
-
-watch(() => [skillsOptions.page, skillsOptions.itemsPerPage, skillsOptions.sortBy], fetchSkills);
-watch(() => [randomFacts.page, randomFacts.itemsPerPage, randomFacts.sortBy], fetchRandomFacts);
 
 onMounted(() => {
     getAboutContent();

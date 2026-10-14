@@ -70,7 +70,7 @@ export const SKILL_CATEGORIES = [
         title: "Soft Skills",
         skills: [
             "Communication",
-            "Attention to Details",
+            "Attention to Detail",
             "Continuous Learning",
             "Collaboration",
             "Creativity",

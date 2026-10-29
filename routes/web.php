@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::permanentRedirect(
     '/',
-    'https://juliusdolana.vercel.app/'
+    'https://youtube.com/'
 );
 
 Route::get('/{any}', fn() => response()->view('app'))
